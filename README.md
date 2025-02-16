@@ -11,5 +11,8 @@ After unzipping  the "Machine-Parts-main.zip",Place it in the "Mod" folder in yo
 
 [Uninstall] Delete the "Machine-Parts-main" folder.
 
+[Contents] Wire Clip,Shackle,Thimble,Ball Bearing,Plain Bearing,Gear,Sprocket,Screws,Pins,Shafts,Chains,
+Snap Ring,Oil Seal,Gland Packing,Springs,End Plate,Key Plate,Joint,Shaped Steel,Planar Shape,One touch window,Handle
+
 [Necessary Workbench] Gear Workbench
 
