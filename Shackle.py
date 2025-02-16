@@ -80,6 +80,7 @@ class Ui_Dialog(object):
     def import_data(self):
         global Bolt
         global Nut
+        global spreadsheet
         selection = Gui.Selection.getSelection()
         if selection:
              selected_object = selection[0]
@@ -88,6 +89,10 @@ class Ui_Dialog(object):
                  for obj in parts_group.Group:
                      if obj.Label[:18] == "SpreadsheetShackle":
                          spreadsheet = obj
+                     elif obj.Label[:4] == "Bolt":
+                         Bolt = obj  
+                     elif obj.Label[:3] == "Nut":
+                         Nut = obj      
 
                          key=spreadsheet.getContents('B2')
                          self.comboBox_dia.setCurrentText(key)
@@ -96,43 +101,33 @@ class Ui_Dialog(object):
         return
 
     def update(self):
-         # 選択したオブジェクトを取得
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
-
-                         key=self.comboBox_dia.currentText()
-                         for i in range(3,12):
-                             if key==spreadsheet.getContents('B'+str(i)):
-                                 wdia=spreadsheet.getContents('A'+str(i))
-                                 d0=spreadsheet.getContents('C'+str(i))
-                                 B0=spreadsheet.getContents('D'+str(i))
-                                 D0=spreadsheet.getContents('E'+str(i))
-                                 d1=spreadsheet.getContents('F'+str(i))
-                                 l1=spreadsheet.getContents('G'+str(i))
-                                 l2=spreadsheet.getContents('H'+str(i))
-                                 r1=spreadsheet.getContents('I'+str(i))
-                                 bolt=spreadsheet.getContents('J'+str(i))
-                                 
-                                 spreadsheet.set('B2',key)
-                                 spreadsheet.set('A2',str(wdia))
-                                 spreadsheet.set('C2',str(d0))
-                                 spreadsheet.set('D2',str(B0))
-                                 spreadsheet.set('E2',str(D0))
-                                 spreadsheet.set('F2',str(d1))
-                                 spreadsheet.set('G2',str(l1))
-                                 spreadsheet.set('H2',str(l2))
-                                 spreadsheet.set('I2',str(r1))
-                                 spreadsheet.set('J2',str(bolt))
-                         Bolt.dia=spreadsheet.getContents('J2')[1:]  
-                         Nut.dia=spreadsheet.getContents('J2')[1:] 
-                               
-                         App.ActiveDocument.recompute()
+         key=self.comboBox_dia.currentText()
+         for i in range(3,12):
+             if key==spreadsheet.getContents('B'+str(i)):
+                 wdia=spreadsheet.getContents('A'+str(i))
+                 d0=spreadsheet.getContents('C'+str(i))
+                 B0=spreadsheet.getContents('D'+str(i))
+                 D0=spreadsheet.getContents('E'+str(i))
+                 d1=spreadsheet.getContents('F'+str(i))
+                 l1=spreadsheet.getContents('G'+str(i))
+                 l2=spreadsheet.getContents('H'+str(i))
+                 r1=spreadsheet.getContents('I'+str(i))
+                 bolt=spreadsheet.getContents('J'+str(i))
+                 
+                 spreadsheet.set('B2',key)
+                 spreadsheet.set('A2',str(wdia))
+                 spreadsheet.set('C2',str(d0))
+                 spreadsheet.set('D2',str(B0))
+                 spreadsheet.set('E2',str(D0))
+                 spreadsheet.set('F2',str(d1))
+                 spreadsheet.set('G2',str(l1))
+                 spreadsheet.set('H2',str(l2))
+                 spreadsheet.set('I2',str(r1))
+                 spreadsheet.set('J2',str(bolt))
+         Bolt.dia=spreadsheet.getContents('J2')[1:]  
+         Nut.dia=spreadsheet.getContents('J2')[1:] 
+               
+         App.ActiveDocument.recompute()
 
     def create(self): 
          dia=self.comboBox_dia.currentText()
