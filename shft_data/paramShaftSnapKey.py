@@ -10,7 +10,7 @@ class CShapeSnpKy:
         App.activeDocument().recompute(None,True,True)
     def execute(self, obj):
         label=obj.Name 
-        keyway=App.ActiveDocument.getObject(label).keyway
+        Key=App.ActiveDocument.getObject(label).Key
         D=App.ActiveDocument.getObject(label).D
         #print(D)
         L=App.ActiveDocument.getObject(label).L
@@ -74,10 +74,11 @@ class CShapeSnpKy:
         #Part.show(c1)
         keyway2(self)  #キー表示 
         c2=c0
-        if keyway==True:
-            Part.show(c2)
-
         c1=c1.cut(c2)
+        if Key==True:
+            #Part.show(c2)
+            c1=c1.fuse(c2)
+
         g=c1.Volume*7850/10**9 
         #print(g)
     

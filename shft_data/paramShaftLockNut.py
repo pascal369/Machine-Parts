@@ -19,8 +19,8 @@ class ScrBrg6:
         L2=App.ActiveDocument.getObject(label).L2
         L3=App.ActiveDocument.getObject(label).L3
         thread=App.ActiveDocument.getObject(label).thread
-        keyway=App.ActiveDocument.getObject(label).keyway
-        print(keyway)
+        Key=App.ActiveDocument.getObject(label).Key
+        #print(keyway)
         #for i in range(34):
         #dia=ShaftData.screw_size[i]
         sa2=ShaftData.fine_screw[dia]
@@ -163,9 +163,9 @@ class ScrBrg6:
         keyway2(self)
         c2=c0
         c2.rotate(Base.Vector(0,0,0),Base.Vector(1,0,0),180)
-        if keyway==True:
-            Part.show(c2)
         c1=c1.cut(c2)
+        if Key==True:
+            c1=c1.fuse(c2)
         g=c0.Volume*7850/10**9 
         label='mass[kg]'
         try:

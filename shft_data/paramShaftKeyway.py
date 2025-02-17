@@ -15,14 +15,14 @@ class KeyWay:
         label=obj.Name
         type=App.ActiveDocument.getObject(label).type
         key=type[3:]
-        keyway=App.ActiveDocument.getObject(label).keyway
+        Key=App.ActiveDocument.getObject(label).Key
         D=App.ActiveDocument.getObject(label).D
         L=App.ActiveDocument.getObject(label).L
         L1=App.ActiveDocument.getObject(label).L1
-        print(key)
+        #print(key)
         if key=='keyway_2':
             L2=App.ActiveDocument.getObject(label).L2
-            print(L2)
+            #print(L2)
         for i in range(30):
                 key1=ShaftData.key_size[i]
                 sa=ShaftData.key_scr[key1]
@@ -51,7 +51,7 @@ class KeyWay:
             wface=Part.Face(awire)
             c2=wface.extrude(Base.Vector(0,0,t))
             c1=c1.cut(c2)
-            if keyway==True:
+            if Key==True:
                 #Part.show(c2)
                 c1=c1.fuse(c2)
             #Part.show(c1)    
@@ -71,7 +71,7 @@ class KeyWay:
             wface=Part.Face(awire)
             c2=wface.extrude(Base.Vector(0,0,t))
             c1=c1.cut(c2)
-            if keyway==True:
+            if Key==True:
                 #Part.show(c2)
                 c1=c1.fuse(c2)
 
