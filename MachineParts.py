@@ -35,7 +35,7 @@ shaft=['Shaft','Screw shaft']
 joint=['Tube Split Joint',]
 
 #Gear=['Spur gears','Helical gears','Worm Gear','Bevel gear','Planetary gears','Hypocycloidal gear']
-Gear=['Spur gears','Helical gears','Worm Gear','Bevel gear','Planetary gears',]
+Gear=['Helical gears','Worm Gear','Bevel gear','Planetary gears',]
 
 #GlandP=['Gland Packing Assy','Gland Packing','Lantern Ring','Ground presser','Stuffing Box']
 GlandP=['Gland Packing Assy',]
