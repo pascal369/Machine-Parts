@@ -286,9 +286,9 @@ class Ui_Dialog(object):
                 obj.addProperty("App::PropertyFloat", "L2",'keyway').L2=L2
 
             if self.checkbox2.isChecked():
-                obj.addProperty("App::PropertyBool",'keyway','keyway').keyway = True
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
-                obj.addProperty("App::PropertyBool",'keyway','keyway').keyway = False
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = False
              
             paramShaftKeyway.KeyWay(obj) 
             obj.ViewObject.Proxy=0
@@ -319,15 +319,15 @@ class Ui_Dialog(object):
             L1=float(self.le_L1.text())
             L2=float(self.le_L2.text())
             obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
-            obj.addProperty("App::PropertyFloat", "L1",'shaft').L1=L1
-            obj.addProperty("App::PropertyFloat", "L2",'shaft').L2=L2
+            obj.addProperty("App::PropertyFloat", "L1",'keyway').L1=L1
+            obj.addProperty("App::PropertyFloat", "L2",'keyway').L2=L2
             n=float(sa[4])
             obj.addProperty("App::PropertyFloat", "n",'shaft').n=n
 
             if self.checkbox2.isChecked():
-                obj.addProperty("App::PropertyBool",'keyway','keyway').keyway = True
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
-                obj.addProperty("App::PropertyBool",'keyway','keyway').keyway = False
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = False
 
             paramShaftSnapKey.CShapeSnpKy(obj) 
             obj.ViewObject.Proxy=0
@@ -389,9 +389,9 @@ class Ui_Dialog(object):
                 obj.addProperty("App::PropertyBool",'thread','screw').thread = False
 
             if self.checkbox2.isChecked():
-                obj.addProperty("App::PropertyBool",'keyway','keyway').keyway = True
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
-                obj.addProperty("App::PropertyBool",'keyway','keyway').keyway = False    
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = False    
             
             paramShaftLockNut.ScrBrg6(obj) 
             obj.ViewObject.Proxy=0
