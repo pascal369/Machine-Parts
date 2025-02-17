@@ -117,13 +117,13 @@ class Ui_Dialog(object):
 
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 288, 60, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 288, 70, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton(Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(140, 288, 60, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(140, 288, 70, 22))
         #インポートデータ
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(50, 310, 180, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(50, 310, 160, 22))
 
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
