@@ -25,8 +25,9 @@ class BasePlate:
         #p5=(b1,h1,0)
         polygon=Part.makePolygon([p1,p2,p3,p4,p1])
         c00=polygon
-        if sface=='XZ':
-            c00.rotate(Base.Vector(0,0,0),Base.Vector(1,0,0),90)
+
+        if sface=='XY':
+            c00.rotate(Base.Vector(0,0,0),Base.Vector(0,0,1),90)
         elif sface=='YZ':
             c00.rotate(Base.Vector(0,0,0),Base.Vector(0,1,0),90)
 
@@ -55,10 +56,6 @@ class BasePlate:
                     c00=c00.fuse(c02)
             except:
                 pass
-            '''
-            doc=App.ActiveDocument
-            Gui.Selection.addSelection(doc.Name,obj.Name)
-            Gui.runCommand('Draft_Move',0)    
-            '''
+
         obj.Shape=c00
      

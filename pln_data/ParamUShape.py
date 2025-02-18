@@ -8,41 +8,30 @@ import Part
 
 class UShape:
     def __init__(self, obj):
-        self.Type = 'Ring'
+        self.Type = 'UShape'
         obj.Proxy = self
         App.activeDocument().recompute(None,True,True)
     def execute(self,obj):
         label=obj.Name
         sface=App.ActiveDocument.getObject(label).sface
         D=App.ActiveDocument.getObject(label).D
-        d=App.ActiveDocument.getObject(label).d
         H=App.ActiveDocument.getObject(label).H
         p1=(-D/2,0,0)
         p2=(0,-D/2,0)
         p3=(D/2,0,0)
-        p4=(d/2,0,0)
-        p5=(-d/2,0,0)
-        p6=(0,-d/2,0)
-        p7=(-D/2,H,0)
-        p8=(-d/2,H,0)
-        p9=(d/2,H,0)
-        p10=(D/2,H,0)
+        p4=(D/2,H,0)
+        p5=(-D/2,H,0)
+        
         edge1=Part.Arc(Base.Vector(p1),Base.Vector(p2),Base.Vector(p3)).toShape()
-        edge2=Part.Arc(Base.Vector(p4),Base.Vector(p6),Base.Vector(p5)).toShape()
-        edge3=Part.makeLine(p1,p7)
-        edge4=Part.makeLine(p7,p8)
-        edge5=Part.makeLine(p5,p8)
-        edge6=Part.makeLine(p4,p9)
-        edge7=Part.makeLine(p9,p10)
-        edge8=Part.makeLine(p3,p10)
-        awire=Part.Wire([edge1,edge2,edge3,edge4,edge5,edge6,edge7,edge8])
+        edge2=Part.makeLine(p3,p4)
+        edge3=Part.makeLine(p4,p5)
+        edge4=Part.makeLine(p5,p1)
+        awire=Part.Wire([edge1,edge2,edge3,edge4])
         if sface=='XZ':
             awire.rotate(Base.Vector(0,0,0),Base.Vector(1,0,0),90)
         elif sface=='YZ':
             awire.rotate(Base.Vector(0,0,0),Base.Vector(0,1,0),90)
         pface=Part.Face(awire)
         c00=pface
-        #doc=App.ActiveDocument
-        #Gui.Selection.addSelection(doc.Name,obj.Name)
-        #Gui.runCommand('Draft_Move',0)    
+
         obj.Shape=c00

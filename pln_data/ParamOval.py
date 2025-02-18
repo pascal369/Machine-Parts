@@ -31,9 +31,6 @@ class Oval:
             awire.rotate(Base.Vector(0,0,0),Base.Vector(1,0,0),90)
         elif sface=='YZ':
             awire.rotate(Base.Vector(0,0,0),Base.Vector(0,1,0),90)
-        #doc=App.ActiveDocument
-        #Gui.Selection.addSelection(doc.Name,obj.Name)
-        #Gui.runCommand('Draft_Move',0)     
         pface=Part.Face(awire)
         c00=pface
         obj.Shape=c00
