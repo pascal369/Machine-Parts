@@ -95,15 +95,7 @@ class Ui_Dialog(object):
         self.le_BB2.setGeometry(QtCore.QRect(160, 235, 50, 20))
         self.le_BB2.setAlignment(QtCore.Qt.AlignCenter)
 
-         #ウエブ厚
-        #self.label_WB = QtGui.QLabel('Web Thickness',Dialog)
-        #self.label_WB.setGeometry(QtCore.QRect(10, 263, 100, 22))
-        #self.le_WB = QtGui.QLineEdit('9',Dialog)
-        #self.le_WB.setGeometry(QtCore.QRect(110, 260, 50, 20))
-        #self.le_WB.setAlignment(QtCore.Qt.AlignCenter)
-        #self.le_WB2 = QtGui.QLineEdit('9',Dialog)
-        #self.le_WB2.setGeometry(QtCore.QRect(160, 260, 50, 20))
-        #self.le_WB2.setAlignment(QtCore.Qt.AlignCenter)
+        
 
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
@@ -186,10 +178,8 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onShape)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
-
-        #self.comboBox_mod.setCurrentText('2')
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
+        
         
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "helicalGear", None))
@@ -223,12 +213,7 @@ class Ui_Dialog(object):
                      elif obj.TypeId =="Spreadsheet::Sheet":
                          spreadsheet = obj
 
-                         #key2=self.comboBox_type.currentText()
-                         #fname=key2+'.png'
-                         #base=os.path.dirname(os.path.abspath(__file__))
-                         #joined_path = os.path.join(base, "prt_data",'Gear_data',fname)
-
-                         #self.label_6.setPixmap(QtGui.QPixmap(joined_path))              
+                         
                          self.comboBox_type.setCurrentText(spreadsheet.getContents('A1'))
                          self.comboBox_mod.setCurrentText(spreadsheet.getContents('m0'))
                          self.le_N.setText(spreadsheet.getContents('z1'))
@@ -241,47 +226,40 @@ class Ui_Dialog(object):
                          self.le_Bdia2.setText(spreadsheet.getContents('Bdia2'))  
                          self.le_BB.setText(spreadsheet.getContents('bb1')) 
                          self.le_BB2.setText(spreadsheet.getContents('bb2')) 
-                         #self.le_WB.setText(spreadsheet.getContents('wb1')) 
-                         #self.le_WB2.setText(spreadsheet.getContents('wb2')) 
-                         self.le_beta.setText(spreadsheet.getContents('beta'))
+                         
 
                          self.label_M.setText(spreadsheet.getContents('m0'))
                          self.label_N1.setText(spreadsheet.getContents('z1'))
                          self.label_N2.setText(spreadsheet.getContents('z2'))
                          
-                         #m0=float(spreadsheet.getContents('m0'))
-                         #z1=float(spreadsheet.getContents('z1'))
-                         #z2=float(spreadsheet.getContents('z2'))
-                         #pcd1=m0*z1
-                         #pcd2=m0*z2
-                         #self.label_pcd1.setText(str(pcd1))
-                         #self.label_pcd2.setText(str(pcd2))
-                         #c0=(pcd1+pcd2)/2
-                         #self.label_L1.setText(str(c0))
+
             
     def setIchi(self):
         #global A
+        N1=self.label_N1.text()
         A=self.spinBox_Ichi.value()
         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
-        print(A)
+        #print(A)
         #self.spinBox.setValue(A)
 
         App.ActiveDocument.recompute()
     
     def spinMove(self):
-         try:
-             N1=self.label_N1.text()
-             if N1=='***':
-                 return
-             N2=self.label_N2.text()
-             r1 = self.spinBox.value()
-             r2 =r1*float(N1)/float(N2)
-             A=-float(self.spinBox_Ichi.value())
-             #A=0
-             Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),3*r1+A)
-             Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-3*r2)
-         except:
+         #try:
+         N1=self.label_N1.text()
+         if N1=='***':
              return
+         N2=self.label_N2.text()
+         A=self.spinBox_Ichi.value()
+         r1 = self.spinBox.value()
+         r2 =r1*float(N1)/float(N2)
+        
+         #A=float(N1)/360
+         #print(r1,r2)
+         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1-A)
+         Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2)
+         #except:
+         #    return
     
     def update(self):
          m0=self.comboBox_mod.currentText()
