@@ -243,7 +243,7 @@ class Ui_Dialog(object):
                          self.le_BB2.setText(spreadsheet.getContents('bb2')) 
                          #self.le_WB.setText(spreadsheet.getContents('wb1')) 
                          #self.le_WB2.setText(spreadsheet.getContents('wb2')) 
-                         #self.le_beta.setText(spreadsheet.getContents('beta'))
+                         self.le_beta.setText(spreadsheet.getContents('beta'))
 
                          self.label_M.setText(spreadsheet.getContents('m0'))
                          self.label_N1.setText(spreadsheet.getContents('z1'))
@@ -278,7 +278,7 @@ class Ui_Dialog(object):
              r2 =r1*float(N1)/float(N2)
              A=-float(self.spinBox_Ichi.value())
              #A=0
-             Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),3*(r1+A))
+             Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),3*r1+A)
              Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-3*r2)
          except:
              return
