@@ -178,7 +178,7 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
         
         
     def retranslateUi(self, Dialog):

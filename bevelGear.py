@@ -20,7 +20,7 @@ helix=['right','left']
 # 画面を並べて表示する
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
+        Dialog.setObjectName("Dialog")          
         Dialog.resize(250, 640)
         Dialog.move(1000, 0)
         #形状
@@ -67,7 +67,7 @@ class Ui_Dialog(object):
 
         #歯数
         self.label_z = QtGui.QLabel('Number o of Teeth',Dialog)
-        self.label_z.setGeometry(QtCore.QRect(10, 15883, 100, 22))
+        self.label_z.setGeometry(QtCore.QRect(10, 163, 100, 22))
         self.le_z1 = QtGui.QLineEdit('20',Dialog)
         self.le_z1.setGeometry(QtCore.QRect(110, 160, 45, 20))
         self.le_z1.setAlignment(QtCore.Qt.AlignCenter)
@@ -117,13 +117,13 @@ class Ui_Dialog(object):
 
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 288, 70, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 288, 60, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton(Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(140, 288, 70, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(140, 288, 60, 22))
         #インポートデータ
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(50, 310, 160, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(50, 310, 180, 22))
 
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
@@ -256,20 +256,13 @@ class Ui_Dialog(object):
         App.ActiveDocument.recompute()
     
     def spinMove(self):
-
          N1=self.le_z1.text()
          if N1=='***':
              return
          N2=self.le_z2.text()
-         #print(N2,key)
          r1 = self.spinBox.value()
          r2 =r1*float(N1)/float(N2)
          A=-float(self.spinBox_Ichi.value())
-         
-         #if key=='spiralBevelAssy':
-         #    Pinion.Placement.Rotation=App.Rotation(App.Vector(1,0,0),3*(r1+A))
-         #    Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),3*r2)
-         #elif key=='bevelAssy':
          Pinion.Placement.Rotation=App.Rotation(App.Vector(1,0,0),3*(r1+A))
          Gear.Placement.Rotation=App.Rotation(App.Vector(0,0,1),-3*r2)
                  
@@ -340,7 +333,7 @@ class Ui_Dialog(object):
         BB1=float(self.le_BB1.text())#ボス幅1 
         BB2=float(self.le_BB2.text())#ボス幅2
 
-        spreadsheet.set('sigma',str(sigma))
+        #spreadsheet.set('sigma',str(sigma))
         spreadsheet.set('m0',str(m0))
         spreadsheet.set('alphan',str(alphan))
         #if key=='spiralBevelAssy':
