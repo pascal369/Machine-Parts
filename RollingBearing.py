@@ -12,6 +12,7 @@ from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
 from prt_data.RollBrg_data import ParamBallBrg
+from prt_data.RollBrg_data import ParamAngulaBallBrg
 from prt_data.RollBrg_data import RollingBrg_Data
 
 
@@ -51,8 +52,8 @@ class Ui_Dialog(object):
         self.label_5.setObjectName("label_5")
 
         self.comboBox_type.addItems(RollingBrg_Data.BType)
-        self.comboBox_ser.addItems(RollingBrg_Data.BSer)
-        self.comboBox_dia.addItems(RollingBrg_Data.BDia)
+        #self.comboBox_ser.addItems(RollingBrg_Data.BSer)
+        #self.comboBox_dia.addItems(RollingBrg_Data.BDia)
 
         self.comboBox_type.setCurrentIndex(1)
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
@@ -79,6 +80,8 @@ class Ui_Dialog(object):
          self.comboBox_ser.clear()
          if type=='Ball Bearings':
              self.comboBox_ser.addItems(RollingBrg_Data.BSer)
+         elif type=='Angular Ball Bearings':
+             self.comboBox_ser.addItems(RollingBrg_Data.ASer)    
          elif type=='Tapered roller bearings': 
              self.comboBox_ser.addItems(RollingBrg_Data.TRSer) 
          elif type=='Roller Bearings': 
@@ -97,7 +100,7 @@ class Ui_Dialog(object):
     def onSer(self):
          ser=self.comboBox_ser.currentText()
          self.comboBox_dia.clear()
-         if type=='Ball Bearings':
+         if type=='Ball Bearings' or type=='Angular Ball Bearings':
              self.comboBox_dia.addItems(RollingBrg_Data.BDia)
          elif type=='Tapered roller bearings': 
              self.comboBox_dia.addItems(RollingBrg_Data.TRDia)
@@ -117,8 +120,7 @@ class Ui_Dialog(object):
                    sa=RollingBrg_Data.Bdim62[dia]
               elif series=='63':
                    sa=RollingBrg_Data.Bdim63[dia]     
-
-                   
+                  
               label='Ballbearing'
               modelNo=sa[5]
               D=sa[1]
@@ -144,7 +146,43 @@ class Ui_Dialog(object):
               ParamBallBrg.BallBrg(obj)
               obj.ViewObject.Proxy=0
               App.ActiveDocument.recompute()  
-              Gui.ActiveDocument.ActiveView.fitAll()  
+              Gui.ActiveDocument.ActiveView.fitAll() 
+
+         elif key0=='Angular Ball Bearings':
+              if series=='70': 
+                   sa=RollingBrg_Data.Adim70[dia]
+              elif series=='72':
+                   sa=RollingBrg_Data.Adim72[dia]
+              elif series=='73':
+                   sa=RollingBrg_Data.Adim73[dia]     
+
+                   
+              label='Angular Ball bearing'
+              modelNo=sa[5]
+              D=sa[1]
+              B=sa[2]
+              r=sa[3]
+              doc=App.activeDocument()              
+              try:
+                 obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+              except:
+                  doc=App.newDocument()
+                  obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+              
+              obj.addProperty("App::PropertyString",'modelNo','series').modelNo=modelNo  
+              obj.addProperty("App::PropertyString",'series','series').series=series
+              dia=RollingBrg_Data.BDia
+              obj.addProperty("App::PropertyEnumeration",'dia',label).dia=dia 
+              
+              obj.addProperty("App::PropertyFloat",'D',label).D=D
+              obj.addProperty("App::PropertyFloat",'B',label).B=B
+              obj.addProperty("App::PropertyFloat",'r',label).r=r
+              
+              obj.dia=dia[key2] 
+              ParamAngulaBallBrg.BallBrg(obj)
+              obj.ViewObject.Proxy=0
+              App.ActiveDocument.recompute()  
+              Gui.ActiveDocument.ActiveView.fitAll() 
 
          elif key0=='Tapered roller bearings' or  key0=='Roller Bearings' :   
               if series=='double-rowoutward':
