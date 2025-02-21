@@ -189,11 +189,11 @@ class Ui_Dialog(object):
             label='blade'
         obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
         obj.addProperty("App::PropertyString", "key",'shaft').key=key
-        obj.addProperty("App::PropertyFloat", "pitch",'shaft').pitch=pitch
+        obj.addProperty("App::PropertyFloat", "pitch",'blade').pitch=pitch
         obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
-        obj.addProperty("App::PropertyFloat", "L1",'shaft').L1=L1
-        obj.addProperty("App::PropertyFloat", "L2",'shaft').L2=L2
-        obj.addProperty("App::PropertyFloat", "D1",'shaft').D1=D1
+        obj.addProperty("App::PropertyFloat", "L1",'blade').L1=L1
+        obj.addProperty("App::PropertyFloat", "L2",'blade').L2=L2
+        obj.addProperty("App::PropertyFloat", "D1",'blade').D1=D1
         obj.addProperty("App::PropertyFloat", "D",'shaft').D=D
         obj.addProperty("App::PropertyFloat", "d0",'shaft').d0=d0
         obj.addProperty("App::PropertyFloat", "d1",'shaft').d1=d1
