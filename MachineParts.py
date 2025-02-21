@@ -28,7 +28,7 @@ snapring=['for shafts','for holes']
 
 spring=['Tensile coil spring','Compression coil springs']
 
-bearing=['Ball Bearings受','Double-row outward tapered roller bearing']
+bearing=['Ball Bearings','Angular Ball Bearing','Double-row outward tapered roller bearing']
 
 shaft=['Shaft','Screw shaft']
 
