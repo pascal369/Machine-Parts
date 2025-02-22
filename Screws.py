@@ -360,7 +360,6 @@ class Ui_Dialog(object):
                     pic='img_point_ahead.png'
                     #FC="六角穴付き止めねじ_とがり先_2欄"
             elif key=='13':
-                
                 pic='img_threadedHoll.png' 
                 #FC='ねじ穴'       
         elif key=='07':
