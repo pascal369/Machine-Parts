@@ -145,24 +145,24 @@ class Ui_Dialog(object):
         self.label_spin.setGeometry(QtCore.QRect(10, 580, 150, 22))
         #spinBox
         self.spinBox=QtGui.QSpinBox(Dialog)
-        self.spinBox.setGeometry(100, 580, 50, 30)
+        self.spinBox.setGeometry(100, 580, 50, 50)
         self.spinBox.setMinimum(0.0)  # 最小値を0.0に設定
         self.spinBox.setMaximum(100.0)  # 最大値を100.0に設定
         self.spinBox.setValue(100.0)
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
-
+        #base
         self.label_kiten = QtGui.QLabel('Base',Dialog)
-        self.label_kiten.setGeometry(QtCore.QRect(10, 615, 100, 22))
+        self.label_kiten.setGeometry(QtCore.QRect(10, 640, 100, 22))
         self.le_kiten = QtGui.QLineEdit('100',Dialog)
-        self.le_kiten.setGeometry(QtCore.QRect(110, 615, 100, 20))
+        self.le_kiten.setGeometry(QtCore.QRect(110, 640, 100, 20))
         self.le_kiten.setAlignment(QtCore.Qt.AlignCenter)
 
         #ローラーチェン
-        self.pushButton4 = QtGui.QPushButton('ローラーチェン',Dialog)
-        self.pushButton4.setGeometry(QtCore.QRect(10, 640, 100, 22))
+        #self.pushButton4 = QtGui.QPushButton('ローラーチェン',Dialog)
+        #self.pushButton4.setGeometry(QtCore.QRect(10, 640, 100, 22))
         #sprocket調節
         self.spinBox2=QtGui.QSpinBox(Dialog)
-        self.spinBox2.setGeometry(170, 580, 50, 30)
+        self.spinBox2.setGeometry(170, 580, 50, 50)
         self.spinBox2.setMinimum(-100.0)  # 最小値を0.0に設定
         self.spinBox2.setMaximum(100.0)  # 最大値を100.0に設定
         self.spinBox2.setValue(0.0)
@@ -179,7 +179,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
-        QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.onChain)
+        #QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.onChain)
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
 
         self.comboBox_shape.setCurrentIndex(0)
@@ -201,7 +201,6 @@ class Ui_Dialog(object):
 
     def onType(self):
         global N_Lst
-        
         key=self.comboBox_shape.currentText()
         N0=self.comboBox_N.currentText()
         key2= self.comboBox_shape.currentText()
@@ -211,7 +210,7 @@ class Ui_Dialog(object):
         joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
         self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
         #print(joined_path)
-        return
+        #return
         selection = Gui.Selection.getSelection()
         if selection:
              selected_object = selection[0]
@@ -223,8 +222,11 @@ class Ui_Dialog(object):
              except Exception as e:
                  print(f"エラーが発生しました: {e}")
                  #sys.exit(1)  # プログラムを終了する 
-                 return               
-             key3=spreadsheet.getContents('I2')
+                 return  
+             try:             
+                 key3=spreadsheet.getContents('I2')
+             except:
+                 return
              if key!=key3[1:]:
                  return
              try:
@@ -281,50 +283,59 @@ class Ui_Dialog(object):
              self.comboBox_N.setCurrentText(spreadsheet.getContents('E2'))
         
     def spinMove(self):
-    
-             Pitch=float(self.label_pitch1.text())
-             A=self.spinBox.value()
-             beta1=360/float(N1)
-             beta2=360/float(N2)
-             x=10
-             #print(N1,N2,beta1)
-             spro1.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
-             spro2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
-             if A==0:
-                 return
-             self.le_kiten.setText(str(round(A*Pitch/x,0)))
+        #pass
+         #try:
+         Pitch=float(self.label_pitch1.text())
+         A=self.spinBox.value()
+         beta1=360/float(N1)
+         beta2=360/float(N2)
+         x=10
+         #print(N1,N2,beta1)
+         spro1.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
+         spro2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
+         #print(A,Pitch,x)
+         if A==0:
+             return
+         self.le_kiten.setText(str(round(A*Pitch/x,3)))
+     #except:
+     #   return
 
     def update_kiten(self):
-         kiten=self.le_kiten.text()
-         spreadAssy.set('kiten',kiten)
-         App.ActiveDocument.recompute() 
-    
-    def setIchi(self):
+        kiten=self.le_kiten.text()
+        #print(kiten)
+        #return
         try:
-            selection = Gui.Selection.getSelection()
-            if selection:
+             shtAssy.set('kiten',kiten)
+             App.ActiveDocument.recompute() 
+        except:
+             #Spreadsheet.set('kiten',kiten)
+             #App.ActiveDocument.recompute() 
+             pass
+    def setIchi(self):
+        #try:
+         selection = Gui.Selection.getSelection()
+         if selection:
                  selected_object = selection[0]
                  if selected_object.TypeId == "App::Part":
                      parts_group = selected_object
                      for obj in parts_group.Group:
                          if obj.TypeId == "Spreadsheet::Sheet":
                              spreadsheet = obj
-
+#
                              try:
                                  if selected_object.Label=='spro1' :
                                      A0=float(self.spinBox2.value())*0.5
                                      SP1.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A0)
-                                     spreadAssy.set('spr1',str(A0))
+                                     spreadsheet.set('spr1',str(A0))
                                      App.ActiveDocument.recompute() 
                                  elif selected_object.Label=='spro2' :
                                      A1=float(self.spinBox2.value())*0.5
                                      SP2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A1)  
-                                     spreadAssy.set('spr2',str(A1))  
+                                     spreadsheet.set('spr2',str(A1))  
                                      App.ActiveDocument.recompute() 
                              except:
-                                 pass
-        except:
-            pass                     
+                                return        
+       
                          
     def setParts(self):
      global spro1
@@ -332,7 +343,10 @@ class Ui_Dialog(object):
      global SP1
      global SP2
      global chainPath
-     global spreadAssy
+     global shtAssy
+     global shtSpro1
+     global shtSpro2
+     global shtLink
      doc = FreeCAD.activeDocument()
      if doc:
          group_names = []
@@ -348,8 +362,15 @@ class Ui_Dialog(object):
                  SP2=obj        
              elif obj.Label=='chainPath':
                  chainPath=obj
-             elif obj.Label=='spreadsheetAssy':
-                 spreadAssy=obj 
+             elif obj.Label=='shtAssy':
+                 shtAssy=obj 
+             elif obj.Label=='shtSpro1':
+                 shtSpro1=obj 
+             elif obj.Label=='shtSpro1':
+                 shtSpro2=obj 
+             elif obj.Label=='shtLink':
+                 shtLink=obj         
+
      else:  
          return
      
@@ -359,6 +380,7 @@ class Ui_Dialog(object):
          global N1
          global N2
          global pitch
+         global Spreadsheet
          try:
              selection = Gui.Selection.getSelection()
          except:
@@ -382,6 +404,7 @@ class Ui_Dialog(object):
                                  pass 
                              
                              self.comboBox_shape.setCurrentText(spreadsheet.getContents('I2')[1:])
+                             myShape=shtAssy.getContents('A1')[1:]
                              self.comboBox_N.setCurrentText(spreadsheet.getContents('E2'))
                              self.le_dia.setText(spreadsheet.getContents('H2')) 
                              key2= self.comboBox_shape.currentText()
@@ -405,15 +428,17 @@ class Ui_Dialog(object):
                                                  pass
                                  
                                  if selected_object.Label=='spro1':
+                                     self.comboBox_shape.setCurrentText(myShape[5:7])
                                      self.label_N1.setText(N0)
                                      self.label_pitch1.setText(str(pitch))
                                      self.label_pcd1.setText(str(pcd))
                                  elif  selected_object.Label=='spro2':
+                                     self.comboBox_shape.setCurrentText(myShape[8:10])
                                      self.label_N2.setText(N0) 
                                      self.label_pitch1.setText(str(pitch)) 
                                      self.label_pcd2.setText(str(pcd))
                                  elif selected_object.Label=='sproAssy':
-                                     self.comboBox_type.setCurrentText(spreadsheet.getContents('B6'))
+                                     self.comboBox_type.setCurrentText(spreadsheet.getContents('B6')[1:])
                                      Lc=spreadsheet.getContents('CLp')
                                      self.le_Lp.setText(Lc)
                                      N1=spreadsheet.getContents('Teeth1')
@@ -539,6 +564,8 @@ class Ui_Dialog(object):
                      if obj.TypeId == "Spreadsheet::Sheet":
                          spreadsheet = obj
 
+                         #print(obj.Label)
+
                          key=self.comboBox_shape.currentText()
                          if selected_object.Label!='sproAssy':
                              key3=spreadsheet.getContents('I2')[1:]
@@ -546,6 +573,7 @@ class Ui_Dialog(object):
                                  return
                          
                          if selected_object.Label!='sproAssy':
+
                             N0=self.comboBox_N.currentText()
                             dia=self.le_dia.text()  
                             #p0 r0 t0 E0を検索
@@ -609,26 +637,51 @@ class Ui_Dialog(object):
                             spreadsheet.set('G2',L0)  
                             spreadsheet.set('H2',dia)  
                             spreadsheet.set('J2',E0) 
+
+                            
                          elif selected_object.Label=='sproAssy':
                              Lc=self.le_Lp.text()
                              spreadsheet.set('CLp',Lc)
                              self.AssyCulc()
-                             spreadsheet.set('CLj',str(Lcj))
-                             spreadsheet.set('Linkp',str(Lp))
-                             spreadsheet.set('Linkj',str(Lj))
-                             spreadsheet.set('CLp',Lc)
-                             spreadsheet.set('CLj',str(Lcj))
-                             spreadsheet.set('alpha',str(k1))
-                             spreadsheet.set('pcd1',str(pcd1))
-                             spreadsheet.set('pcd2',str(pcd2))
-                             spreadsheet.set('alpha',str(k1))
+                             
+                             #リンク型番変更
+                             key=self.comboBox_type.currentText()[4:]
+                             for i in range(2,14):
+                                 key2=shtLink.getContents(column_list[i]+str('2'))
+                                 if key==key2:
+                                    #print(key,key2)
+                                    break
+                                                          
+                             picth=shtLink.getContents(column_list[i]+str(3))
+                             h0=shtLink.getContents(column_list[i]+str(4))
+                             t0=shtLink.getContents(column_list[i]+str(5))
+                             W0=shtLink.getContents(column_list[i]+str(6))
+                             d=shtLink.getContents(column_list[i]+str(7))
+                             d2=shtLink.getContents(column_list[i]+str(8))
+                             h1=shtLink.getContents(column_list[i]+str(9))
+
+                             shtLink.set(column_list[1]+str(2),key2)
+                             shtLink.set(column_list[1]+str(3),picth)
+                             shtLink.set(column_list[1]+str(4),h0)
+                             shtLink.set(column_list[1]+str(5),t0)
+                             shtLink.set(column_list[1]+str(6),W0)
+                             shtLink.set(column_list[1]+str(7),d)
+                             shtLink.set(column_list[1]+str(8),d2)
+                             shtLink.set(column_list[1]+str(9),h1)
+
+                             shtAssy.set('Type','ANSI'+str(key))
+                             shtAssy.set('CLj',str(Lcj))
+                             shtAssy.set('Linkp',str(Lp))
+                             shtAssy.set('Linkj',str(Lj))
+                             shtAssy.set('CLp',Lc)
+                             shtAssy.set('CLj',str(Lcj))
+                             shtAssy.set('alpha',str(k1))
+                             shtAssy.set('pcd1',str(pcd1))
+                             shtAssy.set('pcd2',str(pcd2))
+                             shtAssy.set('alpha',str(k1))
 
                          App.ActiveDocument.recompute() 
                          return
-
-    def onChain(self):
-        import RollerChain
-        RollerChain
     def create(self): 
          shp=self.comboBox_shape.currentText()
          fname='Sprocket_'+shp+'.FCStd'

@@ -14,7 +14,7 @@ from math import pi
 #buhin=['ワイヤーロープ','転がり軸受','滑り軸受','歯車','スプロケット','シーブ','ねじ類','ピン類','シャフト','チェン','C形止め輪','オイルシール','グランドパッキン',
 #       'ばね','エンドプレート','キープレート','軸継手','形鋼','平面形状','ワンタッチ窓'
 #       ,'取手','ベルトコンベヤ','スクリューコンベヤ','フライトコンベヤ','自動除塵機']
-buhin=['Wire rope','Rolling bearing','Plain bearing','Gear','Sprocket','Screws','Pins','Shaft','Chain','Snap Ring',
+buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Screws','Pins','Shaft','Snap Ring',
        'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Shaped Steel','Planar shape','One-touch window'
        ,'Handle',]
 
@@ -28,7 +28,7 @@ snapring=['for shafts','for holes']
 
 spring=['Tensile coil spring','Compression coil springs']
 
-bearing=['Ball Bearings','Angular Ball Bearing','Double-row outward tapered roller bearing']
+bearing=['Ball Bearings受','Double-row outward tapered roller bearing']
 
 shaft=['Shaft','Screw shaft']
 
@@ -224,10 +224,10 @@ class Ui_Dialog(object):
         elif buhin=='One-touch window':
             self.comboBox_buhin2.hide()    
             return
-        elif buhin=='Gear':
+        elif buhin=='GearAssy':
             self.comboBox_buhin2.show()  
             self.comboBox_buhin2.addItems(Gear)  
-        elif buhin=='Sprocket':
+        elif buhin=='driveChainAssy':
             self.comboBox_buhin2.hide() 
         elif buhin=='Handle':
             self.comboBox_buhin2.hide()       
@@ -313,7 +313,7 @@ class Ui_Dialog(object):
               import Pln_shape  
          elif buhin=='Shaped Steel':
               import Shaped_steel   
-         elif buhin=='Gear':
+         elif buhin=='GearAssy':
            if buhin2=='Spur gears':
               import sperGear
            elif buhin2=='Helical gears':
@@ -326,7 +326,7 @@ class Ui_Dialog(object):
                import planetaryGears   
            elif buhin2=='Hypocycloidal gear':
                import hypoCycloidGears  
-         elif buhin=='Sprocket':
+         elif buhin=='driveChainAssy':
              import Sprocket  
          elif buhin=='Handle':
              import Handle
