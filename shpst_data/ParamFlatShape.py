@@ -36,17 +36,17 @@ class FlatShape:
         if Solid==True:
             #L=App.ActiveDocument.getObject(label).L
             c00=pface.extrude(Base.Vector(0,L,0))
-        obj.size=size
-        obj.t=t
-        obj.B=B     
-        g=c00.Volume*g0/10**9 
-        label='mass[kg]'
+            obj.size=size
+            obj.t=t
+            obj.B=B     
+            g=c00.Volume*g0/10**9 
+            label='mass[kg]'
         try:
             obj.addProperty("App::PropertyFloat", "mass",label)
             obj.mass=g
             obj.ViewObject.Proxy=0
         except:
-            obj.mass=g
+            #obj.mass=g
             obj.ViewObject.Proxy=0
             pass    
         obj.Shape=c00
