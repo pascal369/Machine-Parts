@@ -3,9 +3,11 @@
 #from ast import Delete
 from math import asin, sqrt
 import os
+import math
 #from pickle import TRUE
 import sys
 import string
+import Part
 #from tkinter.tix import ComboBox
 import Import
 import Spreadsheet
@@ -18,7 +20,7 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
-from prt_data.CSnap_data import paramCSnap
+#from prt_data.CSnap_data import paramCSnap
 
 sprType=['ANSI25','ANSI35','ANSI40','ANSI50','ANSI60','ANSI80','ANSI100','ANSI120',
            'ANSI140','ANSI160','ANSI180','ANSI200','ANSI240',]
@@ -43,7 +45,6 @@ class Ui_Dialog(object):
     for i in range(0,26):
         for j in range(0,26):
             column_list.append(alphabet_list[i] + alphabet_list[j])
-
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(250, 675)
@@ -78,6 +79,9 @@ class Ui_Dialog(object):
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
         self.pushButton3.setGeometry(QtCore.QRect(50, 135, 180, 22))
+        #クリヤ
+        self.pushButton4 = QtGui.QPushButton('Clear Data',Dialog)
+        self.pushButton4.setGeometry(QtCore.QRect(50, 160, 180, 22))
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
         self.label_6.setGeometry(QtCore.QRect(25, 170, 200, 200))
@@ -176,9 +180,10 @@ class Ui_Dialog(object):
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+        QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.setClear)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
+        
         #QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.onChain)
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
 
@@ -217,14 +222,14 @@ class Ui_Dialog(object):
              parts_group = selected_object
              try:
                  for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                             spreadsheet = obj
+                     if obj.Label[:8] == "shtSproP" or obj.Label[8:]=='shtSproG':
+                             sht_X = obj
              except Exception as e:
                  print(f"エラーが発生しました: {e}")
                  #sys.exit(1)  # プログラムを終了する 
                  return  
              try:             
-                 key3=spreadsheet.getContents('I2')
+                 key3=sht_X.getContents('I2')
              except:
                  return
              if key!=key3[1:]:
@@ -236,13 +241,15 @@ class Ui_Dialog(object):
              N_Lst=[]
              #タイプを選択
              for j in range(0,116):
-                 type3=spreadsheet.getContents(column_list[j]+str('18'))
+                 type3=sht_X.getContents(column_list[j]+str('18'))
                  type0=self.comboBox_type.currentText()
                  if type0==type3[1:]:
                      break
              col_type=j 
+             #print(col_type)
              #D0 形状を選択 
              for s in range(col_type+1,col_type+4):
+                 
                  if key=='1B':
                      sx=s-2
                  elif key=='2B':
@@ -253,20 +260,20 @@ class Ui_Dialog(object):
                      sx=s+1    
                  elif key=='1A':
                      sx=s-2
-                 key2=spreadsheet.getContents(column_list[sx]+str('20'))
+                 key2=sht_X.getContents(column_list[sx]+str('20'))
                  if key==key2[1:]: 
                     break
              col_shp=sx 
              #歯数を設定 
              for i in range(21,57):
-                 shp_cell=spreadsheet.getContents(column_list[col_shp]+str(i))
+                 shp_cell=sht_X.getContents(column_list[col_shp]+str(i))
                  if shp_cell!='':
                      break
              col_N=i 
              N_Lst=[] 
              for i in range(col_N,57):
-                 N_cell=spreadsheet.getContents(column_list[col_type]+str(i))
-                 N_cell2=spreadsheet.getContents(column_list[col_shp]+str(i))
+                 N_cell=sht_X.getContents(column_list[col_type]+str(i))
+                 N_cell2=sht_X.getContents(column_list[col_shp]+str(i))
                  if N_cell2!='':
                      N_Lst.append(N_cell)
              string_list = [str(element) for element in N_Lst]
@@ -280,7 +287,7 @@ class Ui_Dialog(object):
              elif self.comboBox_shape.setCurrentText=='1C':
                  self.comboBox_type.clear()
                  self.comboBox_type.addItems[sprType[2:]]
-             self.comboBox_N.setCurrentText(spreadsheet.getContents('E2'))
+             self.comboBox_N.setCurrentText(sht_X.getContents('E2'))
         
     def spinMove(self):
         #pass
@@ -291,397 +298,401 @@ class Ui_Dialog(object):
          beta2=360/float(N2)
          x=10
          #print(N1,N2,beta1)
-         spro1.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
-         spro2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
+         sproP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
+         sproG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
          #print(A,Pitch,x)
          if A==0:
              return
          self.le_kiten.setText(str(round(A*Pitch/x,3)))
-     #except:
-     #   return
 
     def update_kiten(self):
         kiten=self.le_kiten.text()
-        #print(kiten)
-        #return
         try:
              shtAssy.set('kiten',kiten)
              App.ActiveDocument.recompute() 
         except:
-             #Spreadsheet.set('kiten',kiten)
-             #App.ActiveDocument.recompute() 
              pass
     def setIchi(self):
-        #try:
          selection = Gui.Selection.getSelection()
          if selection:
                  selected_object = selection[0]
                  if selected_object.TypeId == "App::Part":
                      parts_group = selected_object
                      for obj in parts_group.Group:
-                         if obj.TypeId == "Spreadsheet::Sheet":
-                             spreadsheet = obj
-#
-                             try:
-                                 if selected_object.Label=='spro1' :
-                                     A0=float(self.spinBox2.value())*0.5
-                                     SP1.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A0)
-                                     spreadsheet.set('spr1',str(A0))
-                                     App.ActiveDocument.recompute() 
-                                 elif selected_object.Label=='spro2' :
-                                     A1=float(self.spinBox2.value())*0.5
-                                     SP2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A1)  
-                                     spreadsheet.set('spr2',str(A1))  
-                                     App.ActiveDocument.recompute() 
-                             except:
-                                return        
-       
-                         
-    def setParts(self):
-     global spro1
-     global spro2 
-     global SP1
-     global SP2
-     global chainPath
-     global shtAssy
-     global shtSpro1
-     global shtSpro2
-     global shtLink
-     doc = FreeCAD.activeDocument()
-     if doc:
-         group_names = []
-         for obj in doc.Objects:
-             print(obj.Label)
-             if obj.Label=='spro1':
-                 spro1=obj
-             elif obj.Label=='spro2':
-                 spro2=obj 
-             elif obj.Label=='SP1':
-                 SP1=obj
-             elif obj.Label=='SP2':
-                 SP2=obj        
-             elif obj.Label=='chainPath':
-                 chainPath=obj
-             elif obj.Label=='shtAssy':
-                 shtAssy=obj 
-             elif obj.Label=='shtSpro1':
-                 shtSpro1=obj 
-             elif obj.Label=='shtSpro1':
-                 shtSpro2=obj 
-             elif obj.Label=='shtLink':
-                 shtLink=obj         
+                         if obj.Label[:7]=='sP':
+                             sP = obj
+                         elif obj.Label[:7]=='sG':
+                             sG = obj    
 
-     else:  
-         return
-     
+                     try:
+                         #print('cccccccccccccccc')
+                         if selected_object.Label=='sproP' :
+                             A0=float(self.spinBox2.value())*0.5
+                             sP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A0)
+                             shtAssy.set('spr1',str(A0))
+                             App.ActiveDocument.recompute() 
+                         elif selected_object.Label=='sproG' :
+                             #print('cccccccccccccccc')
+                             A1=float(self.spinBox2.value())*0.5
+                             sG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A1)  
+                             shtAssy.set('spr2',str(A1))  
+                             App.ActiveDocument.recompute() 
+                     except:
+                        return        
+                         
+    #def setParts(self):
+    # global sproP
+    # global sproG 
+    # global sP
+    # global sG
+    # global chainPath
+    # global shtAssy
+    # global shtsproP
+    # global shtsproG
+    # global shtLink
+    # doc = FreeCAD.activeDocument()
+    # if doc:
+    #     group_names = []
+    #     for obj in doc.Objects:
+    #         if obj.Label[:5]=='sproP':
+    #             sproP=obj
+    #         elif obj.Label[:5]=='sproG':
+    #             sproG=obj 
+    #         elif obj.Label[:2]=='sP':
+    #             sP=obj
+    #         elif obj.Label[:2]=='sG':
+    #             sG=obj        
+    #         elif obj.Label[:9]=='chainPath':
+    #             chainPath=obj
+    #         elif obj.Label[:7]=='shtAssy':
+    #             shtAssy=obj 
+    #         elif obj.Label[:8]=='shtsproP':
+    #             shtsproP=obj 
+    #         elif obj.Label[:8]=='shtsproG':
+    #             shtsproG=obj 
+    #         elif obj.Label[:7]=='shtLink':
+    #             shtLink=obj         
+    def setClear(self):
+        Gui.Selection.clearSelection()
+
     def read_data(self):
-         global type0
+         #global type0
          global Lc
          global N1
          global N2
          global pitch
-         global Spreadsheet
-         try:
-             selection = Gui.Selection.getSelection()
-         except:
-             return
+         global sht_X
+         global shtAssy
+         global shtSproP
+         global shtSproG
+         global sproP
+         global sproG
+         global sP
+         global sG
+         global Sketch_P
+         global shtLink
+         
+         selection = Gui.Selection.getSelection()
          if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId =="Spreadsheet::Sheet":
-                         spreadsheet = obj
-                         
-                         if selected_object.Label=='sproAssy':
-                             self.comboBox_type.setCurrentText(spreadsheet.getContents('B6')[1:])
-                             pass
-                         else: 
-                             try:
-                                 self.comboBox_type.setCurrentText(spreadsheet.getContents('A2')[1:])
-                                 type0=self.comboBox_type.currentText()
-                             except:
-                                 pass 
-                             
-                             self.comboBox_shape.setCurrentText(spreadsheet.getContents('I2')[1:])
-                             myShape=shtAssy.getContents('A1')[1:]
-                             self.comboBox_N.setCurrentText(spreadsheet.getContents('E2'))
-                             self.le_dia.setText(spreadsheet.getContents('H2')) 
-                             key2= self.comboBox_shape.currentText()
-                             fname='Sprocket_'+key2+'.png'
-                             base=os.path.dirname(os.path.abspath(__file__))
-                             joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-                             self.label_6.setPixmap(QtGui.QPixmap(joined_path))  
-                         
-                         if selected_object.TypeId=='App::Part': 
-                                 sht=[]
-                                 sht=['spro1','spro2','sproAssy']
-                                 for i in range(6):
-                                     if  selected_object.Label!='sproAssy':
-                                         if i<5:
-                                             N0=self.comboBox_N.currentText()
-                                             pitch=spreadsheet.getContents('B2')
-                                             try:
-                                                pcd=round(float(N0)*float(pitch)/3.142,3)
-                                                self.onType
-                                             except:
-                                                 pass
-                                 
-                                 if selected_object.Label=='spro1':
-                                     self.comboBox_shape.setCurrentText(myShape[5:7])
-                                     self.label_N1.setText(N0)
-                                     self.label_pitch1.setText(str(pitch))
-                                     self.label_pcd1.setText(str(pcd))
-                                 elif  selected_object.Label=='spro2':
-                                     self.comboBox_shape.setCurrentText(myShape[8:10])
-                                     self.label_N2.setText(N0) 
-                                     self.label_pitch1.setText(str(pitch)) 
-                                     self.label_pcd2.setText(str(pcd))
-                                 elif selected_object.Label=='sproAssy':
-                                     self.comboBox_type.setCurrentText(spreadsheet.getContents('B6')[1:])
-                                     Lc=spreadsheet.getContents('CLp')
-                                     self.le_Lp.setText(Lc)
-                                     N1=spreadsheet.getContents('Teeth1')
-                                     N2=spreadsheet.getContents('Teeth2')
-                                     pitch=spreadsheet.getContents('Pitch')
-                                     pcd1=spreadsheet.getContents('pcd1')
-                                     pcd2=spreadsheet.getContents('pcd2')
-                                     k1=spreadsheet.getContents('alpha')
-                                     Lp=spreadsheet.getContents('Linkp')
-                                     Lj=spreadsheet.getContents('Linkj')
-                                     CLj=spreadsheet.getContents('CLj')
-                                     self.label_N1.setText(N1)
-                                     self.label_N2.setText(N2)
-                                     self.label_pitch1.setText(pitch)
-                                     self.label_pcd1.setText(pcd1)
-                                     self.label_pcd2.setText(pcd2)
-                                     self.AssyCulc
-                                     self.label_k1.setText(k1)
-                                     self.label_Linkp.setText(Lp)
-                                     self.label_Linkj.setText(Lj)
-                                     self.label_Lj.setText(CLj)
-                                     
-                                     
-                                     try:
-                                         k1=asin((float(pcd2)/2-float(pcd1)/2)/float(Lc))
-                                         k1=round(180-2*k1*57.3,2)
-                                         Lp=(float(N1)+float(N2))/2+2*float(Lc)/float(pitch)+\
-                                            ((float(N2)-float(N1))/6.28)**2/(float(Lc)/float(pitch))
-                                         Lp=round(Lp,2)
-                                     except:
-                                         return
-                                     Lj=int(Lp)
-                                     Lcj=(float(pitch)/8)*(2*float(Lp)-float(N1)-float(N2)+\
-                                         sqrt((2*float(Lp)-float(N1)-float(N2))**2-(8/9.86)*(float(N2)-float(N1))**2))
-                                     Lcj=round(Lcj,2)
-                                     self.label_Linkp.setText(str(Lp))
-                                     self.label_Linkj.setText(str(Lj))
-                                     self.label_Lj.setText(str(Lcj))
-                                     self.label_N1.setText(N1)
-                                     self.label_N2.setText(N2)
-                                     self.label_pitch1.setText(pitch)
-                                     self.label_pcd1.setText(pcd1)
-                                     self.label_pcd2.setText(pcd2)
-                                     self.label_k1.setText(str(k1)+'°')
-                                     self.comboBox_shape.setCurrentText('sproAssy')
-                                     key2= self.comboBox_shape.currentText()
-                                     fname='Sprocket_'+key2+'.png'
-                                     base=os.path.dirname(os.path.abspath(__file__))
-                                     joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-                                     self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
-                                 else:
-                                     self.comboBox_shape.setCurrentText(spreadsheet.getContents('I2')[1:])
-                                     self.comboBox_N.setCurrentText(spreadsheet.getContents('E2'))
-                                     self.le_dia.setText(spreadsheet.getContents('H2')) 
-                                     key2= self.comboBox_shape.currentText()
-                                     fname='Sprocket_'+key2+'.png'
-                                     base=os.path.dirname(os.path.abspath(__file__))
-                                     joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-                                     self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+            selected_object = selection[0]
+            if selected_object.TypeId == "App::Part":
+                parts_group = selected_object
+                for obj in parts_group.Group:
+                    print(obj.Label)
+                    if obj.Label[:5]=='sproP':
+                        sproP=obj
+                    elif obj.Label[:5]=='sproG':
+                        sproG=obj 
+                    elif obj.Label[:2]=='sP':
+                        sP=obj
+                    elif obj.Label[:2]=='sG':
+                        sG=obj        
+                    elif obj.Label[:8]=='Sketch_P':
+                        Sketch_P=obj
+                    elif obj.Label[:7]=='shtAssy':
+                        shtAssy=obj 
+                    elif obj.Label[:8]=='shtSproP':
+                        shtSproP=obj 
+                    elif obj.Label[:8]=='shtSproG':
+                        shtSproG=obj 
+                    elif obj.Label[:7]=='shtLink':
+                        shtLink=obj  
+                    elif obj.Label[:5]=='sht_X':
+                        sht_X=obj      
+
+                for i in range(6):
+                    if  selected_object.Label[:8]!='sproAssy':
+                        if selected_object.Label[:5]=='sproP':
+                            sht_X=shtSproP
+                        elif selected_object.Label[:5] =='sproG':
+                            sht_X=shtSproG
+                        else:
+                            return
+                    
+                        self.comboBox_type.setCurrentText(sht_X.getContents('A2')[1:])  
+                        self.comboBox_shape.setCurrentText(sht_X.getContents('I2')[1:])
+                        self.comboBox_N.setCurrentText(sht_X.getContents('E2'))
+                        self.le_dia.setText(sht_X.getContents('H2')) 
+                        if i<5:
+                            N0=self.comboBox_N.currentText()
+                            pitch=sht_X.getContents('B2')
+                            try:
+                               pcd=round(float(N0)*float(pitch)/3.142,0)
+                               self.onType
+                            except:
+                                pass
+
+                        if selected_object.Label[:5]=='sproP':
+                            self.comboBox_shape.addItems(sprShape[:5])
+                            self.label_N1.setText(N0)
+                            self.label_pitch1.setText(str(pitch))
+                            self.label_pcd1.setText(str(pcd))
+                        elif  selected_object.Label[:5]=='sproG':
+                            self.comboBox_shape.addItems(sprShape[:5])
+                            self.label_N2.setText(N0) 
+                            self.label_pitch1.setText(str(pitch)) 
+                            self.label_pcd2.setText(str(pcd))
+                    elif selected_object.Label[:8]=='sproAssy':
+                        self.comboBox_type.setCurrentText(shtAssy.getContents('B6')[1:])
+                        Lc=shtAssy.getContents('CLp')
+                        self.le_Lp.setText(Lc)
+                        N1=shtAssy.getContents('Teeth1')
+                        N2=shtAssy.getContents('Teeth2')
+                        pitch=shtAssy.getContents('Pitch')
+                        pcd1=shtAssy.getContents('pcd1')
+                        pcd2=shtAssy.getContents('pcd2')
+                        k1=shtAssy.getContents('alpha')
+                        Lp=shtAssy.getContents('Linkp')
+                        Lj=shtAssy.getContents('Linkj')
+                        CLj=shtAssy.getContents('CLj')
+                        self.label_N1.setText(N1)
+                        self.label_N2.setText(N2)
+                        self.label_pitch1.setText(pitch)
+                        self.label_pcd1.setText(pcd1)
+                        self.label_pcd2.setText(pcd2)
+                        self.AssyCulc
+                        self.label_k1.setText(k1)
+                        self.label_Linkp.setText(Lp)
+                        self.label_Linkj.setText(Lj)
+                        self.label_Lj.setText(CLj)
+                        try:
+                            k1=asin((float(pcd2)/2-float(pcd1)/2)/float(Lc))
+                            k1=round(180-2*k1*57.3,2)
+                            Lp=(float(N1)+float(N2))/2+2*float(Lc)/float(pitch)+\
+                               ((float(N2)-float(N1))/6.28)**2/(float(Lc)/float(pitch))
+                            Lp=round(Lp,2)
+                        except:
+                            return
+                        Lj=int(Lp)
+                        Lcj=(float(pitch)/8)*(2*float(Lp)-float(N1)-float(N2)+\
+                            sqrt((2*float(Lp)-float(N1)-float(N2))**2-(8/9.86)*(float(N2)-float(N1))**2))
+                        Lcj=round(Lcj,2)
+                        self.label_Linkp.setText(str(Lp))
+                        self.label_Linkj.setText(str(Lj))
+                        self.label_Lj.setText(str(Lcj))
+                        self.label_N1.setText(N1)
+                        self.label_N2.setText(N2)
+                        self.label_pitch1.setText(pitch)
+                        self.label_pcd1.setText(pcd1)
+                        self.label_pcd2.setText(pcd2)
+                        self.label_k1.setText(str(k1)+'°')
+
+                        self.comboBox_shape.setCurrentText('sproAssy')
+                        key2= self.comboBox_shape.currentText()
+                        fname='Sprocket_'+key2+'.png'
+                        base=os.path.dirname(os.path.abspath(__file__))
+                        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+                        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+                    else:
+                        self.comboBox_shape.setCurrentText(sht_X.getContents('I2')[1:])
+                        self.comboBox_N.setCurrentText(sht_X.getContents('E2'))
+                        self.le_dia.setText(sht_X.getContents('H2')) 
+                        key2= self.comboBox_shape.currentText()
+                        fname='Sprocket_'+key2+'.png'
+                        base=os.path.dirname(os.path.abspath(__file__))
+                        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+                        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
 
     def AssyCulc(self):
-        global Lcj
+        #global Lcj
         global Lp
         global Lj
         global k1
         global pcd1
         global pcd2
         global pitch
-        selection = Gui.Selection.getSelection()
-        if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
 
-                         N1=self.label_N1.text()
-                         N2=self.label_N2.text()
-                         pitch=self.label_pitch1.text()
-                         Lc=self.le_Lp.text()
-                         spreadsheet.set('CLp',Lc)
-                         spreadsheet.set('Teeth1',N1)
-                         spreadsheet.set('Teeth2',N2)
-                         spreadsheet.set('Pitch',pitch)
-                         pcd1=self.label_pcd1.text()
-                         pcd2=self.label_pcd2.text()
+        N1=self.label_N1.text()
+        N2=self.label_N2.text()
+        pitch=self.label_pitch1.text()
+        Lc=self.le_Lp.text()
+        shtAssy.set('CLp',Lc)
+        shtAssy.set('Teeth1',N1)
+        shtAssy.set('Teeth2',N2)
+        shtAssy.set('Pitch',pitch)
+        pcd1=self.label_pcd1.text()
+        pcd2=self.label_pcd2.text()
+        #print(pcd1,pcd2)
+        k1=asin((float(pcd2)/2-float(pcd1)/2)/float(Lc))
+        k1=round(180-2*k1*57.3,2)
 
-                         k1=asin((float(pcd2)/2-float(pcd1)/2)/float(Lc))
-                         k1=round(180-2*k1*57.3,2)
-                         Lp=(float(N1)+float(N2))/2+2*float(Lc)/float(pitch)+\
-                            ((float(N2)-float(N1))/6.28)**2/(float(Lc)/float(pitch))
+        #pathLength
+        total_length = 0.0
+        edges = Sketch_P.Geometry  # スケッチ内のジオメトリリスト
+        for edge in edges:
+          #if isinstance(edge, (Part.Line, Part.LineSegment, Part.Circle, Part.ArcOfCircle, Part.Ellipse, Part.ArcOfEllipse)):  # エッジのみ対象
+           if isinstance(edge, (Part.LineSegment, Part.ArcOfCircle )):  # エッジのみ対象 
+              total_length += edge.length()
+        Lp=total_length/float(pitch)
+        Lp=round(Lp,2)
+        Lj=int(Lp)
 
-                         Lp=round(Lp,2)
-                         Lj=int(Lp)
-                         Lcj=(float(pitch)/8)*(2*float(Lp)-float(N1)-float(N2)+\
-                             sqrt((2*float(Lp)-float(N1)-float(N2))**2-(8/9.86)*(float(N2)-float(N1))**2))
-                         Lcj=round(Lcj,2)
-                         self.label_Linkp.setText(str(Lp))
-                         self.label_Linkj.setText(str(Lj))
-                         self.label_Lj.setText(str(Lcj))
-                         self.label_k1.setText(str(k1))
-                         spreadsheet.set('CLp',Lc)
-                         self.comboBox_shape.setCurrentText('sproAssy')
-                         key2= self.comboBox_shape.currentText()
-                         fname='Sprocket_'+key2+'.png'
-                         base=os.path.dirname(os.path.abspath(__file__))
-                         joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-                         self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+        self.label_Linkp.setText(str(Lp))
+        self.label_Linkj.setText(str(Lj))
+        self.label_Lj.setText(str(Lc))
 
+
+        self.label_k1.setText(str(k1))
+        shtAssy.set('CLp',Lc)
+        self.comboBox_shape.setCurrentText('sproAssy')
+        key2= self.comboBox_shape.currentText()
+        fname='Sprocket_'+key2+'.png'
+        base=os.path.dirname(os.path.abspath(__file__))
+        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
     def update(self):
          global N0
          global row_N
          global col_type
          global col_shp
          
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
+         key=self.comboBox_shape.currentText()
+         
+         if key!='sproAssy':
+             N0=self.comboBox_N.currentText()
+             dia=self.le_dia.text()  
+             #p0 r0 t0 E0を検索
+             for i in range(3,15):
+                 type=self.comboBox_type.currentText()
+                 type3=sht_X.getContents('A'+str(i))
+                 
+                 if type==type3[1:]:
+                     break
+             row_type=i 
+             p0=sht_X.getContents('B'+str(row_type))
+             r0=sht_X.getContents('C'+str(row_type))
+             t0=sht_X.getContents('D'+str(row_type))
+             #E0=sht_X.getContents('J'+str(row_type))
+             if sht_X.Label=='shtSproP':
+                 N1=N0
+                 pcd1=int(float(p0)/(math.sin(3.142/float(N0))))
+                 shtAssy.set('Teeth1',N1)
+             elif sht_X.Label=='shtSproG':
+                 N2=N0
+                 pcd2=int(float(p0)/(math.sin(3.142/float(N0))))   
+                 shtAssy.set('Teeth2',N2) 
+             #タイプを選択
+             for j in range(0,116):
+                 type=self.comboBox_type.currentText()
+                 type3=sht_X.getContents(column_list[j]+str('18'))
+                 #print(type,type3)
+                 if type==type3[1:]:
+                     break
+             col_type=j  
+             for m in range(21,56):
+                  N1=sht_X.getContents(column_list[col_type]+str(m))
+                  try:
+                      if float(N0)<=float(N1) : 
+                          break 
+                  except:
+                      pass    
+             row_N=m  
 
-                         #print(obj.Label)
+             #D0 形状を選択 
+             for s in range(col_type+1,col_type+4):
+                 #print(s)
+                 if key=='1B':
+                     sx=s-2
+                 elif key=='2B':
+                     sx=s-2
+                 elif key=='1C':
+                     sx=s
+                 elif key=='2C':
+                     sx=s+1
+                 #elif key=='1A':
+                 #    sx=s-2
+                 key2=sht_X.getContents(column_list[s]+str('20'))
+                 #print(sx,key,key2[1:])
+                 if key==key2[1:]: 
+                    #print(sx,key,key2[1:])
+                    break
+                 col_shp=sx 
+             
+             D0=sht_X.getContents(column_list[sx]+str(m)) 
+             print(sx,m,D0)
+             if D0=='':
+                 return
+             else: 
+                 L0=sht_X.getContents(column_list[sx+4]+str(m)) 
 
-                         key=self.comboBox_shape.currentText()
-                         if selected_object.Label!='sproAssy':
-                             key3=spreadsheet.getContents('I2')[1:]
-                             if key!=key3:
-                                 return
-                         
-                         if selected_object.Label!='sproAssy':
+             #print(D0,L0)
+            
+             sht_X.set('A2',type)
+             sht_X.set('B2',p0)
+             sht_X.set('C2',r0)
+             sht_X.set('D2',t0)
+             sht_X.set('E2',N0)
+             sht_X.set('F2',D0)
+             sht_X.set('G2',L0)  
+             sht_X.set('H2',dia)  
 
-                            N0=self.comboBox_N.currentText()
-                            dia=self.le_dia.text()  
-                            #p0 r0 t0 E0を検索
-                            for i in range(3,15):
-                                type=self.comboBox_type.currentText()
-                                type3=spreadsheet.getContents('A'+str(i))
-                                
-                                if type==type3[1:]:
-                                    break
-                            row_type=i 
-                            p0=spreadsheet.getContents('B'+str(row_type))
-                            r0=spreadsheet.getContents('C'+str(row_type))
-                            t0=spreadsheet.getContents('D'+str(row_type))
-                            E0=spreadsheet.getContents('J'+str(row_type))
-                             #タイプを選択
-                            for j in range(0,116):
-                                type=self.comboBox_type.currentText()
-                                type3=spreadsheet.getContents(column_list[j]+str('18'))
-                                if type==type3[1:]:
-                                    break
-                            col_type=j  
-                            for m in range(21,56):
-                                 N1=spreadsheet.getContents(column_list[col_type]+str(m))
-                                 try:
-                                     if float(N0)<=float(N1) : 
-                                         break 
-                                 except:
-                                     pass    
-                            row_N=m  
-                            
-                            #D0 形状を選択 
-                            for s in range(col_type+1,col_type+4):
-                                #print(key)
-                                if key=='1B':
-                                    sx=s-2
-                                elif key=='2B':
-                                    sx=s-1
-                                elif key=='1C':
-                                    sx=s
-                                elif key=='2C':
-                                    sx=s+1    
-                                elif key=='1A':
-                                    sx=s-2
-                                key2=spreadsheet.getContents(column_list[sx]+str('20'))
-                                if key==key2: 
-                                   break
-                            col_shp=sx 
-                            
-                            D0=spreadsheet.getContents(column_list[col_shp]+str(row_N)) 
-                            if D0=='':
-                                return
-                            else: 
-                                L0=spreadsheet.getContents(column_list[col_shp+4]+str(row_N)) 
+             App.ActiveDocument.recompute()   
 
-                            spreadsheet.set('A2',type)
-                            spreadsheet.set('B2',p0)
-                            spreadsheet.set('C2',r0)
-                            spreadsheet.set('D2',t0)
-                            spreadsheet.set('E2',N0)
-                            spreadsheet.set('F2',D0)
-                            spreadsheet.set('G2',L0)  
-                            spreadsheet.set('H2',dia)  
-                            spreadsheet.set('J2',E0) 
+         elif key=='sproAssy':
+             Lc=self.le_Lp.text()
+             shtAssy.set('CLj',Lc)
+             self.AssyCulc()
+             
+             #リンク型番変更
+             type=self.comboBox_type.currentText()[4:]
+             for i in range(2,14):
+                 key2=shtLink.getContents(column_list[i]+str('2'))
+                 #print(type,key2)
+                 if type==key2:
+                    #print(key,key2)
+                    break
+             shtAssy.set('Linkp',str(Lp))
+             shtAssy.set('Linkj',str(Lj))     
 
-                            
-                         elif selected_object.Label=='sproAssy':
-                             Lc=self.le_Lp.text()
-                             spreadsheet.set('CLp',Lc)
-                             self.AssyCulc()
-                             
-                             #リンク型番変更
-                             key=self.comboBox_type.currentText()[4:]
-                             for i in range(2,14):
-                                 key2=shtLink.getContents(column_list[i]+str('2'))
-                                 if key==key2:
-                                    #print(key,key2)
-                                    break
-                                                          
-                             picth=shtLink.getContents(column_list[i]+str(3))
-                             h0=shtLink.getContents(column_list[i]+str(4))
-                             t0=shtLink.getContents(column_list[i]+str(5))
-                             W0=shtLink.getContents(column_list[i]+str(6))
-                             d=shtLink.getContents(column_list[i]+str(7))
-                             d2=shtLink.getContents(column_list[i]+str(8))
-                             h1=shtLink.getContents(column_list[i]+str(9))
+         type=self.comboBox_type.currentText()                                
+         picth=shtLink.getContents(column_list[i]+str(3))
+         h0=shtLink.getContents(column_list[i]+str(4))
+         t0=shtLink.getContents(column_list[i]+str(5))
+         W0=shtLink.getContents(column_list[i]+str(6))
+         d=shtLink.getContents(column_list[i]+str(7))
+         d2=shtLink.getContents(column_list[i]+str(8))
+         h1=shtLink.getContents(column_list[i]+str(9))
+         shtLink.set(column_list[1]+str(2),key2)
+         shtLink.set(column_list[1]+str(3),picth)
+         shtLink.set(column_list[1]+str(4),h0)
+         shtLink.set(column_list[1]+str(5),t0)
+         shtLink.set(column_list[1]+str(6),W0)
+         shtLink.set(column_list[1]+str(7),d)
+         shtLink.set(column_list[1]+str(8),d2)
+         shtLink.set(column_list[1]+str(9),h1)
+         shtAssy.set('Type',type)
+         shtAssy.set('Pitch',pitch)
 
-                             shtLink.set(column_list[1]+str(2),key2)
-                             shtLink.set(column_list[1]+str(3),picth)
-                             shtLink.set(column_list[1]+str(4),h0)
-                             shtLink.set(column_list[1]+str(5),t0)
-                             shtLink.set(column_list[1]+str(6),W0)
-                             shtLink.set(column_list[1]+str(7),d)
-                             shtLink.set(column_list[1]+str(8),d2)
-                             shtLink.set(column_list[1]+str(9),h1)
+         try:
+             if sht_X.Label=='shtSproP':
+                 shtAssy.set('pcd1',str(pcd1))
+             elif sht_X.Label=='shtSproG':    
+                 shtAssy.set('pcd2',str(pcd2))
+         except:
+             pass
 
-                             shtAssy.set('Type','ANSI'+str(key))
-                             shtAssy.set('CLj',str(Lcj))
-                             shtAssy.set('Linkp',str(Lp))
-                             shtAssy.set('Linkj',str(Lj))
-                             shtAssy.set('CLp',Lc)
-                             shtAssy.set('CLj',str(Lcj))
-                             shtAssy.set('alpha',str(k1))
-                             shtAssy.set('pcd1',str(pcd1))
-                             shtAssy.set('pcd2',str(pcd2))
-                             shtAssy.set('alpha',str(k1))
+         App.ActiveDocument.recompute() 
 
-                         App.ActiveDocument.recompute() 
-                         return
     def create(self): 
          shp=self.comboBox_shape.currentText()
          fname='Sprocket_'+shp+'.FCStd'
