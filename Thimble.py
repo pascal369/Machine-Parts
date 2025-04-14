@@ -28,11 +28,11 @@ wireDia={'6':('6.3',),
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 320)
+        Dialog.resize(300, 370)
         Dialog.move(1000, 0)
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(50, 100, 200, 200))
+        self.label_6.setGeometry(QtCore.QRect(50, 150, 200, 200))
         self.label_6.setText("")
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "prt_data",'WireRope',"Thimble.png")
@@ -53,10 +53,10 @@ class Ui_Dialog(object):
         self.pushButton.setGeometry(QtCore.QRect(70, 60, 50, 22))
         #更新
         self.pushButton3 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(125, 60, 50, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(125, 85, 50, 22))
         #インポート
         self.pushButton2 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(180, 60, 50, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(180, 110, 50, 22))
 
 
         self.comboBox_dia.addItems(ODia)
@@ -82,6 +82,7 @@ class Ui_Dialog(object):
         self.label_wdia.setText('wireDia(max)=  '+sa[0])
 
     def import_data(self):
+        global spreadsheet
         selection = Gui.Selection.getSelection()
         if selection:
              selected_object = selection[0]
@@ -99,14 +100,14 @@ class Ui_Dialog(object):
 
     def update(self):
          # 選択したオブジェクトを取得
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
+        # selection = Gui.Selection.getSelection()
+        # if selection:
+        #     selected_object = selection[0]
+        #     if selected_object.TypeId == "App::Part":
+        #         parts_group = selected_object
+        #         for obj in parts_group.Group:
+        #             if obj.TypeId == "Spreadsheet::Sheet":
+        #                 spreadsheet = obj
 
                          key=self.comboBox_dia.currentText()
                          for i in range(15,24):

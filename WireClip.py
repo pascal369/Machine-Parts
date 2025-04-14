@@ -81,6 +81,7 @@ class Ui_Dialog(object):
         self.label_wdia.setText('wireDia(max)=  '+sa[0])
 
     def import_data(self):
+        global spreadsheet
         global nut
         global All_screw
         selection = Gui.Selection.getSelection()
@@ -94,7 +95,7 @@ class Ui_Dialog(object):
                          nut=obj
                      elif obj.Label=='All_screw':
                          All_screw=obj    
-                     if obj.TypeId == "Spreadsheet::Sheet":
+                     elif obj.TypeId == "Spreadsheet::Sheet":
                          spreadsheet = obj
 
                          key=spreadsheet.getContents('B27')
@@ -105,14 +106,14 @@ class Ui_Dialog(object):
 
     def update(self):
          # 選択したオブジェクトを取得
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
+        #selection = Gui.Selection.getSelection()
+        #if selection:
+        #    selected_object = selection[0]
+        #    if selected_object.TypeId == "App::Part":
+        #        parts_group = selected_object
+        #        for obj in parts_group.Group:
+        #            if obj.TypeId == "Spreadsheet::Sheet":
+        #                spreadsheet = obj
                          
                          
                          key=self.comboBox_dia.currentText()
