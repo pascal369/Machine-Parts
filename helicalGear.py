@@ -237,7 +237,7 @@ class Ui_Dialog(object):
     def setIchi(self):
         #global A
         N1=self.label_N1.text()
-        A=self.spinBox_Ichi.value()
+        A=self.spinBox_Ichi.value()*0.5
         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
         #print(A)
         #self.spinBox.setValue(A)
@@ -294,7 +294,7 @@ class Ui_Dialog(object):
          spreadsheet.set('bb2',str(bb2))
         
          self.label_M.setText(m0)
-         self.label_N.setText(z1)
+         self.label_N1.setText(z1)
          self.label_N2.setText(z2)
          self.label_pcd1.setText(str(pcd1))
          self.label_pcd2.setText(str(pcd2))
