@@ -78,9 +78,9 @@ class Ui_Dialog(object):
                  parts_group = selected_object
                  for obj in parts_group.Group:
                      print(obj.Label)
-                     if obj.Label=='Spring_washer_general':
+                     if obj.Label[:21]=='Spring_washer_general':
                          washer=obj
-                     elif obj.Label=='hexagon_bolt':
+                     elif obj.Label[:12]=='hexagon_bolt':
                          bolt=obj    
                      elif obj.TypeId == "Spreadsheet::Sheet":
                          spreadsheet = obj
