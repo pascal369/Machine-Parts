@@ -235,14 +235,14 @@ class Ui_Dialog(object):
 
             
     def setIchi(self):
-        #global A
-        N1=self.label_N1.text()
-        A=self.spinBox_Ichi.value()*0.5
-        Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
-        #print(A)
-        #self.spinBox.setValue(A)
+        global A
+        N2=float(self.label_N1.text())
+        A=self.spinBox_Ichi.value()/5
+        Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
+        print(A)
+        #self.spinBox.setValue(0)
 
-        App.ActiveDocument.recompute()
+        #App.ActiveDocument.recompute()
     
     def spinMove(self):
          #try:
@@ -250,14 +250,15 @@ class Ui_Dialog(object):
          if N1=='***':
              return
          N2=self.label_N2.text()
-         A=self.spinBox_Ichi.value()
+         
          r1 = self.spinBox.value()
          r2 =r1*float(N1)/float(N2)
-        
+         #A=-float(self.spinBox_Ichi.value())
+         #print(A)
          #A=float(N1)/360
          #print(r1,r2)
-         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1-A)
-         Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2)
+         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1)
+         Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2+A)
          #except:
          #    return
     
