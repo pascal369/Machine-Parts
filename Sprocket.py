@@ -161,9 +161,6 @@ class Ui_Dialog(object):
         self.le_kiten.setGeometry(QtCore.QRect(110, 640, 100, 20))
         self.le_kiten.setAlignment(QtCore.Qt.AlignCenter)
 
-        #ローラーチェン
-        #self.pushButton4 = QtGui.QPushButton('ローラーチェン',Dialog)
-        #self.pushButton4.setGeometry(QtCore.QRect(10, 640, 100, 22))
         #sprocket調節
         self.spinBox2=QtGui.QSpinBox(Dialog)
         self.spinBox2.setGeometry(170, 580, 50, 50)
@@ -184,7 +181,6 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
         
-        #QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.onChain)
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
 
         self.comboBox_shape.setCurrentIndex(0)
@@ -214,8 +210,6 @@ class Ui_Dialog(object):
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
         self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
-        #print(joined_path)
-        #return
         selection = Gui.Selection.getSelection()
         if selection:
              selected_object = selection[0]
@@ -290,20 +284,21 @@ class Ui_Dialog(object):
              self.comboBox_N.setCurrentText(sht_X.getContents('E2'))
         
     def spinMove(self):
-        #pass
-         #try:
-         Pitch=float(self.label_pitch1.text())
-         A=self.spinBox.value()
-         beta1=360/float(N1)
-         beta2=360/float(N2)
-         x=10
-         #print(N1,N2,beta1)
-         sproP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
-         sproG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
-         #print(A,Pitch,x)
-         if A==0:
+         try:
+             Pitch=float(self.label_pitch1.text())
+             A=self.spinBox.value()
+             beta1=360/float(N1)
+             beta2=360/float(N2)
+             x=10
+             #print(N1,N2,beta1)
+             sproP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
+             sproG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
+             #print(A,Pitch,x)
+             if A==0:
+                 return
+             self.le_kiten.setText(str(round(A*Pitch/x,3)))
+         except:
              return
-         self.le_kiten.setText(str(round(A*Pitch/x,3)))
 
     def update_kiten(self):
         kiten=self.le_kiten.text()
@@ -398,7 +393,7 @@ class Ui_Dialog(object):
             if selected_object.TypeId == "App::Part":
                 parts_group = selected_object
                 for obj in parts_group.Group:
-                    print(obj.Label)
+                    #print(obj.Label)
                     if obj.Label[:5]=='sproP':
                         sproP=obj
                     elif obj.Label[:5]=='sproG':
