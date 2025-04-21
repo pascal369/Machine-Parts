@@ -10,7 +10,7 @@ import FreeCAD as App
 from . import ScrData
 class EyeBlt:
     def __init__(self, obj):
-        self.Type = 'Angle'
+        self.Type = ''
         obj.Proxy = self
         App.activeDocument().recompute(None,True,True)
     def execute(self, obj):
@@ -71,10 +71,9 @@ class EyeBlt:
             edge4 = Part.makeLine(p5,p1)
             
             #らせん_sweep
-            
             L3=L1-L2
             if  L3>0:
-                helix=Part.makeHelix(p,0.99*l,D0/2,0,False)
+                helix=Part.makeHelix(p,p+L2,D0/2,0,False)
                 cutProfile = Part.Wire([edge1,edge2,edge3,edge4])
             else:
                 return

@@ -10,7 +10,7 @@ import FreeCAD as App
 from . import ScrData
 class ShBlt:#六角穴付きボルト
     def __init__(self, obj):
-        self.Type = 'Angle'
+        self.Type = ''
         obj.Proxy = self
         App.activeDocument().recompute(None,True,True)
     def execute(self, obj):
