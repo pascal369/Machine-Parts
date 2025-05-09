@@ -10,80 +10,59 @@ from FreeCAD import Base
 import FreeCAD, Part, math
 from math import pi
 
-
-#buhin=['ワイヤーロープ','転がり軸受','滑り軸受','歯車','スプロケット','シーブ','ねじ類','ピン類','シャフト','チェン','C形止め輪','オイルシール','グランドパッキン',
-#       'ばね','エンドプレート','キープレート','軸継手','形鋼','平面形状','ワンタッチ窓'
-#       ,'取手','ベルトコンベヤ','スクリューコンベヤ','フライトコンベヤ','自動除塵機']
 buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Screws','Pins','Shaft','Snap Ring',
        'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Shaped Steel','Planar shape','One-touch window'
        ,'Handle',]
 
-#chain=['ローラーチェン','水処理用チェン','リンクチェン']
 chain=['Roller Chain','Water treatment chain','Link Chains']
-
-#spro=['ドライブチェーン用',]
 spro=['Drive Chains',]
-
 snapring=['for shafts','for holes']
-
 spring=['Tensile coil spring','Compression coil springs']
-
 bearing=['Ball Bearings受','Double-row outward tapered roller bearing']
-
 shaft=['Shaft','Screw shaft']
-
 joint=['Tube Split Joint',]
-
-#Gear=['Spur gears','Helical gears','Worm Gear','Bevel gear','Planetary gears','Hypocycloidal gear']
 Gear=['Helical gears','Worm Gear','Bevel gear','Planetary gears',]
-
-#GlandP=['Gland Packing Assy','Gland Packing','Lantern Ring','Ground presser','Stuffing Box']
 GlandP=['Gland Packing Assy',]
 pin=['Cotter Pin']
-
 Wire=['Shackle','Thimble','Wire Clip','Shackle Assembly','Sheave']
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 200)
+        Dialog.resize(350, 200)
         Dialog.move(1000, 0)
         #部品
         self.comboBox_buhin = QtGui.QComboBox(Dialog)
         self.comboBox_buhin.setGeometry(QtCore.QRect(80, 11, 130, 20))
-        #self.comboBox_buhin.setObjectName("comboBox_2")
         self.label_buhin = QtGui.QLabel('Parts',Dialog)
         self.label_buhin.setGeometry(QtCore.QRect(11, 11, 61, 16))
-        #self.label_buhin.setObjectName("label_2")
         #部品2
         self.comboBox_buhin2 = QtGui.QComboBox(Dialog)
         self.comboBox_buhin2.setGeometry(QtCore.QRect(80, 36, 130, 20))
-        #self.comboBox_buhin2.setObjectName("comboBox_2")
         self.label_buhin2 = QtGui.QLabel('Parts2',Dialog)
         self.label_buhin2.setGeometry(QtCore.QRect(11, 36, 61, 16))
-        #self.label_buhin2.setObjectName("label_2")
         #質量計算
         self.pushButton_m = QtGui.QPushButton('massCulculation',Dialog)
-        self.pushButton_m.setGeometry(QtCore.QRect(80, 61, 100, 23))
-        self.pushButton_m.setObjectName("pushButton")  
-        
+        self.pushButton_m.setGeometry(QtCore.QRect(80, 60, 100, 23))
+        self.pushButton_m.setObjectName("pushButton") 
         #質量集計
-        self.pushButton_m2 = QtGui.QPushButton('massTally',Dialog)
-        self.pushButton_m2.setGeometry(QtCore.QRect(180, 61, 100, 23))
-        self.pushButton_m2.setObjectName("pushButton")
+        self.pushButton_m20 = QtGui.QPushButton('massTally_csv',Dialog)
+        self.pushButton_m20.setGeometry(QtCore.QRect(180, 60, 150, 23))
+        self.pushButton_m2 = QtGui.QPushButton('massTally_SpreadSheet',Dialog)
+        self.pushButton_m2.setGeometry(QtCore.QRect(180, 85, 150, 23))
         #質量入力
         self.pushButton_m3 = QtGui.QPushButton('massImput[kg]',Dialog)
-        self.pushButton_m3.setGeometry(QtCore.QRect(80, 86, 100, 23))
+        self.pushButton_m3.setGeometry(QtCore.QRect(80, 110, 100, 23))
         self.pushButton_m3.setObjectName("pushButton")  
         self.le_mass = QtGui.QLineEdit(Dialog)
-        self.le_mass.setGeometry(QtCore.QRect(180, 86, 50, 20))
+        self.le_mass.setGeometry(QtCore.QRect(180, 110, 50, 20))
         self.le_mass.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_mass.setText('10.0')
         #密度
         self.lbl_gr = QtGui.QLabel('SpecificGravity',Dialog)
-        self.lbl_gr.setGeometry(QtCore.QRect(80, 111, 80, 12))
+        self.lbl_gr.setGeometry(QtCore.QRect(80, 135, 80, 12))
         self.le_gr = QtGui.QLineEdit(Dialog)
-        self.le_gr.setGeometry(QtCore.QRect(180, 111, 50, 20))
+        self.le_gr.setGeometry(QtCore.QRect(180, 135, 50, 20))
         self.le_gr.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_gr.setText('7.85')
         #実行
@@ -94,20 +73,11 @@ class Ui_Dialog(object):
         self.comboBox_buhin.setCurrentIndex(1)
         self.comboBox_buhin.currentIndexChanged[int].connect(self.onSpec)
         self.comboBox_buhin.setCurrentIndex(0)
-        
-         #重心計算
-        #self.pushButton_cm = QtGui.QPushButton('centerOfMass',Dialog)
-        #self.pushButton_cm.setGeometry(QtCore.QRect(80, 135, 100, 23))
-        #self.pushButton_cm.setObjectName("pushButton") 
-        
-        
-        
-
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton_m, QtCore.SIGNAL("pressed()"), self.massCulc)
-        QtCore.QObject.connect(self.pushButton_m2, QtCore.SIGNAL("pressed()"), self.massTally2)
+        QtCore.QObject.connect(self.pushButton_m2, QtCore.SIGNAL("pressed()"), self.massTally)
+        QtCore.QObject.connect(self.pushButton_m20, QtCore.SIGNAL("pressed()"), self.massTally2)
         QtCore.QObject.connect(self.pushButton_m3, QtCore.SIGNAL("pressed()"), self.massImput)
-        #QtCore.QObject.connect(self.pushButton_cm, QtCore.SIGNAL("pressed()"), self.centerOfMas)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -142,7 +112,7 @@ class Ui_Dialog(object):
         except:
             pass
 
-    def massTally2(self):
+    def massTally2(self):#csv
         doc = App.ActiveDocument
         objects = doc.Objects
         mass_list = []
@@ -150,8 +120,11 @@ class Ui_Dialog(object):
             if Gui.ActiveDocument.getObject(obj.Name).Visibility:
                 if obj.isDerivedFrom("Part::Feature"):
                     if hasattr(obj, "mass"):
-                        # Add the object's name, count, and mass to the list
-                        mass_list.append([obj.Label, 1, obj.mass])
+                        try:
+                            mass_list.append([obj.Label, obj.dia,'1', obj.mass])
+                        except:
+                            mass_list.append([obj.Label, '','1', obj.mass])    
+
                 else:
                      pass
         doc_path = doc.FileName
@@ -159,8 +132,48 @@ class Ui_Dialog(object):
         csv_path = os.path.join(os.path.dirname(doc_path), csv_filename)
         with open(csv_path, 'w', newline='') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(["Object Name",'Count', "Mass[kg]"])
+            writer.writerow(["Name",'Standard','Count', "Mass[kg]"])
             writer.writerows(mass_list) 
+    def massTally(self):#spreadsheet
+        doc = App.ActiveDocument
+        # 新しいスプレッドシートを作成
+        spreadsheet = doc.addObject("Spreadsheet::Sheet", "PartList")
+        spreadsheet.Label = "Parts List"
+        
+        # ヘッダー行を記入
+        headers = ['No',"Name",'Standard', 'Count','Mass[kg]']
+        for header in enumerate(headers):
+            spreadsheet.set(f"A{1}", headers[0])
+            spreadsheet.set(f"B{1}", headers[1])
+            spreadsheet.set(f"C{1}", headers[2])
+            spreadsheet.set(f"D{1}", headers[3])
+            spreadsheet.set(f"E{1}", headers[4])
+        # パーツを列挙して情報を書き込む
+        row = 2
+        i=1
+        s=0
+        for i,obj in enumerate(doc.Objects):
+            try:
+                spreadsheet.set(f"E{row}", f"{obj.mass:.2f}")  # mass
+                s=obj.mass+s
+                if hasattr(obj, "Shape") and obj.Shape.Volume > 0:
+                    try:
+                        spreadsheet.set(f"A{row}", str(row-1))  # No
+                        spreadsheet.set(f"B{row}", obj.Label) 
+                        try:
+                            spreadsheet.set(f"C{row}", obj.dia)
+                        except:
+                            pass
+                        spreadsheet.set(f"D{row}", '1')   # count
+                        row += 1
+                    except:
+                        pass    
+            except:
+                pass
+            spreadsheet.set(f'E{row}',s)
+        App.ActiveDocument.recompute()
+        Gui.activeDocument().activeView().viewAxometric()
+
     def onSpec(self):
         global buhin
         global pic
