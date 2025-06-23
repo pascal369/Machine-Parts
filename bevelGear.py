@@ -211,9 +211,9 @@ class Ui_Dialog(object):
                  elif obj.Label[:4]=='Gear':
                      Gear=obj    
 
-                 elif obj.Label =="shtBevelGearAssy":
+                 elif obj.Label[:16] =="shtBevelGearAssy":
                      spreadsheet = obj
-                 elif obj.Label =="shtSpiralBevelGearAssy":
+                 elif obj.Label [:22]=="shtSpiralBevelGearAssy":
                      spreadsheet = obj    
              #key=spreadsheet.getContents('A2')
              self.comboBox_type.setCurrentText(key)

@@ -22,7 +22,7 @@ class Ui_Dialog(object):
         global fname
         global joined_path
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 300)
+        Dialog.resize(300, 350)
         Dialog.move(1000, 0)
         #タイプ　Type
         self.label_type = QtGui.QLabel(Dialog)
@@ -47,7 +47,7 @@ class Ui_Dialog(object):
 
         #png
         self.label_5 = QtGui.QLabel(Dialog)
-        self.label_5.setGeometry(QtCore.QRect(50, 125, 200, 150))
+        self.label_5.setGeometry(QtCore.QRect(50, 125, 200, 200))
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
 
@@ -83,10 +83,18 @@ class Ui_Dialog(object):
          elif type=='Angular Ball Bearings':
              self.comboBox_ser.addItems(RollingBrg_Data.ASer)    
          elif type=='Tapered roller bearings': 
-             self.comboBox_ser.addItems(RollingBrg_Data.TRSer) 
-         elif type=='Roller Bearings': 
-             self.comboBox_ser.addItems(RollingBrg_Data.RSer) 
-             #return    
+             self.comboBox_ser.hide()  
+             self.comboBox_dia.hide()
+             self.comboBox_ser.addItems(RollingBrg_Data.TprSer)
+             return
+         #elif type=='Roller Bearings': 
+         #    self.comboBox_ser.hide()  
+         #    self.comboBox_dia.hide()
+         #    self.comboBox_ser.addItems(RollingBrg_Data.CylSer)
+         elif type=='Cylindorical Roller Bearings':  
+              self.comboBox_ser.hide()  
+              self.comboBox_dia.hide()
+              self.comboBox_ser.addItems(RollingBrg_Data.CylSer)
 
          
          label=type
@@ -106,6 +114,8 @@ class Ui_Dialog(object):
              self.comboBox_dia.addItems(RollingBrg_Data.TRDia)
          elif type=='Roller Bearings': 
              self.comboBox_dia.addItems(RollingBrg_Data.ADia)
+         elif type=='Cylindorical Roller Bearings':
+              self.comboBox_dia.addItems(RollingBrg_Data.CylDia)    
         
 
     def create(self):  
@@ -147,7 +157,7 @@ class Ui_Dialog(object):
               obj.ViewObject.Proxy=0
               App.ActiveDocument.recompute()  
               Gui.ActiveDocument.ActiveView.fitAll() 
-
+              return
          elif key0=='Angular Ball Bearings':
               if series=='70': 
                    sa=RollingBrg_Data.Adim70[dia]
@@ -183,24 +193,35 @@ class Ui_Dialog(object):
               obj.ViewObject.Proxy=0
               App.ActiveDocument.recompute()  
               Gui.ActiveDocument.ActiveView.fitAll() 
+              return
+         #elif key0=='Roller Bearings' :   
+         #     if series=='double-rowoutward':
+         #          sa=RollingBrg_Data.TRDia
+         #     elif series=='Self-aligning' :
+         #          sa=RollingBrg_Data.ADia 
+         elif key0=='Tapered roller bearings':
+              from prt_data.RollBrg_data import TaperedRollerBrg
+              TaperedRollerBrg
+                        
+         elif key0=='Cylindorical Roller Bearings':
+              #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+              from prt_data.RollBrg_data import CylindoricalRollerBrg
+              CylindoricalRollerBrg
+              return
 
-         elif key0=='Tapered roller bearings' or  key0=='Roller Bearings' :   
-              if series=='double-rowoutward':
-                   sa=RollingBrg_Data.TRDia
-              elif series=='Self-aligning' :
-                   sa=RollingBrg_Data.ADia 
+                  
 
-              fname=series+key0+str(dia)+'.FCStd' 
-              base=os.path.dirname(os.path.abspath(__file__))
-              joined_path = os.path.join(base, 'prt_data','RollBrg_data',fname) 
-              try:
-                  doc=App.activeDocument()
-                  Gui.ActiveDocument.mergeProject(joined_path)
-              except:
-                  doc=App.newDocument()
-                  Gui.ActiveDocument.mergeProject(joined_path)    
-              App.ActiveDocument.recompute()  
-              Gui.ActiveDocument.ActiveView.fitAll()  
+         fname=series+key0+str(dia)+'.FCStd' 
+         base=os.path.dirname(os.path.abspath(__file__))
+         joined_path = os.path.join(base, 'prt_data','RollBrg_data',fname) 
+         try:
+             doc=App.activeDocument()
+             Gui.ActiveDocument.mergeProject(joined_path)
+         except:
+             doc=App.newDocument()
+             Gui.ActiveDocument.mergeProject(joined_path)    
+         App.ActiveDocument.recompute()  
+         Gui.ActiveDocument.ActiveView.fitAll()  
 
 class main():
         d = QtGui.QWidget()

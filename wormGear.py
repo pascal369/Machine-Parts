@@ -13,7 +13,7 @@ import FreeCAD, Part, math
 from math import pi
 
 sperType=['wormAssy_A','wormAssy_B',]
-sperMOD=['0.8','1','1.5','2','2.5','3','4','5','6','7','8','9','10']
+sperMOD=['0.8','1','1.5','2','2.5','3','4','4.5','5','6','7','8','9','10']
 sperIchi=['0','1','2','3','4','5','6','7','8']
 helix=['right','left']
 diaQ={
@@ -270,7 +270,7 @@ class Ui_Dialog(object):
                      elif obj.Label[:5]=='wheel':
                          wheel=obj    
 
-                     elif obj.TypeId =="Spreadsheet::Sheet":
+                     elif obj.Label[:10] =="SprshtAssy":
                          spreadsheet = obj
                          key2= spreadsheet.getContents('A1') 
 

@@ -139,14 +139,12 @@ class Ui_Dialog(object):
                          listL=[]
                          for j in range(3,13):
                              listL.append(spreadsheet_500SP.getContents(column_list[j]+str(i)))
-                     #break        
-                         #print(listL) 
+
                          self.comboBox_length.clear()           
                          self.comboBox_length.addItems(listL)
                          series=self.comboBox_ser.currentText()
                          dia=spreadsheet_500SP.getContents(column_list[1]+str(i))
                          outDia=spreadsheet_500SP.getContents(column_list[2]+str(i))
-                         #print(i,'dia=',dia)
                  
          
     def upDate(self):

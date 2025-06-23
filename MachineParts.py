@@ -12,16 +12,16 @@ from math import pi
 
 buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Screws','Pins','Shaft','Snap Ring',
        'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Shaped Steel','Planar shape','One-touch window'
-       ,'Handle',]
+       ,'Handle','Chute']
 
 chain=['Roller Chain','Water treatment chain','Link Chains']
 spro=['Drive Chains',]
 snapring=['for shafts','for holes']
 spring=['Tensile coil spring','Compression coil springs']
-bearing=['Ball Bearings受','Double-row outward tapered roller bearing']
+bearing=['単列深溝形玉軸受','複列円錐ころ軸受_外向']
 shaft=['Shaft','Screw shaft']
 joint=['Tube Split Joint',]
-Gear=['Helical gears','Worm Gear','Bevel gear','Planetary gears',]
+Gear=['Helical gears','Worm Gear','Bevel gear','Planetary gears','Hypocycloidal gear']
 GlandP=['Gland Packing Assy',]
 pin=['Cotter Pin']
 Wire=['Shackle','Thimble','Wire Clip','Shackle Assembly','Sheave']
@@ -65,7 +65,11 @@ class Ui_Dialog(object):
         self.le_gr.setGeometry(QtCore.QRect(180, 135, 50, 20))
         self.le_gr.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_gr.setText('7.85')
-        #実行
+        #sketchLength
+        self.pushButtonS = QtGui.QPushButton('SketchLength',Dialog)
+        self.pushButtonS.setGeometry(QtCore.QRect(180, 160, 75, 23))
+        self.pushButtonS.setObjectName("pushButton")
+        #実行S
         self.pushButton = QtGui.QPushButton('Execution',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(80, 160, 75, 23))
         self.pushButton.setObjectName("pushButton")
@@ -77,7 +81,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton_m, QtCore.SIGNAL("pressed()"), self.massCulc)
         QtCore.QObject.connect(self.pushButton_m2, QtCore.SIGNAL("pressed()"), self.massTally)
         QtCore.QObject.connect(self.pushButton_m20, QtCore.SIGNAL("pressed()"), self.massTally2)
-        QtCore.QObject.connect(self.pushButton_m3, QtCore.SIGNAL("pressed()"), self.massImput)
+        QtCore.QObject.connect(self.pushButtonS, QtCore.SIGNAL("pressed()"), self.sketchLength)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -85,6 +89,17 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", 'Machine_Parts(JIS_Standard)', None))
         
+    def sketchLength(self):
+        obj = Gui.Selection.getSelection()[0]  # 選択されたオブジェクトを取得
+        if obj is None or obj.TypeId != "Sketcher::SketchObject":
+            FreeCAD.Console.PrintError("スケッチを選択してください\n")
+        else:
+            total_length = 0.0
+            for geo in obj.Geometry:
+                if isinstance(geo, (Part.LineSegment, Part.ArcOfCircle )):
+                           total_length += geo.length()
+            FreeCAD.Console.PrintMessage(f"スケッチ '{obj.Label}' の合計エッジ長: {total_length} mm\n")
+
     def massImput(self):
          # 選択したオブジェクトを取得する
         c00 = Gui.Selection.getSelection()
@@ -108,7 +123,6 @@ class Ui_Dialog(object):
         try:
             obj.addProperty("App::PropertyFloat", "mass",label)
             obj.mass=g
-            
         except:
             pass
 
@@ -151,26 +165,30 @@ class Ui_Dialog(object):
         # パーツを列挙して情報を書き込む
         row = 2
         i=1
-        s=0
+        #s=0
         for i,obj in enumerate(doc.Objects):
-            try:
-                spreadsheet.set(f"E{row}", f"{obj.mass:.2f}")  # mass
-                s=obj.mass+s
-                if hasattr(obj, "Shape") and obj.Shape.Volume > 0:
-                    try:
-                        spreadsheet.set(f"A{row}", str(row-1))  # No
-                        spreadsheet.set(f"B{row}", obj.Label) 
+            if obj.Label=='本体' or obj.Label=='本体 (mirrored)' or obj.Label[:7]=='Channel' or \
+                obj.Label[:5]=='Angle' or obj.Label[:5]=='Squre' or obj.Label[:7]=='Extrude' or obj.Label[:6]=='Fusion':
+                pass        
+            else:  
+                try:
+                    spreadsheet.set(f"E{row}", f"{obj.mass:.2f}")  # mass
+                    #s=obj.mass+s
+                    if hasattr(obj, "Shape") and obj.Shape.Volume > 0:
                         try:
-                            spreadsheet.set(f"C{row}", obj.dia)
+                            spreadsheet.set(f"A{row}", str(row-1))  # No
+                            spreadsheet.set(f"B{row}", obj.Label) 
+                            try:
+                                spreadsheet.set(f"C{row}", obj.dia)
+                            except:
+                                pass
+                            spreadsheet.set(f"D{row}", '1')   # count
+                            row += 1
                         except:
-                            pass
-                        spreadsheet.set(f"D{row}", '1')   # count
-                        row += 1
-                    except:
-                        pass    
-            except:
-                pass
-            spreadsheet.set(f'E{row}',s)
+                            pass    
+                except:
+                    pass
+                #spreadsheet.set(f'E{row}',s)
         App.ActiveDocument.recompute()
         Gui.activeDocument().activeView().viewAxometric()
 
@@ -271,7 +289,8 @@ class Ui_Dialog(object):
                  import CotterPin
                    
          elif buhin=='Rolling bearing':
-            import RollingBearing   
+            import RollingBearing  
+            RollingBearing 
          elif buhin=='Plain bearing':
             import plainBrg   
          elif buhin=='Screws':
@@ -343,6 +362,8 @@ class Ui_Dialog(object):
              import Sprocket  
          elif buhin=='Handle':
              import Handle
+         elif buhin=='Chute':
+             import chute    
 
 class main():
         d = QtGui.QWidget()

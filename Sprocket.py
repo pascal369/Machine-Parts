@@ -335,38 +335,7 @@ class Ui_Dialog(object):
                      except:
                         return        
                          
-    #def setParts(self):
-    # global sproP
-    # global sproG 
-    # global sP
-    # global sG
-    # global chainPath
-    # global shtAssy
-    # global shtsproP
-    # global shtsproG
-    # global shtLink
-    # doc = FreeCAD.activeDocument()
-    # if doc:
-    #     group_names = []
-    #     for obj in doc.Objects:
-    #         if obj.Label[:5]=='sproP':
-    #             sproP=obj
-    #         elif obj.Label[:5]=='sproG':
-    #             sproG=obj 
-    #         elif obj.Label[:2]=='sP':
-    #             sP=obj
-    #         elif obj.Label[:2]=='sG':
-    #             sG=obj        
-    #         elif obj.Label[:9]=='chainPath':
-    #             chainPath=obj
-    #         elif obj.Label[:7]=='shtAssy':
-    #             shtAssy=obj 
-    #         elif obj.Label[:8]=='shtsproP':
-    #             shtsproP=obj 
-    #         elif obj.Label[:8]=='shtsproG':
-    #             shtsproG=obj 
-    #         elif obj.Label[:7]=='shtLink':
-    #             shtLink=obj         
+
     def setClear(self):
         Gui.Selection.clearSelection()
 

@@ -22,12 +22,12 @@ class Ui_Dialog(object):
         self.label_6.setGeometry(QtCore.QRect(200, 10, 250, 100))
         self.label_6.setText("")
         base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, "prt_data",'Spring_data',"CompressionSpring.png")
+        joined_path = os.path.join(base, "prt_data",'Spring_data',"inlet.png")
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         
-        #線径　dia
+        #W
         self.label_dia = QtGui.QLabel('Wire_dia',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 13, 150, 12))
         self.lineEdit_dia = QtGui.QLineEdit('1.6',Dialog)
@@ -35,21 +35,21 @@ class Ui_Dialog(object):
         self.lineEdit_dia.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_dia.setObjectName("Wire_dia")
         
-        #ピッチ Pitch
+        #L
         self.label_Pitch = QtGui.QLabel('Pitch',Dialog)
         self.label_Pitch.setGeometry(QtCore.QRect(10, 38, 150, 12))
         self.lineEdit_Pitch = QtGui.QLineEdit('2.0',Dialog)
         self.lineEdit_Pitch.setGeometry(QtCore.QRect(80, 35, 50, 20))
         self.lineEdit_Pitch.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_Pitch.setObjectName("Pitch")
-        #コイル径 Coildia
+        #sita
         self.label_coilDia = QtGui.QLabel('Coil_dia',Dialog)
         self.label_coilDia.setGeometry(QtCore.QRect(10, 63, 150, 12))
         self.lineEdit_coilDia = QtGui.QLineEdit('10.0',Dialog)
         self.lineEdit_coilDia.setGeometry(QtCore.QRect(80, 65, 50, 20))
         self.lineEdit_coilDia.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_coilDia.setObjectName("CoilRa")
-        #巻き数　turns
+        #h
         self.label_Turns = QtGui.QLabel('Turns',Dialog)
         self.label_Turns.setGeometry(QtCore.QRect(10, 88, 150, 12))
         self.lineEdit_Turns = QtGui.QLineEdit('10.0',Dialog)

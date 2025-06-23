@@ -162,66 +162,49 @@ class Ui_Dialog(object):
          global sun
          global carrier
          
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     print(obj.Label)
-                     if obj.Label=='planetary':
-                         planetary=obj
-                     elif obj.Label=='planetary001':
-                         planetary001=obj 
-                     elif obj.Label=='planetary002':
-                         planetary002=obj    
-                     elif obj.Label=='planetary003':
-                         planetary003=obj 
-                     elif obj.Label=='sun':
-                         sun=obj  
-                     elif obj.Label=='carrier':
-                         carrier=obj        
+         doc = App.ActiveDocument
+         objects = doc.Objects
+         for obj in objects:
+             #print(obj.Label)
+             if obj.Label=='planetary':
+                 planetary=obj
+             elif obj.Label=='planetary001':
+                 planetary001=obj 
+             elif obj.Label=='planetary002':
+                 planetary002=obj    
+             elif obj.Label=='planetary003':
+                 planetary003=obj 
+             elif obj.Label=='sun':
+                 sun=obj  
+             elif obj.Label=='carrier':
+                 carrier=obj        
+             elif obj.Label[:6] =="shtPln":
+                 spreadsheet = obj
 
-
-
-                     elif obj.TypeId =="Spreadsheet::Sheet":
-                         spreadsheet = obj
-
-                         key2=self.comboBox_type.currentText()
-                         
-                         self.comboBox_mod.setCurrentText(spreadsheet.getContents('m0'))
-                         self.le_beta.setText(spreadsheet.getContents('beta'))
-                         self.comboBox_betaK.setCurrentText(spreadsheet.getContents('betaK'))
-                         self.comboBox_N.setCurrentText(spreadsheet.getContents('n'))
-
-                         #self.le_z.setText('')
-                         #self.le_t.setText('')   
-                         #self.le_dia.setText('')  
-                         #self.le_Bdia.setText('')  
-                         #self.le_BB.setText('') 
-
-                         if key2=='sun':
-                             self.le_z.setText(spreadsheet.getContents('za'))
-                             self.le_t.setText(spreadsheet.getContents('ta'))   
-                             self.le_dia.setText(spreadsheet.getContents('dia_a'))  
-                             self.le_Bdia.setText(spreadsheet.getContents('Bdia_a'))  
-                             self.le_BB.setText(spreadsheet.getContents('bb_a')) 
-                             
-                         elif key2=='planetary':
-                             zc=float(spreadsheet.getContents('zc'))
-                             za=float(spreadsheet.getContents('za'))
-                             zb=(zc-za)/2
-                             self.le_z.setText(str(zb))
-                             self.le_t.setText(spreadsheet.getContents('tb'))   
-                             self.le_dia.setText(spreadsheet.getContents('dia_b'))  
-                             self.le_Bdia.setText(spreadsheet.getContents('Bdia_b'))  
-                             self.le_BB.setText(spreadsheet.getContents('bb_b')) 
-                         elif key2=='internal':
-                             self.le_z.setText(spreadsheet.getContents('zc'))
-                             self.le_t.setText(spreadsheet.getContents('tc'))   
-                             
-                             
-    
+                 key2=self.comboBox_type.currentText()
+                 self.comboBox_mod.setCurrentText(spreadsheet.getContents('m0'))
+                 self.le_beta.setText(spreadsheet.getContents('beta'))
+                 self.comboBox_betaK.setCurrentText(spreadsheet.getContents('betaK'))
+                 self.comboBox_N.setCurrentText(spreadsheet.getContents('n'))
+                 if key2=='sun':
+                     self.le_z.setText(spreadsheet.getContents('za'))
+                     self.le_t.setText(spreadsheet.getContents('ta'))   
+                     self.le_dia.setText(spreadsheet.getContents('dia_a'))  
+                     self.le_Bdia.setText(spreadsheet.getContents('Bdia_a'))  
+                     self.le_BB.setText(spreadsheet.getContents('bb_a')) 
+                 elif key2=='planetary':
+                     zc=float(spreadsheet.getContents('zc'))
+                     za=float(spreadsheet.getContents('za'))
+                     zb=(zc-za)/2
+                     self.le_z.setText(str(zb))
+                     self.le_t.setText(spreadsheet.getContents('tb'))   
+                     self.le_dia.setText(spreadsheet.getContents('dia_b'))  
+                     self.le_Bdia.setText(spreadsheet.getContents('Bdia_b'))  
+                     self.le_BB.setText(spreadsheet.getContents('bb_b')) 
+                 elif key2=='internal':
+                     self.le_z.setText(spreadsheet.getContents('zc'))
+                     self.le_t.setText(spreadsheet.getContents('tc'))   
+     
     def setParts(self):
      return
      global sun

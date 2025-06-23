@@ -91,11 +91,11 @@ class Ui_Dialog(object):
                  parts_group = selected_object
                  for obj in parts_group.Group:
                      print(obj.Label)
-                     if obj.Label=='hexagon_nut':
+                     if obj.Label[:11]=='hexagon_nut':
                          nut=obj
-                     elif obj.Label=='All_screw':
+                     elif obj.Label[:9]=='All_screw':
                          All_screw=obj    
-                     elif obj.TypeId == "Spreadsheet::Sheet":
+                     elif obj.Label[:7] == "shtClip":
                          spreadsheet = obj
 
                          key=spreadsheet.getContents('B27')
@@ -105,55 +105,43 @@ class Ui_Dialog(object):
 
 
     def update(self):
-         # 選択したオブジェクトを取得
-        #selection = Gui.Selection.getSelection()
-        #if selection:
-        #    selected_object = selection[0]
-        #    if selected_object.TypeId == "App::Part":
-        #        parts_group = selected_object
-        #        for obj in parts_group.Group:
-        #            if obj.TypeId == "Spreadsheet::Sheet":
-        #                spreadsheet = obj
-                         
-                         
-                         key=self.comboBox_dia.currentText()
-                         for i in range(28,41):
-                             if key==spreadsheet.getContents('B'+str(i)):
-                                 cld=spreadsheet.getContents('A'+str(i))
-                                 clA=spreadsheet.getContents('C'+str(i))
-                                 clB=spreadsheet.getContents('D'+str(i))
-                                 clC=spreadsheet.getContents('E'+str(i))
-                                 clD=spreadsheet.getContents('F'+str(i))
-                                 clE=spreadsheet.getContents('G'+str(i))
-                                 clG1=spreadsheet.getContents('H'+str(i))
-                                 clr=spreadsheet.getContents('I'+str(i))
-                                 clbolt=spreadsheet.getContents('J'+str(i))
-                                 #print(clbolt)
-                                 db=spreadsheet.getContents('K'+str(i)) 
-                                 clL=spreadsheet.getContents('L'+str(i)) 
-                                 clS=spreadsheet.getContents('M'+str(i)) 
-                                 cln=spreadsheet.getContents('N'+str(i)) 
-                                 cll=spreadsheet.getContents('O'+str(i)) 
-                                 spreadsheet.set('B27',key)
-                                 spreadsheet.set('A27',str(cld))
-                                 spreadsheet.set('C27',str(clA))
-                                 spreadsheet.set('D27',str(clB))
-                                 spreadsheet.set('E27',str(clC))
-                                 spreadsheet.set('F27',str(clD))
-                                 spreadsheet.set('G27',str(clE))
-                                 spreadsheet.set('H27',str(clG1))
-                                 spreadsheet.set('I27',str(clr))
-                                 spreadsheet.set('J27',str(clbolt))
-                                 spreadsheet.set('K27',str(db))
-                                 spreadsheet.set('L27',str(clL))
-                                 spreadsheet.set('M27',str(clS))
-                                 spreadsheet.set('N27',str(cln))
-                                 spreadsheet.set('O27',str(cll))
-                         print(nut.dia)  
-
-                         nut.dia=spreadsheet.getContents('J27')[1:]
-                         All_screw.dia=spreadsheet.getContents('J27')[1:]    
-                         App.ActiveDocument.recompute()
+         key=self.comboBox_dia.currentText()
+         for i in range(28,41):
+             if key==spreadsheet.getContents('B'+str(i)):
+                 cld=spreadsheet.getContents('A'+str(i))
+                 clA=spreadsheet.getContents('C'+str(i))
+                 clB=spreadsheet.getContents('D'+str(i))
+                 clC=spreadsheet.getContents('E'+str(i))
+                 clD=spreadsheet.getContents('F'+str(i))
+                 clE=spreadsheet.getContents('G'+str(i))
+                 clG1=spreadsheet.getContents('H'+str(i))
+                 clr=spreadsheet.getContents('I'+str(i))
+                 clbolt=spreadsheet.getContents('J'+str(i))
+                 #print(clbolt)
+                 db=spreadsheet.getContents('K'+str(i)) 
+                 clL=spreadsheet.getContents('L'+str(i)) 
+                 clS=spreadsheet.getContents('M'+str(i)) 
+                 cln=spreadsheet.getContents('N'+str(i)) 
+                 cll=spreadsheet.getContents('O'+str(i)) 
+                 spreadsheet.set('B27',key)
+                 spreadsheet.set('A27',str(cld))
+                 spreadsheet.set('C27',str(clA))
+                 spreadsheet.set('D27',str(clB))
+                 spreadsheet.set('E27',str(clC))
+                 spreadsheet.set('F27',str(clD))
+                 spreadsheet.set('G27',str(clE))
+                 spreadsheet.set('H27',str(clG1))
+                 spreadsheet.set('I27',str(clr))
+                 spreadsheet.set('J27',str(clbolt))
+                 spreadsheet.set('K27',str(db))
+                 spreadsheet.set('L27',str(clL))
+                 spreadsheet.set('M27',str(clS))
+                 spreadsheet.set('N27',str(cln))
+                 spreadsheet.set('O27',str(cll))
+         #print(nut.dia)  
+         nut.dia=spreadsheet.getContents('J27')[1:]
+         All_screw.dia=spreadsheet.getContents('J27')[1:]    
+         App.ActiveDocument.recompute()
 
     def create(self): 
          dia=self.comboBox_dia.currentText()

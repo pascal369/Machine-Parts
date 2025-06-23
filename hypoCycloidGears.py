@@ -35,7 +35,6 @@ class Ui_Dialog(object):
         self.label_mod.setGeometry(QtCore.QRect(10, 38, 100, 12))
         self.comboBox_mod = QtGui.QComboBox(Dialog)
         self.comboBox_mod.setGeometry(QtCore.QRect(120, 35, 100, 22))
-
         #ねじれ角 helixAngle
         self.label_beta = QtGui.QLabel('helixAngle[deg]',Dialog)
         self.label_beta.setGeometry(QtCore.QRect(10, 63, 100, 22))
@@ -93,7 +92,6 @@ class Ui_Dialog(object):
         #インポートデータ
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
         self.pushButton3.setGeometry(QtCore.QRect(50, 310, 180, 22))
-
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
         self.label_6.setGeometry(QtCore.QRect(35, 350, 200, 200))
@@ -109,10 +107,8 @@ class Ui_Dialog(object):
         self.spinBox.setMaximum(360.0)  # 最大値を100.0に設定
         self.spinBox.setValue(0.0)
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
-
         self.comboBox_ichi = QtGui.QComboBox(Dialog)
         self.comboBox_ichi.setGeometry(QtCore.QRect(180, 570, 50, 30))
-
         self.comboBox_type.addItems(sperType)
         self.comboBox_type.setEditable(True)
         self.comboBox_mod.addItems(sperMOD)
@@ -121,21 +117,16 @@ class Ui_Dialog(object):
         self.comboBox_ichi.setEditable(True)
         self.comboBox_betaK.addItems(helix)
         self.comboBox_N.addItems(pN)
-
         self.comboBox_type.setCurrentIndex(1)
         self.comboBox_type.currentIndexChanged[int].connect(self.onShape) 
         self.comboBox_type.setCurrentIndex(0)
-
         self.spinBox.valueChanged[int].connect(self.spinMove)
         self.comboBox_ichi.currentIndexChanged[int].connect(self.setIchi) 
-        
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onShape)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
-
         self.comboBox_mod.setCurrentText('2')
         
     def retranslateUi(self, Dialog):
@@ -161,82 +152,56 @@ class Ui_Dialog(object):
          global plate
          global plate2
          
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     print(obj.Label)
-                     if obj.Label=='inputShaft':
-                         inputShaft=obj
-                     elif obj.Label=='outputShaft':
-                         outputShaft=obj    
-
-                     elif obj.Label=='bearing':
-                         bearing=obj 
-                     elif obj.Label=='curvedPlate':
-                         curvedPlate=obj    
-                     elif obj.Label=='curvedPlate2':
-                         curvedPlate2=obj 
-                     elif obj.Label=='Brg':
-                         Brg=obj  
-                     elif obj.Label=='plate':
-                        plate=obj  
-                     elif obj.Label=='plate2':
-                        plate2=obj          
-
-
-
-                     elif obj.TypeId =="Spreadsheet::Sheet":
-                         spreadsheet = obj
-
-                         
-                             
-                             
+         doc = App.ActiveDocument
+         objects = doc.Objects
+         for obj in objects:
+             #print(obj.Label)
+             if obj.Label=='inputShaft':
+                 inputShaft=obj
+             elif obj.Label=='outputShaft':
+                 outputShaft=obj    
+             elif obj.Label=='bearing':
+                 bearing=obj 
+             elif obj.Label=='curvedPlate':
+                 curvedPlate=obj    
+             elif obj.Label=='curvedPlate2':
+                 curvedPlate2=obj 
+             elif obj.Label=='Brg':
+                 Brg=obj  
+             elif obj.Label=='plate':
+                plate=obj  
+             elif obj.Label=='plate2':
+                plate2=obj          
+             elif obj.Label[:7] =="shtHypo":
+                 spreadsheet = obj
     
     def setParts(self):
      return
      
     def setIchi(self):
-        #global A
         A=float(self.comboBox_ichi.currentText())
-        #sun.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
         self.spinBox.setValue(A)
-
         App.ActiveDocument.recompute()
-    
     def spinMove(self):
-         
          try:
              z1=float(spreadsheet.getContents('z1'))
-             
-             
-             r1 = self.spinBox.value()*10
+             r1 = self.spinBox.value()*30
              curvedPlate.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1)
              plate.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r1/z1-r1)
              curvedPlate2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1)
              plate2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r1/z1-r1)
              outputShaft.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r1/z1)
              inputShaft.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1)
-
-             
-    
-             
          except:
              return
-    
     def update(self):
         mod=self.comboBox_mod.currentText()
         beta=self.le_beta.text()
         key2=self.comboBox_type.currentText()
         n=self.comboBox_N.currentText()
-        
-
         spreadsheet.set('m0',mod)
         spreadsheet.set('beta',beta)
         spreadsheet.set('n',n)
-        
         z=self.le_z.text()
         t=self.le_t.text()
         pcd=float(mod)*float(z)
@@ -244,7 +209,6 @@ class Ui_Dialog(object):
         bb=self.le_BB.text()
         Bdia=self.le_Bdia.text()
         if key2=='sun': 
-           
             spreadsheet.set('za',z)
             spreadsheet.set('ta',t)
             spreadsheet.set('pcda',str(pcd))
@@ -252,7 +216,6 @@ class Ui_Dialog(object):
             spreadsheet.set('bb_a',bb)
             spreadsheet.set('Bdia_a',Bdia)
         elif key2=='planetary':   
-
             spreadsheet.set('zb',z)
             spreadsheet.set('tb',t)
             spreadsheet.set('pcdb',str(pcd))
@@ -260,24 +223,16 @@ class Ui_Dialog(object):
             spreadsheet.set('bb_b',bb)
             spreadsheet.set('Bdia_b',Bdia)  
         elif key2=='internal':   
-        
             spreadsheet.set('zc',z)
             spreadsheet.set('tc',t)
             spreadsheet.set('pcdc',str(pcd))
-      
             spreadsheet.set('bb_b',bb)
             spreadsheet.set('Bdia_b',Bdia)    
-
         za=float(spreadsheet.getContents('za'))      
         zc=float(spreadsheet.getContents('zc'))   
         n0=(zc+za)/2  
         self.label_N0.setText('(za+zc)/2=' + str(n0))
-
-
-
     App.ActiveDocument.recompute()
-    
-   
     def create(self): 
          fname='hypoCycloid.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))

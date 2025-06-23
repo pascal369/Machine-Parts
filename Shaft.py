@@ -146,22 +146,7 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Shaft generator", None))
-        #self.shape.setText(QtGui.QApplication.translate("Dialog", "ShapeType", None))
-        #self.screw_dia.setText(QtGui.QApplication.translate("Dialog", "Screw dia", None))
-        #self.lbl_D.setText(QtGui.QApplication.translate("Dialog", "D[mm]", None))
-        #self.lbl_d0.setText(QtGui.QApplication.translate("Dialog", "d0[mm]", None))
-        #self.lbl_L.setText(QtGui.QApplication.translate("Dialog", "L[mm]", None))
-        #self.lbl_L1.setText(QtGui.QApplication.translate("Dialog", "L1[mm]", None))
-        #self.lbl_L2.setText(QtGui.QApplication.translate("Dialog", "L2[mm]", None))
-        #self.lbl_L3.setText(QtGui.QApplication.translate("Dialog", "L3[mm]", None))
-        #self.lbl_c.setText(QtGui.QApplication.translate("Dialog", "C_shaped retaining ring D", None))
-        #self.lbl_m.setText(QtGui.QApplication.translate("Dialog", "m[mm]", None))
-        #self.lbl_n.setText(QtGui.QApplication.translate("Dialog", "n(min)[mm]", None))
-        #self.lbl_key.setText(QtGui.QApplication.translate("Dialog", "key_size", None))
-        #self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))
-        #self.checkbox.setText(QtGui.QApplication.translate("Dialog", "Screw display", None))
-        #self.checkbox2.setText(QtGui.QApplication.translate("Dialog", "Keyway display", None))
-    
+   
     def on_mass(self):
         doc = App.activeDocument()
         object_list = []
@@ -169,27 +154,6 @@ class Ui_Dialog(object):
             if hasattr(obj, "mass"):
                 if obj.ViewObject.isVisible():
                     object_list.append([obj.Label, 1, obj.mass,obj.I])
-
-
-        #doc_path = doc.FileName
-        #csv_filename = os.path.splitext(os.path.basename(doc_path))[0] + "_counts_and_masses.csv"
-        #csv_path = os.path.join(os.path.dirname(doc_path), csv_filename)
-        #try:
-        #    with open(csv_path, 'w', newline='') as csvfile:
-        #        writer = csv.writer(csvfile)
-        #        writer.writerow(['Object Name','Count', 'mass[kg]','I[kg-cm2]'])
-        #        for obj in object_list:
-        #            writer.writerow(obj)
-        #except:
-        #    pass    
-        #with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as temp:
-        #    with open(csv_filename, "r") as f:
-        #        temp.write(f.read().encode('utf-8'))
-#
-        #if App.GuiUp:
-        #    subprocess.Popen(['cmd.exe', '/c', 'start', '', temp.name], shell=True)
-        # Print a message indicating the export was successful
-        #print("Object counts and masses exported to '{}'".format(csv_path))
 
     def on_shape(self):
         global sa

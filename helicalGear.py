@@ -12,7 +12,7 @@ from FreeCAD import Base
 import FreeCAD, Part, math
 from math import pi
 
-sperType=['helical_A_B','helical_B_B','helical_B_C','helical_C_C']
+sperType=['helical_A_B','helical_B_B','helical_B_C','helical_C_C','helical_A_C']
 sperMOD=['0.8','1','1.5','2','2.5','3','4','5','6','7','8','9','10']
 sperIchi=['0','1','2','3','4','5','6','7','8']
 helix=['right','left']
@@ -178,7 +178,7 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
         
         
     def retranslateUi(self, Dialog):
@@ -235,14 +235,14 @@ class Ui_Dialog(object):
 
             
     def setIchi(self):
-        global A
-        N2=float(self.label_N1.text())
-        A=self.spinBox_Ichi.value()/5
-        Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
-        print(A)
-        #self.spinBox.setValue(0)
+        #global A
+        N1=self.label_N1.text()
+        A=self.spinBox_Ichi.value()
+        Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
+        #print(A)
+        #self.spinBox.setValue(A)
 
-        #App.ActiveDocument.recompute()
+        App.ActiveDocument.recompute()
     
     def spinMove(self):
          #try:
@@ -250,18 +250,17 @@ class Ui_Dialog(object):
          if N1=='***':
              return
          N2=self.label_N2.text()
-         
-         r1 = self.spinBox.value()
+         A=self.spinBox_Ichi.value()
+         r1 = self.spinBox.value()*5
          r2 =r1*float(N1)/float(N2)
-         #A=-float(self.spinBox_Ichi.value())
-         #print(A)
+        
          #A=float(N1)/360
          #print(r1,r2)
-         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1)
-         Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2+A)
+         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1-A)
+         Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2)
          #except:
          #    return
-    
+         App.ActiveDocument.recompute()
     def update(self):
          m0=self.comboBox_mod.currentText()
          z1=self.le_N.text()
