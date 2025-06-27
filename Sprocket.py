@@ -94,6 +94,10 @@ class Ui_Dialog(object):
         self.label_6.setText("")
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
+        fname='Sprocket_Assy_1B_1B.png'
+        base=os.path.dirname(os.path.abspath(__file__))
+        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
         #中心距離
         self.label_L1 = QtGui.QLabel('Plan',Dialog)
         self.label_L1.setGeometry(QtCore.QRect(110, 400, 100, 22))
@@ -183,13 +187,13 @@ class Ui_Dialog(object):
         self.comboBox_N2.setEditable(True)
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
-        #QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+        QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.setClear)
 
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
 
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
         
@@ -217,11 +221,12 @@ class Ui_Dialog(object):
         global sx
         key=self.comboBox_shape.currentText()
         N0=self.comboBox_N.currentText()
+
         key2= self.comboBox_shape.currentText()
-        fname='Sprocket_'+key2+'.png'
-        base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+        #fname='Sprocket_'+key2+'.png'
+        #base=os.path.dirname(os.path.abspath(__file__))
+        #joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+        #self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
         
         for k in range(2):
             try:
@@ -308,20 +313,23 @@ class Ui_Dialog(object):
                 return
         
     def spinMove(self):
-         try:
-             Pitch=float(self.label_pitch1.text())
-             A=self.spinBox.value()
-             beta1=360/float(N1)
-             beta2=360/float(N2)
-             x=5
-             #print(N1,N2,beta1)
-             sproP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
-             sproG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
-             #print(A,Pitch,x)
-             if A==0:
-                 return
-             self.le_kiten.setText(str(round(A*Pitch/x,3)))
-         except:
+         #try:
+         Pitch=float(self.label_pitch1.text())
+         A=b0-self.spinBox.value()
+         beta1=360/float(N1)
+         beta2=360/float(N2)
+         x=5
+         sproP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
+         sproG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
+         #print(A,Pitch,x)
+         if A==0:
+             return
+         self.le_kiten.setText(str(round(A*Pitch/x,3)))
+         kiten=self.le_kiten.text()
+         CLj=shtAssy.getContents('CLj')
+         
+         if float(kiten)>float(CLj):
+             
              return
 
     def update_kiten(self):
@@ -342,7 +350,6 @@ class Ui_Dialog(object):
                              sP = obj
                          elif obj.Label[:7]=='sG':
                              sG = obj    
-
                      try:
                          
                          if selected_object.Label=='sproP' :
@@ -358,7 +365,6 @@ class Ui_Dialog(object):
                              App.ActiveDocument.recompute() 
                      except:
                         return        
-                         
 
     def setClear(self):
         Gui.Selection.clearSelection()
@@ -409,13 +415,8 @@ class Ui_Dialog(object):
                 sht_X=shtAssy
                 self.comboBox_type.setCurrentText(sht_X.getContents('A2')[1:])  
                 self.comboBox_shape.setCurrentText(sht_X.getContents('A1')[1:])
-                #self.comboBox_N.setCurrentText(shtSproP.getContents('N0'))
-                #self.comboBox_N2.setCurrentText(shtSproG.getContents('N0'))
                 self.le_dia.setText(shtSproP.getContents('dia'))
                 self.le_dia2.setText(shtSproG.getContents('dia'))
-
-                #self.comboBox_shape.addItems(sprShape[:5])
-
                 self.comboBox_type.setCurrentText(shtAssy.getContents('B6')[1:])
                 Lc=shtAssy.getContents('CLp')
                 self.le_Lp.setText(Lc)
@@ -423,7 +424,6 @@ class Ui_Dialog(object):
                 N2=shtAssy.getContents('Teeth2')
                 self.comboBox_N.setCurrentText(N1)
                 self.comboBox_N2.setCurrentText(N2)
-                #print(N1,N2)
                 pitch=shtAssy.getContents('Pitch')
                 pcd1=shtAssy.getContents('pcd1')
                 pcd2=shtAssy.getContents('pcd2')
@@ -523,23 +523,30 @@ class Ui_Dialog(object):
         self.label_k1.setText(str(k1))
         shtAssy.set('CLp',Lc)
         self.comboBox_shape.setCurrentText('sproAssy')
-        key2= self.comboBox_shape.currentText()
-        fname='Sprocket_'+key2+'.png'
-        base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+
+        #key2= self.comboBox_shape.currentText()
+        #fname='Sprocket_'+key2+'.png'
+        #base=os.path.dirname(os.path.abspath(__file__))
+        #joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+        #self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
         App.ActiveDocument.recompute() 
     def update(self):
-         
+         global b0
          global N0
          global row_N
          global col_type
          global col_shp
          global sx
-         
+         b0=self.le_Lp.text()
+         b0=float(b0)/2
+         shtAssy.set('kiten',str(b0))
+         self.le_kiten.setText(str(b0))
+         self.spinBox.setMaximum(b0)  # 最大値を100.0に設定
+         self.spinBox2.setMinimum(1)  # 最小値を0.0に設定
+         self.spinBox.setValue(b0)
+         #print(b0,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
          key=self.comboBox_shape.currentText()
-         #print(key)
-         #if key!='sproAssy':
+        
          for k in range(2):
              if k==0:
                  sht_X=shtSproP
@@ -557,14 +564,13 @@ class Ui_Dialog(object):
                  type3=sht_X.getContents('A'+str(i))
                  #print(type,type3)
                  if type==type3[1:]:
-                     print(type,type3[1:])
+                     #print(type,type3[1:])
                      break
                  
              row_type=i 
              p0=sht_X.getContents('B'+str(row_type))
              r0=sht_X.getContents('C'+str(row_type))
              t0=sht_X.getContents('D'+str(row_type))
-             #E0=sht_X.getContents('J'+str(row_type))
              shtAssy.set('Pitch',p0)
              if sht_X.Label=='shtSproP':
                  N1=N0
@@ -578,7 +584,6 @@ class Ui_Dialog(object):
              for j in range(0,116):
                  type=self.comboBox_type.currentText()
                  type3=sht_X.getContents(column_list[j]+str('18'))
-                 #print(type,type3)
                  if type==type3[1:]:
                      break
              col_type=j  
@@ -591,42 +596,44 @@ class Ui_Dialog(object):
                       pass    
              row_N=m  
              #D0 形状を選択 
-             #print(key,key2[1:])
              key2= self.comboBox_shape.currentText()
+             if key2=='Assy_1B_1B':
+                 if k==0:
+                     key='1B'
+                 elif k==1:
+                     key='1B'  
+             elif key2=='Assy_1B_1C':
+                 if k==0:
+                     key='1B'
+                 elif k==1:
+                     key='1C'    
+             elif key2=='Assy_1C_1C':
+                 if k==0:
+                     key='1C'
+                 elif k==1:
+                     key='1C'           
 
-             for p in range(2):
-                 if key2=='Assy_1B_1B':
-                     if p==0:
-                         key='1B'
-                     elif p==1:
-                         key='1B'    
-                 
-                     for s in range(col_type+1,col_type+4):
-                         #print(key,'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-                         if key=='1B':
-                             sx=s-2
-                         elif key=='2B':
-                             sx=s-2
-                         elif key=='1C':
-                             sx=s
-                         elif key=='2C':
-                             sx=s+1
-                         #    sx=s-2
-                         key2=sht_X.getContents(column_list[s]+str('20'))
-                         #print(key,key2[1:])
-                         if key==key2[1:]: 
-                            print(sx,key,key2[1:])
-                            break
-                         col_shp=sx 
+                 for s in range(col_type,col_type+4):   
+                     print(col_type) 
+                     if key=='1B':
+                         sx=s-2
+                     elif key=='2B':
+                         sx=s-2
+                     elif key=='1C':
+                         sx=s
+                     elif key=='2C':
+                         sx=s+1
+                     key2=sht_X.getContents(column_list[s]+str('20'))
+                     if key==key2[1:]: 
+                        break
+                     col_shp=sx 
              
              D0=sht_X.getContents(column_list[sx]+str(m)) 
-             #print(key,key2[1:],sx,m,D0)
              if D0=='':
                  return
              else: 
                 L0=sht_X.getContents(column_list[sx+4]+str(m)) 
-             #print(D0,L0)
-            
+             #print(key,key2,sx,m,D0,L0,col_type)   
              sht_X.set('A2',type)
              sht_X.set('B2',p0)
              sht_X.set('C2',r0)
@@ -635,29 +642,21 @@ class Ui_Dialog(object):
              sht_X.set('F2',D0)
              sht_X.set('G2',L0)  
              sht_X.set('H2',dia)  
-             #App.ActiveDocument.recompute()   
-             #elif key=='sproAssy':
-             #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
              Lc=self.le_Lp.text()
              shtAssy.set('CLj',Lc)
              self.AssyCulc()
              
              #リンク型番変更
              type=self.comboBox_type.currentText()[4:]
-             #print(type)
              for i in range(2,14):
                  key2=shtLink.getContents(column_list[i]+str('2'))
-                 #print(type,key2)
                  if type==key2:
-                    #print(key,key2)
                     break
              shtAssy.set('Type',type)    
              shtAssy.set('Linkp',str(Lp))
              shtAssy.set('Linkj',str(Lj))     
-
              type=self.comboBox_type.currentText()                                
              picth=shtLink.getContents(column_list[i]+str(3))
-             
              h0=shtLink.getContents(column_list[i]+str(4))
              t0=shtLink.getContents(column_list[i]+str(5))
              W0=shtLink.getContents(column_list[i]+str(6))
@@ -673,7 +672,6 @@ class Ui_Dialog(object):
              shtLink.set(column_list[1]+str(8),d2)
              shtLink.set(column_list[1]+str(9),h1)
              shtAssy.set('Type',type)
-             #shtAssy.set('Pitch',str(pitch))
              
              self.label_pitch1.setText(pitch)
              try:
@@ -684,11 +682,9 @@ class Ui_Dialog(object):
              except:
                  pass
              self.comboBox_shape.setCurrentText(shtAssy.getContents('A1'))    
-             #self.AssyCulc()
              App.ActiveDocument.recompute() 
 
     def create(self): 
-         #print('ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
          shp=self.comboBox_shape.currentText()
          fname='Sprocket_'+shp+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
