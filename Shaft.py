@@ -160,7 +160,7 @@ class Ui_Dialog(object):
         global m
         global n
         global d2
-        global key
+        #global key
         global key_c
         key=self.combo_shape.currentText()
         pic='shaft_' + key[:2] +'.png'
@@ -201,7 +201,8 @@ class Ui_Dialog(object):
 
        
     def on_key(self):
-        if key=='01_keyway_1' or key=='02_keyway_2' or key=='04_C_shape snapring groove with keyway' or key=='6_Lock nut':
+        key=self.combo_shape.currentText()
+        if key=='02_keyway_2' or key=='04_C_shape snapring groove with keyway' or key=='6_Lock nut':
             for i in range(30):
                 key1=ShaftData.key_size[i]
                 sa=ShaftData.key_scr[key1]
@@ -212,14 +213,15 @@ class Ui_Dialog(object):
                     break
 
     def on_create(self):
+        key=self.combo_shape.currentText()
         #print(key)
-        try:
-            label=key[3:]
-            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-            g0=float(self.le_mtrl.text())
-            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
-        except:
-            pass
+        #try:
+        #    label=key[3:]
+        #    obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+        #    g0=float(self.le_mtrl.text())
+        #    obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
+        #except:
+        #    pass
         if key=='00_basic':
             D=float(self.le_D.text()) 
             L=float(self.le_L.text())
@@ -232,15 +234,19 @@ class Ui_Dialog(object):
             obj.ViewObject.Proxy=0
             App.ActiveDocument.recompute() 
 
-        elif key=='01_keyway_1'  :
+        elif key=='01_keyway_1':
+            #return
             fname='keyway_1.FCStd'
             base=os.path.dirname(os.path.abspath(__file__))
             joined_path = os.path.join(base, 'shft_data',fname) 
-            try:
-                Gui.ActiveDocument.mergeProject(joined_path)
-            except:
-                doc=App.newDocument()
-                Gui.ActiveDocument.mergeProject(joined_path)    
+            Gui.ActiveDocument.mergeProject(joined_path)
+            #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+            #ry:
+            #   Gui.ActiveDocument.mergeProject(joined_path)
+            #xcept:
+            #   doc=App.newDocument()
+            #   Gui.ActiveDocument.mergeProject(joined_path)    
+            #return    
         elif  key=='02_keyway_2' :
             global key1
             D=float(self.le_D.text()) 
