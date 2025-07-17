@@ -216,8 +216,8 @@ class Ui_Dialog(object):
         key=self.combo_shape.currentText()
         #print(key)
         #try:
-        #    label=key[3:]
-        #    obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+        label=key[3:]
+        #obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
         #    g0=float(self.le_mtrl.text())
         #    obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
         #except:
@@ -225,7 +225,9 @@ class Ui_Dialog(object):
         if key=='00_basic':
             D=float(self.le_D.text()) 
             L=float(self.le_L.text())
-            
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
             obj.addProperty("App::PropertyFloat", "D",'shaft').D=D
             obj.addProperty("App::PropertyString", "type",'shaft').type=key
@@ -250,7 +252,10 @@ class Ui_Dialog(object):
         elif  key=='02_keyway_2' :
             global key1
             D=float(self.le_D.text()) 
-            L=float(self.le_L.text())       
+            L=float(self.le_L.text())  
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0     
             obj.addProperty("App::PropertyEnumeration", "type",'shaft')
             obj.type=ShaftData.shape_type[1:3]
             i=self.combo_shape.currentIndex()
@@ -274,6 +279,9 @@ class Ui_Dialog(object):
             App.ActiveDocument.recompute() 
            
         elif key=='03_C_shape snapring groove':
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyEnumeration", "D",'shaft')
             obj.D=ShaftData.csnap_size
             i=self.combo_c.currentIndex()
@@ -290,6 +298,9 @@ class Ui_Dialog(object):
             App.ActiveDocument.recompute() 
         
         elif key=='04_C_shape snapring groove with keyway':
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyEnumeration", "D",'shaft')
             obj.D=ShaftData.csnap_size
             i=self.combo_c.currentIndex()
@@ -319,6 +330,9 @@ class Ui_Dialog(object):
             L1=float(self.le_L1.text())
             L2=float(self.le_L2.text())
             L3=float(self.le_L3.text())
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyString", "type",'shaft').type=key
             
             obj.addProperty("App::PropertyEnumeration", "ScrewDia",label)
@@ -344,6 +358,9 @@ class Ui_Dialog(object):
             App.ActiveDocument.recompute()           
         elif key=='06_Lock nut' :
             dia1=self.combo_sc_dia.currentText()
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyEnumeration", "ScrewDia",label)
             obj.ScrewDia=ShaftData.screw_size
             i=self.combo_sc_dia.currentIndex()
@@ -380,6 +397,9 @@ class Ui_Dialog(object):
             d0=float(self.le_d0.text())
             D=float(self.le_D.text()) 
             L=float(self.le_L.text())
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyFloat", "L",'tube').L=L
             obj.addProperty("App::PropertyFloat", "D",'tube').D=D
             obj.addProperty("App::PropertyFloat", "d0",'tube').d0=d0
@@ -388,6 +408,7 @@ class Ui_Dialog(object):
             App.ActiveDocument.recompute() 
         elif key=='09_keyway_boss':
             D=float(self.le_D.text()) 
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
             obj.addProperty("App::PropertyFloat", "D",'shaft').D=D
             paramShaftKeywayBoss.KeyWayBoss(obj) 
             obj.ViewObject.Proxy=0
@@ -395,6 +416,9 @@ class Ui_Dialog(object):
         elif key=='10_Key_1':
             D=float(self.le_D.text()) 
             L1=float(self.le_L1.text())
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyFloat", "D",'Key').D=D
             obj.addProperty("App::PropertyFloat", "L1",'Key').L1=L1
             paramShaftKey.Key(obj) 
@@ -404,6 +428,9 @@ class Ui_Dialog(object):
             D=float(self.le_D.text()) 
             L1=float(self.le_L1.text())
             L2=float(self.le_L2.text())
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyFloat", "D",'Key').D=D
             obj.addProperty("App::PropertyFloat", "L1",'Key').L1=L1
             paramShaftKey_2.Key(obj) 
@@ -414,7 +441,9 @@ class Ui_Dialog(object):
             D=float(self.le_D.text()) 
             L=float(self.le_L.text()) 
             L1=float(self.le_L1.text())
-            
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
             obj.addProperty("App::PropertyString", "type",'shaft').type=key
             
             obj.addProperty("App::PropertyEnumeration", "ScrewDia",label)
