@@ -16,33 +16,35 @@ blt_size=['M3','M4','M5','M8','M10','M12','M14','M16']
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(200, 350)
+        Dialog.resize(200, 360)
         Dialog.move(1500, 0)
         
         #ねじ径　diameter
         self.label_blt = QtGui.QLabel('ねじ径',Dialog)
-        self.label_blt.setGeometry(QtCore.QRect(10, 18, 150, 12))
+        self.label_blt.setGeometry(QtCore.QRect(10, 13, 150, 12))
         self.combo_blt = QtGui.QComboBox(Dialog)
         self.combo_blt.setGeometry(QtCore.QRect(80, 10, 50, 22))
         self.combo_blt.setEditable(True)
         #首下長さ length　
-        self.label_t = QtGui.QLabel('首下長さ',Dialog)
-        self.label_t.setGeometry(QtCore.QRect(10, 33, 150, 12))
+        self.label_t = QtGui.QLabel('ねじ深さ',Dialog)
+        self.label_t.setGeometry(QtCore.QRect(10, 38, 150, 12))
         self.le_t = QtGui.QLineEdit('20',Dialog)
-        self.le_t.setGeometry(QtCore.QRect(80, 60, 35, 22))
+        self.le_t.setGeometry(QtCore.QRect(80, 35, 50, 22))
         #作成
-        self.pushButton = QtGui.QPushButton('作成',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(10, 85, 50, 22))
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
+        self.pushButton.setGeometry(QtCore.QRect(60, 60, 50, 22))
+        
         #更新
-        self.pushButton2 = QtGui.QPushButton('更新',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(70, 85, 50, 22))
+        self.pushButton2 = QtGui.QPushButton('upDate',Dialog)
+        self.pushButton2.setGeometry(QtCore.QRect(60, 85, 50, 22))
+        
         #インポート
         self.pushButton3 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(130, 85, 50, 22))
-
+        self.pushButton3.setGeometry(QtCore.QRect(60, 110, 50, 22))
+        
          #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(0, 135, 200, 200))
+        self.label_6.setGeometry(QtCore.QRect(0, 150, 200, 200))
         self.label_6.setText("")
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, 'ThreadHoll.png')
@@ -66,14 +68,18 @@ class Ui_Dialog(object):
          
          global spreadsheet
          global ThreadRod
+         global cylinder
          selection = Gui.Selection.getSelection()
          if selection:
              selected_object = selection[0]
              if selected_object.TypeId == "App::Part":
                  parts_group = selected_object
                  for obj in parts_group.Group:
-                     if obj.Label=='ThreadRod':
+                     print(obj.Label[-11:])
+                     if obj.Label[-11:]=='ThreadedRod':
                          ThreadRod=obj
+                     elif obj.Label=='cylinder':    
+                         cylinder=obj
                      if obj.TypeId == "Spreadsheet::Sheet":
                          spreadsheet = obj
                          
@@ -92,8 +98,9 @@ class Ui_Dialog(object):
               if size == size_value[1:]:
                 break
          Db=spreadsheet.getContents('B'+str(i)) 
-         ThreadRod.diameter=size
-         print(ThreadRod.diameter)
+         ThreadRod.Diameter=size
+         cylinder.Height=length
+         print(ThreadRod.Diameter)
          
          
          #tw=washer.t
