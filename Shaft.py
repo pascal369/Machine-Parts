@@ -232,7 +232,16 @@ class Ui_Dialog(object):
             obj.ViewObject.Proxy=0
             App.ActiveDocument.recompute() 
 
-        elif key=='01_keyway_1' or key=='02_keyway_2' :
+        elif key=='01_keyway_1'  :
+            fname='keyway_1.FCStd'
+            base=os.path.dirname(os.path.abspath(__file__))
+            joined_path = os.path.join(base, 'shft_data',fname) 
+            try:
+                Gui.ActiveDocument.mergeProject(joined_path)
+            except:
+                doc=App.newDocument()
+                Gui.ActiveDocument.mergeProject(joined_path)    
+        elif  key=='02_keyway_2' :
             global key1
             D=float(self.le_D.text()) 
             L=float(self.le_L.text())       

@@ -102,7 +102,7 @@ class Ui_Dialog(object):
         self.checkbox.setGeometry(QtCore.QRect(190, 110, 100, 23))
         self.checkbox.setObjectName("checkbox")
         #creat
-        self.pushButton = QtGui.QPushButton('Creare',Dialog)
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(30, 145, 250, 25))
         self.pushButton.setObjectName("pushButton")
         #img
@@ -161,7 +161,9 @@ class Ui_Dialog(object):
         elif key=='11':
             ta=ScrData.u_bolt_st
         elif key=='12':
-            ta=ScrData.u_band_st      
+            ta=ScrData.u_band_st   
+        elif key=='13':
+            return       
 
         self.comboBox_standard.clear()
         self.comboBox_standard.addItems(ta)
@@ -435,6 +437,8 @@ class Ui_Dialog(object):
                 dia2=ScrData.U_size
                 pic='img_u_band.png'
                 FC='Uバンド'
+        #elif key=='13' :
+        #    pic='img_threadHoll.png'      
 
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "ScrLib",pic)
@@ -734,6 +738,9 @@ class Ui_Dialog(object):
                 ParamUBnd.UBlt(obj)
                 obj.ViewObject.Proxy=0
                 FreeCAD.ActiveDocument.recompute()  
+            elif key=='13':
+                from ScrLib import ThreadedHoll
+                ThreadedHoll    
         elif key=='10':
                 #print(key)
                 L1=float(self.lineEdit.text())
@@ -756,7 +763,10 @@ class Ui_Dialog(object):
                 obj.addProperty("App::PropertyFloat", "L2",label).L2=L2
                 ParamBrgNut.BrgNut(obj)
                 obj.ViewObject.Proxy=0
-                FreeCAD.ActiveDocument.recompute()                
+                FreeCAD.ActiveDocument.recompute() 
+        elif key=='13' :
+            import ThreadHoll   
+            ThreadHoll                   
         
 class main():
         d = QtGui.QWidget()
