@@ -171,7 +171,7 @@ class Ui_Dialog(object):
         self.le_d0.setText('14')
         self.le_L.setText('45')
         self.le_L1.setText('15')
-        self.le_L2.setText('10')
+        self.le_L2.setText('15')
         self.le_L3.setText('5')
         self.le_mtrl.setText('7.85')
         if key=='03_C_shape snapring groove' or key=='04_C_shape snapring groove with keyway' :
@@ -343,7 +343,7 @@ class Ui_Dialog(object):
             obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
             obj.addProperty("App::PropertyFloat", "L1",'keyway').L1=L1
             if key=='07_screws for bearing2':
-                print(key)
+                #print(key)
                 obj.addProperty("App::PropertyFloat", "D",'shaft').D=D
                 obj.addProperty("App::PropertyFloat", "L2",'keyway').L2=L2
 
