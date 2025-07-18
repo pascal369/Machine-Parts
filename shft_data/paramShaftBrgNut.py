@@ -96,10 +96,22 @@ class ScrBrg5:
                 #らせん_sweep
                 helix=Part.makeHelix(p,p+L1,D0/2,0,False)
                 cutProfile = Part.Wire([edge1,edge2,edge3,edge4])
-                try:
+                #try:
+                if  D0==45.0 or D0==50.0 or D0==80.0 :
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,-2.0*p),App.Rotation(App.Vector(0,0,1),0))
+                    #print(D0,'aaaaaaaaaaaaaaaaaaaaaaaa')
+                elif  D0==110.0 or D0==115.0 or D0==130.0 or D0==150.0 :
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,0.5*p),App.Rotation(App.Vector(0,0,1),0))
+                    #print(D0,'aaaaaaaaaaaaaaaaaaaaaaaa')   
+                elif D0==40.0 or D0==155.0:
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,-1.0*p),App.Rotation(App.Vector(0,0,1),0))    
+                elif D0==160.0 or D0==180.0:
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,-0.25*p),App.Rotation(App.Vector(0,0,1),0))         
+                else:
                     cutProfile.Placement=App.Placement(App.Vector(0,0,-1.5*p),App.Rotation(App.Vector(0,0,1),0))
-                except:
-                    pass
+                    #print(D0,'cccccccccccccccccccccccccc')
+                #except:
+                #    pass
                 makeSolid=True
                 isFrenet=True
                 pipe = Part.Wire(helix).makePipeShell([cutProfile],makeSolid,isFrenet)
@@ -121,7 +133,7 @@ class ScrBrg5:
             c1=c1.fuse(c2)
         
         elif key=='07':
-            print(L,L1,L2,D)
+            #print(L,L1,L2,D)
             c2= Part.makeCylinder(D0/2,L-(L1+L2),Base.Vector(0,0,L1),Base.Vector(0,0,1),360)
             c1=c1.fuse(c2)
             c3=Part.makeCylinder(D/2,L2,Base.Vector(0,0,-L2),Base.Vector(0,0,1),360)

@@ -87,10 +87,20 @@ class ScrBrg6:
                 #らせん_sweep
                 helix=Part.makeHelix(p,p+L1,D0/2,0,False)
                 cutProfile = Part.Wire([edge1,edge2,edge3,edge4])
-                try:
+                
+                if  D0==45.0 or D0==50.0 or D0==80.0 :
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,-2.0*p),App.Rotation(App.Vector(0,0,1),0))
+                    #print(D0,'aaaaaaaaaaaaaaaaaaaaaaaa')
+                elif  D0==110.0 or D0==115.0 or D0==130.0 or D0==150.0 :
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,0.5*p),App.Rotation(App.Vector(0,0,1),0))
+                    #print(D0,'aaaaaaaaaaaaaaaaaaaaaaaa')   
+                elif D0==40.0 or D0==155.0:
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,-1.0*p),App.Rotation(App.Vector(0,0,1),0))    
+                elif D0==160.0 or D0==180.0:
+                    cutProfile.Placement=App.Placement(App.Vector(0,0,-0.25*p),App.Rotation(App.Vector(0,0,1),0))         
+                else:
                     cutProfile.Placement=App.Placement(App.Vector(0,0,-1.5*p),App.Rotation(App.Vector(0,0,1),0))
-                except:
-                    pass
+                    #print(D0,'cccccccccccccccccccccccccc')
                 makeSolid=True
                 isFrenet=True
                 pipe = Part.Wire(helix).makePipeShell([cutProfile],makeSolid,isFrenet)
