@@ -12,7 +12,7 @@ from math import pi
 
 buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Screws','Pins','Shaft','Snap Ring',
        'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Shaped Steel','Planar shape','One-touch window'
-       ,'Handle','Chute']
+       ,'Handle','Chute','DumpCar']
 
 chain=['Roller Chain','Water treatment chain','Link Chains']
 spro=['Drive Chains',]
@@ -260,7 +260,7 @@ class Ui_Dialog(object):
             self.comboBox_buhin2.addItems(Gear)  
         elif buhin=='driveChainAssy':
             self.comboBox_buhin2.hide() 
-        elif buhin=='Handle':
+        elif buhin=='Handle' or buhin=='DumpCar':
             self.comboBox_buhin2.hide()       
         
     def create(self):
@@ -317,14 +317,7 @@ class Ui_Dialog(object):
          elif buhin=='Gland Packing':
              if buhin2=='Gland Packing Assy':
                  import GlandpackingAssy 
-             #elif buhin2=='Gland Packing':
-             #    import Glandpacking   
-             #elif buhin2=='Lantern Ring':
-             #    import Lanternring 
-             #elif buhin2=='Ground presser':
-             #    import GlandPresser 
-             #elif buhin2=='Stuffing Box':
-             #    import StuffingBox     
+
          elif buhin=='One-touch window':
              import OneTouchWindow  
              return
@@ -333,7 +326,7 @@ class Ui_Dialog(object):
                import TensionCoilSpring
            elif buhin2=='Compression coil springs':    
                import CompressionCoilSpring
-               #return  
+
          elif buhin=='End Plate':
                import EndPlate    
          elif buhin=='Key Plate':
@@ -363,7 +356,9 @@ class Ui_Dialog(object):
          elif buhin=='Handle':
              import Handle
          elif buhin=='Chute':
-             import chute    
+             import chute  
+         elif buhin=='DumpCar':
+             import DumpCar      
 
 class main():
         d = QtGui.QWidget()
