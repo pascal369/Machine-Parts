@@ -35,8 +35,11 @@ class Ui_Dialog(object):
         self.pushButton = QtGui.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(80, 35, 80, 22))
         #更新
-        self.pushButton2 = QtGui.QPushButton(Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        #self.pushButton2 = QtGui.QPushButton(Dialog)
+        #self.pushButton2.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        #インポート
+        #self.pushButton3 = QtGui.QPushButton(Dialog)
+        #self.pushButton3.setGeometry(QtCore.QRect(80, 60, 80, 22))
 
         self.comboBox_ton.addItems(ton)
 
@@ -47,15 +50,16 @@ class Ui_Dialog(object):
         #QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
-        #QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+        #QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.upDate)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.import_data)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Handle", None))
         self.label_ton.setText(QtGui.QApplication.translate("Dialog", "Capacity", None))    
         self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
-        self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "upDate", None))  
-    
+        #self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "upDate", None))  
+        #self.pushButton3.setText(QtGui.QApplication.translate("Dialog", "import", None))  
     def on_type(self):
         Capacity=self.comboBox_ton.currentText()
         if Capacity=='4t':
@@ -68,7 +72,18 @@ class Ui_Dialog(object):
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
-
+        
+    #def import_data(self):
+    #    global spreadsheet
+    #    
+    #    selection = Gui.Selection.getSelection()
+    #    if selection:
+    #         selected_object = selection[0]
+            #if selected_object.TypeId == "App::Part":
+            #    parts_group = selected_object
+            #    for obj in parts_group.Group:
+            #       if obj.TypeId == "Spreadsheet::Sheet":
+            #           spreadsheet = obj
     
 
     def create(self): 
@@ -81,7 +96,7 @@ class Ui_Dialog(object):
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'DumpCar_data',fname) 
          #doc=App.newDocument()
-         print(joined_path)
+         #print(joined_path)
          Gui.ActiveDocument.mergeProject(joined_path)
         
 
