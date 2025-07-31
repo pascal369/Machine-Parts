@@ -63,28 +63,32 @@ class Ui_Dialog(object):
         Dialog.move(1000, 0)
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(0, 80, 200, 200))
+        self.label_6.setGeometry(QtCore.QRect(0, 150, 200, 200))
         self.label_6.setText("")
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "prt_data",'CSnap_data',"CSnap_hole.png")
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
-        self.label_6.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_6.setAlignment(QtCore.Qt.AlignTop)
         self.label_6.setObjectName("label_6")
         
         #呼び径　nominal diameter
-        self.label_dia = QtGui.QLabel(Dialog)
+        self.label_dia = QtGui.QLabel('Nominal Dia',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 13, 150, 12))
         self.comboBox_dia = QtGui.QComboBox(Dialog)
         self.comboBox_dia.setGeometry(QtCore.QRect(80, 10, 80, 22))
         #作成
-        self.pushButton = QtGui.QPushButton(Dialog)
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(25, 35, 150, 22))
         #更新
-        self.pushButton2 = QtGui.QPushButton(Dialog)
+        self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(25, 60, 150, 22))
+        #Import
+        self.pushButton4 = QtGui.QPushButton('Import',Dialog)
+        self.pushButton4.setGeometry(QtCore.QRect(25, 85, 150, 22))
+
         #エクスポート
         self.pushButton3 = QtGui.QPushButton('Stp_Export',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(25, 85, 150, 24))
+        self.pushButton3.setGeometry(QtCore.QRect(25, 110, 150, 24))
         self.pushButton3.setObjectName("pushButton2")
 
 
@@ -93,13 +97,22 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.export_step)
+        QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.import_data)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Snap Ring for hole", None))
-        self.label_dia.setText(QtGui.QApplication.translate("Dialog", "Nominal Dia", None))    
-        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
-        self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "upDate", None))  
-        self.pushButton3.setText(QtGui.QApplication.translate("Dialog", "export（step）", None))  
+
+    def import_data(self):
+        global spreadsheet
+        selection = Gui.Selection.getSelection()
+        if selection:
+             selected_object = selection[0]
+             if selected_object.TypeId == "App::Part":
+                 parts_group = selected_object
+                 for obj in parts_group.Group:
+                    if obj.TypeId == "Spreadsheet::Sheet":
+                        spreadsheet = obj
+             self.comboBox_dia.setCurrentText(spreadsheet.getContents('B2'))        
 
     def export_step(self):
         

@@ -68,7 +68,7 @@ class Ui_Dialog(object):
         Dialog.move(1000, 0)
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(0, 80, 200, 200))
+        self.label_6.setGeometry(QtCore.QRect(0, 110, 200, 200))
         self.label_6.setText("")
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "prt_data",'CSnap_data',"CSnap_shaft.png")
@@ -77,29 +77,42 @@ class Ui_Dialog(object):
         self.label_6.setObjectName("label_6")
         
         #呼び径　nominal diameter
-        self.label_dia = QtGui.QLabel(Dialog)
+        self.label_dia = QtGui.QLabel('Nominal',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 13, 150, 12))
         self.comboBox_dia = QtGui.QComboBox(Dialog)
         self.comboBox_dia.setGeometry(QtCore.QRect(80, 10, 80, 22))
         #作成
-        self.pushButton = QtGui.QPushButton(Dialog)
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(80, 35, 80, 22))
         #更新
-        self.pushButton2 = QtGui.QPushButton(Dialog)
+        self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        #Import
+        self.pushButton3 = QtGui.QPushButton('Import',Dialog)
+        self.pushButton3.setGeometry(QtCore.QRect(80, 85, 80, 22))
 
 
         self.comboBox_dia.addItems(CDia)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.import_data)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Snap Ring", None))
-        self.label_dia.setText(QtGui.QApplication.translate("Dialog", "Nominal", None))    
-        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
-        self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "upDate", None))  
-
+        
+    def import_data(self):
+        global spreadsheet
+        selection = Gui.Selection.getSelection()
+        if selection:
+             selected_object = selection[0]
+             if selected_object.TypeId == "App::Part":
+                 parts_group = selected_object
+                 for obj in parts_group.Group:
+                    if obj.TypeId == "Spreadsheet::Sheet":
+                        spreadsheet = obj
+             self.comboBox_dia.setCurrentText(spreadsheet.getContents('B2'))           
+                        
     def update(self):
          # スプレッドシートを選択
          selection = Gui.Selection.getSelection()
