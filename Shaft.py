@@ -213,14 +213,7 @@ class Ui_Dialog(object):
 
     def on_create(self):
         key=self.combo_shape.currentText()
-        #print(key)
-        #try:
         label=key[3:]
-        #obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-        #    g0=float(self.le_mtrl.text())
-        #    obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0
-        #except:
-        #    pass
         if key=='00_basic':
             D=float(self.le_D.text()) 
             L=float(self.le_L.text())
@@ -238,14 +231,6 @@ class Ui_Dialog(object):
             App.ActiveDocument.recompute() 
 
         elif key=='01_keyway_1':
-            #return
-            fname='keyway_1.FCStd'
-            base=os.path.dirname(os.path.abspath(__file__))
-            joined_path = os.path.join(base, 'shft_data',fname) 
-            Gui.ActiveDocument.mergeProject(joined_path)
-
-        elif  key=='02_keyway_2' :
-            global key1
             D=float(self.le_D.text()) 
             L=float(self.le_L.text())  
             obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
@@ -255,7 +240,33 @@ class Ui_Dialog(object):
             obj.type=ShaftData.shape_type[1:3]
             i=self.combo_shape.currentIndex()
             obj.type=ShaftData.shape_type[i] 
+            obj.addProperty("App::PropertyFloat", "D",'shaft').D=D
+            obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
+            L1=float(self.le_L1.text())
+            L2=0
+            obj.addProperty("App::PropertyFloat", "L1",'keyway').L1=L1
+            
+            if self.checkbox2.isChecked():
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
+            else:
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = False
+             
+            paramShaftKeyway.KeyWay(obj) 
+            obj.ViewObject.Proxy=0
+            App.ActiveDocument.recompute() 
 
+
+        elif  key=='02_keyway_2' :
+            #global key1
+            D=float(self.le_D.text()) 
+            L=float(self.le_L.text())  
+            obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            g0=float(self.le_mtrl.text())
+            obj.addProperty("App::PropertyFloat", "g0",'shaft').g0=g0     
+            obj.addProperty("App::PropertyEnumeration", "type",'shaft')
+            obj.type=ShaftData.shape_type[1:3]
+            i=self.combo_shape.currentIndex()
+            obj.type=ShaftData.shape_type[i] 
             obj.addProperty("App::PropertyFloat", "D",'shaft').D=D
             obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
             L1=float(self.le_L1.text())
@@ -263,7 +274,6 @@ class Ui_Dialog(object):
             obj.addProperty("App::PropertyFloat", "L1",'keyway').L1=L1
             if key[3:]=='keyway_2':    
                 obj.addProperty("App::PropertyFloat", "L2",'keyway').L2=L2
-
             if self.checkbox2.isChecked():
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
