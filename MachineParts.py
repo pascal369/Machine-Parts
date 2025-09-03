@@ -167,25 +167,25 @@ class Ui_Dialog(object):
         c00 = Gui.Selection.getSelection()
         if c00:
             obj = c00[0]
-        label=obj.Label
+        #label=obj.Label
         Standard=self.le_st.text()
         try:
             obj.addProperty("App::PropertyString", "Standard",'Standard')
             obj.Standard=Standard
         except:
             obj.Standard=Standard      
-
     def material(self):
         c00 = Gui.Selection.getSelection()
         if c00:
             obj = c00[0]
-        label=obj.Label
-        Material=self.comboBox_mt.currentText()
+        #label=obj.Label
+        material=self.comboBox_mt.currentText()
+        print(material)
         try:
-            obj.addProperty("App::PropertyString", "Material",'Material')
-            obj.Material=Material
+            obj.addProperty("App::PropertyString", 'material','material')
+            obj.material=material
         except:
-            obj.Material=Material      
+            obj.material=material      
 
 
     def language(self):
@@ -292,7 +292,7 @@ class Ui_Dialog(object):
                         except:
                             spreadsheet.set(f"B{row}", obj.Base_JPN)  
                     try:
-                        spreadsheet.set(f"C{row}", obj.Material)
+                        spreadsheet.set(f"C{row}", obj.material)
                     except:
                         pass
                     try:
