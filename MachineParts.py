@@ -119,12 +119,12 @@ class Ui_Dialog(object):
 
         #sketchLength
         self.pushButtonS = QtGui.QPushButton('SketchLength',Dialog)
-        self.pushButtonS.setGeometry(QtCore.QRect(180, 210, 75, 23))
+        self.pushButtonS.setGeometry(QtCore.QRect(180, 235, 75, 23))
         self.pushButtonS.setObjectName("pushButton")
 
         #実行S
         self.pushButton = QtGui.QPushButton('Execution',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(80, 210, 75, 23))
+        self.pushButton.setGeometry(QtCore.QRect(80, 235, 75, 23))
         self.pushButton.setObjectName("pushButton")
         self.comboBox_buhin.addItems(buhin)
 
