@@ -35,38 +35,44 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(270, 350)
         Dialog.move(1000, 0)
+        #和文
+        self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
+        self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
+        self.le_la = QtGui.QLineEdit('円錐ころ軸受',Dialog)
+        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
         #タイプ　Type
         self.label_type = QtGui.QLabel('Type',Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 13, 120, 12))
+        self.label_type.setGeometry(QtCore.QRect(10, 38, 120, 12))
         self.comboBox_type = QtGui.QComboBox(Dialog)
-        self.comboBox_type.setGeometry(QtCore.QRect(80, 10, 165, 22))
+        self.comboBox_type.setGeometry(QtCore.QRect(80, 35, 165, 22))
 
         #シリーズ　Series
         self.label_ser = QtGui.QLabel('Series',Dialog)
-        self.label_ser.setGeometry(QtCore.QRect(10, 38, 50, 12))
+        self.label_ser.setGeometry(QtCore.QRect(10, 63, 50, 12))
         self.label_ser.setAlignment(QtCore.Qt.AlignRight)
         self.comboBox_ser = QtGui.QComboBox(Dialog)
-        self.comboBox_ser.setGeometry(QtCore.QRect(80, 35, 80, 22))
+        self.comboBox_ser.setGeometry(QtCore.QRect(80, 60, 80, 22))
 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('dia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 63, 50, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 88, 50, 12))
         self.label_dia.setAlignment(QtCore.Qt.AlignRight)
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 85, 80, 22))
         #実行
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 85, 180, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 110, 180, 22))
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(140, 110, 80, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(140, 135, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         #self.pushButton2.setGeometry(QtCore.QRect(80, 110, 40, 22))
-        self.pushButton2.setGeometry(QtCore.QRect(50,110,80,22))
+        self.pushButton2.setGeometry(QtCore.QRect(50,135,80,22))
         #png
         self.label_5 = QtGui.QLabel(Dialog)
-        self.label_5.setGeometry(QtCore.QRect(80, 150, 250, 200))
+        self.label_5.setGeometry(QtCore.QRect(80, 170, 250, 200))
         self.label_5.setAlignment(QtCore.Qt.AlignTop)
         self.label_5.setObjectName("label_5")
         pic='Tapered Roller Bearings.png'  
@@ -79,9 +85,9 @@ class Ui_Dialog(object):
         self.comboBox_ser.addItems(RollingBrg_Data.TprSer)
         self.comboBox_dia.addItems(RollingBrg_Data.TprDia)
 
-        #self.comboBox_ser.setCurrentIndex(1)
-        #self.comboBox_ser.currentIndexChanged[int].connect(self.onSeries)
-        #self.comboBox_ser.setCurrentIndex(0)
+        self.comboBox_type.setCurrentIndex(1)
+        self.comboBox_type.currentIndexChanged[int].connect(self.onType)
+        self.comboBox_type.setCurrentIndex(0)
         
         #self.comboBox_ser.setEditable(True)
 
@@ -92,16 +98,34 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
+        #QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.japan)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.upDate)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.readData)
-
+        QtCore.QObject.connect(self.pushButton_la, QtCore.SIGNAL("pressed()"), self.japan)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "TaperedRollerBrg", None))
+    def japan(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label=obj.Label
+        JPN=self.le_la.text()
+        try:
+            obj.addProperty("App::PropertyString", "JPN",'Base')
+            obj.JPN=JPN
+        except:
+            obj.JPN=JPN
     def readData(self):
         global spreadsheet
         selection = Gui.Selection.getSelection()
+        for obj in selection:
+            try:
+                JPN=obj.JPN
+                self.le_la.setText(JPN)
+            except:
+                pass
         if selection:
             selected_object = selection[0]
             if selected_object.TypeId == "App::Part":
@@ -114,13 +138,19 @@ class Ui_Dialog(object):
             self.comboBox_ser.setCurrentText(spreadsheet.getContents('A1'))            
             self.comboBox_dia.setCurrentText(spreadsheet.getContents('A3'))
             #print(self.comBox_dia.CurrentText())
-         
+    #def onSereis(self):
+    #    key0=self.comboBox_ser.currentTex()   
+    #    if key0== '02': 
+    
     def onType(self):
-        
-        return
+        #return
         key0=self.comboBox_type.currentIndex()
         if key0==0:
-            self.comboBox_ser.addItems(series500SP)
+            self.le_la.setText('複列円錐ころ軸受')
+            spreadsheet.set('B1','DoubleRow')
+        elif key0==1:
+            self.le_la.setText('単列円錐ころ軸受')  
+            spreadsheet.set('B1','SingleRow')  
         
     def onDia(self):
          global d
@@ -137,15 +167,23 @@ class Ui_Dialog(object):
          global yk
          global xi
          global d1
+         global g
+         #global listL
          key=self.comboBox_dia.currentText()
+         key0=self.comboBox_ser.currentText()
          listL=[]
-         for i in range(3,27):
+         if key0=='02':
+             a=3
+             b=27
+         elif key0=='03':
+             return  
+         for i in range(a,b):
              if key==spreadsheet.getContents('A'+str(i)):
                  #print(i,key,spreadsheet.getContents('A'+str(i)))
                  for i in range(3,27):
                      if key==spreadsheet.getContents('A'+str(i)):
                          listL=[]
-                         for j in range(0,15):
+                         for j in range(0,17):
                              listL.append(spreadsheet.getContents(column_list[j]+str(i)))
                          d=listL[0]
                          D=listL[1]
@@ -162,8 +200,11 @@ class Ui_Dialog(object):
                          xi=listL[12]
                          xk=listL[13]
                          yk=listL[14]
-         
+                         g=listL[16]
     def upDate(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
         spreadsheet.set('d',d)
         spreadsheet.set('D',D)
         spreadsheet.set('T0',T0)
@@ -178,6 +219,24 @@ class Ui_Dialog(object):
         spreadsheet.set('xi',xi)
         spreadsheet.set('xk',xk)
         spreadsheet.set('yk',yk)
+        spreadsheet.set('g0',g)
+
+        JPN=self.le_la.text()
+        try:
+            obj.addProperty("App::PropertyString", "JPN",'Base')
+            obj.JPN=JPN
+        except:
+            obj.JPN=JPN
+        try:
+            #label='mass[kg]'
+            print(g)
+            obj.addProperty("App::PropertyString", "mass",'mass[kg]').mass=g
+            print(g)
+        except:
+            obj.mass=g
+            print('error')
+            pass
+    
         App.ActiveDocument.recompute()      
 
     def create(self):
@@ -197,7 +256,8 @@ class Ui_Dialog(object):
             elif key==1:
                 fname='TaperedRollerBrg_DoubleRow03.FCStd'        
         else:
-            return
+            #return
+            pass
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, fname) 
         print(joined_path)
@@ -206,6 +266,14 @@ class Ui_Dialog(object):
         except:
            doc=App.newDocument()
            Gui.ActiveDocument.mergeProject(joined_path)
+
+        #obj.addProperty("App::PropertyString", "JPN",'Base')
+        #obj.JPN=JPN
+#
+        #label='mass[kg]'
+        #obj.addProperty("App::PropertyEnumeration", "mass",label)
+        #obj.mass=g
+        #print('aaaaaaaaaaaaaaaaaaaaaaa')
         return  
 
 class main():

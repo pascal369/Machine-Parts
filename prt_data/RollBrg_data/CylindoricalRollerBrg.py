@@ -35,38 +35,39 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(270, 350)
         Dialog.move(1000, 0)
-        #タイプ　Type
-        #self.label_type = QtGui.QLabel(Dialog)
-        #self.label_type.setGeometry(QtCore.QRect(10, 13, 120, 12))
-        #self.comboBox_type = QtGui.QComboBox(Dialog)
-        #self.comboBox_type.setGeometry(QtCore.QRect(80, 10, 165, 22))
+        #和文
+        self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
+        self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
+        self.le_la = QtGui.QLineEdit('円筒ころ軸受',Dialog)
+        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
 
         #シリーズ　Series
         self.label_ser = QtGui.QLabel('Series',Dialog)
-        self.label_ser.setGeometry(QtCore.QRect(10, 28, 50, 12))
+        self.label_ser.setGeometry(QtCore.QRect(10, 38, 50, 12))
         self.label_ser.setAlignment(QtCore.Qt.AlignRight)
         self.comboBox_ser = QtGui.QComboBox(Dialog)
-        self.comboBox_ser.setGeometry(QtCore.QRect(80, 25, 80, 22))
+        self.comboBox_ser.setGeometry(QtCore.QRect(80, 35, 80, 22))
 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('dia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 53, 50, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 58, 60, 12))
         self.label_dia.setAlignment(QtCore.Qt.AlignRight)
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 50, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 60, 80, 22))
         #実行
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 75, 180, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 85, 180, 22))
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(140, 100, 80, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(140, 110, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         #self.pushButton2.setGeometry(QtCore.QRect(80, 110, 40, 22))
-        self.pushButton2.setGeometry(QtCore.QRect(50,100,80,22))
+        self.pushButton2.setGeometry(QtCore.QRect(50,110,80,22))
         #png
         self.label_5 = QtGui.QLabel(Dialog)
-        self.label_5.setGeometry(QtCore.QRect(50, 140, 200, 200))
+        self.label_5.setGeometry(QtCore.QRect(50, 150, 200, 200))
         self.label_5.setAlignment(QtCore.Qt.AlignTop)
         self.label_5.setObjectName("label_5")
         pic='Cylindorical Roller Bearings.png'  
@@ -79,10 +80,11 @@ class Ui_Dialog(object):
         self.comboBox_dia.addItems(RollingBrg_Data.CylDia)
 
         #self.comboBox_ser.setCurrentIndex(1)
-        #self.comboBox_ser.currentIndexChanged[int].connect(self.onSeries)
+        self.comboBox_ser.currentIndexChanged[int].connect(self.onSer)
+        self.comboBox_ser.currentIndexChanged[int].connect(self.onDia)
         #self.comboBox_ser.setCurrentIndex(0)
         
-        #self.comboBox_ser.setEditable(True)
+        self.comboBox_ser.setEditable(True)
 
         self.comboBox_dia.setCurrentIndex(1)
         self.comboBox_dia.currentIndexChanged[int].connect(self.onDia)
@@ -93,11 +95,22 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.upDate)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.readData)
-
+        QtCore.QObject.connect(self.pushButton_la, QtCore.SIGNAL("pressed()"), self.japan)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "CylindoricalRollerBrg", None))
+    def japan(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label=obj.Label
+        JPN=self.le_la.text()
+        try:
+            obj.addProperty("App::PropertyString", "JPN",'Base')
+            obj.JPN=JPN
+        except:
+            obj.JPN=JPN
     def readData(self):
         global spreadsheet
         selection = Gui.Selection.getSelection()
@@ -113,12 +126,13 @@ class Ui_Dialog(object):
             self.comboBox_dia.setCurrentText(spreadsheet.getContents('A3'))
             #print(self.comBox_dia.CurrentText())
          
-    def onType(self):
-        
-        return
-        key0=self.comboBox_type.currentIndex()
-        if key0==0:
-            self.comboBox_ser.addItems(series500SP)
+    def onSer(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        key0=self.comboBox_ser.currentText()
+        spreadsheet.set('A1',key0)
+        print(key0,'aaaaaaaaaaaaaaaaaa')
         
     def onDia(self):
          global d
@@ -131,10 +145,17 @@ class Ui_Dialog(object):
          global n
          key=self.comboBox_dia.currentText()
          listL=[]
-         for i in range(3,27):
+         if self.comboBox_ser.currentText()=='20':
+             a=3
+             b=28
+         elif self.comboBox_ser.currentText()=='30':
+             a=29
+             b=53  
+         #spreadsheet.set('A1',self.comboBox_ser.currentText())
+         for i in range(a,b):
              if key==spreadsheet.getContents('A'+str(i)):
                  #print(i,key,spreadsheet.getContents('A'+str(i)))
-                 for i in range(3,27):
+                 for i in range(a,b):
                      if key==spreadsheet.getContents('A'+str(i)):
                          listL=[]
                          for j in range(0,8):
@@ -161,16 +182,13 @@ class Ui_Dialog(object):
         App.ActiveDocument.recompute()      
 
     def create(self):
-        #print(key)
         key=self.comboBox_ser.currentIndex()
-
-        #print(key)
-        if key==0:
-            fname='CylindoricalRollerBrg_SingleRow20.FCStd'
-        elif key==1:
-            fname='CylindoricalRollerBrg_SingleRow30.FCStd'    
-        else:
-            return
+        #if key==0:
+        fname='CylindoricalRollerBrg_SingleRow20.FCStd'
+        #elif key==1:
+        #    fname='CylindoricalRollerBrg_SingleRow30.FCStd'    
+        #else:
+        #    return
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, fname) 
         #print(joined_path)
