@@ -43,71 +43,75 @@ class ViewProvider:
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 300)
+        Dialog.resize(300, 325)
         Dialog.move(1000, 0)
+        #jpn text
+        self.pushButton_jpn = QtGui.QPushButton('Jpn Text',Dialog)
+        self.pushButton_jpn.setGeometry(QtCore.QRect(10, 10, 50, 23))
+        self.le_jpn = QtGui.QLineEdit(Dialog)
+        self.le_jpn.setGeometry(QtCore.QRect(100, 10, 170, 23))
+        self.le_jpn.setAlignment(QtCore.Qt.AlignCenter)  
         #種類 type
         self.type = QtGui.QLabel('Type',Dialog)
-        self.type.setGeometry(QtCore.QRect(10, 10, 50, 12))
+        self.type.setGeometry(QtCore.QRect(10, 38, 50, 12))
         self.type.setObjectName("type")
         self.comboBox_type = QtGui.QComboBox(Dialog)
-        self.comboBox_type.setGeometry(QtCore.QRect(100, 10, 170, 20))
+        self.comboBox_type.setGeometry(QtCore.QRect(100, 35, 170, 20))
         self.comboBox_type.setObjectName("comboBox_type")
-        #self.type2 = QtGui.QLabel(Dialog)
-        #self.type2.setGeometry(QtCore.QRect(70, 33, 200, 22))
-        #self.type2.setObjectName("type2")
+        
         #規格
         self.standard = QtGui.QLabel('Standard',Dialog)
-        self.standard.setGeometry(QtCore.QRect(10, 35, 60, 20))
+        self.standard.setGeometry(QtCore.QRect(10, 60, 60, 20))
         #self.standard.setObjectName("standard")
         self.comboBox_standard = QtGui.QComboBox(Dialog)
-        self.comboBox_standard.setGeometry(QtCore.QRect(100, 35, 170, 20))
+        self.comboBox_standard.setGeometry(QtCore.QRect(100, 60, 170, 20))
         self.comboBox_standard.setObjectName("comboBox_standard")
         #ねじ呼び径
         self.dia = QtGui.QLabel('Screw diameter',Dialog)
-        self.dia.setGeometry(QtCore.QRect(10, 60, 50, 20))
+        self.dia.setGeometry(QtCore.QRect(10, 85, 50, 20))
         #self.dia.setObjectName("yobikei")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(100, 60, 70, 20))
+        self.comboBox_dia.setGeometry(QtCore.QRect(100, 85, 70, 20))
         self.comboBox_dia.setObjectName("comboBox_dia")
         #フランジ規格
         self.fdia = QtGui.QLabel('Flange',Dialog)
-        self.fdia.setGeometry(QtCore.QRect(180, 60, 60, 20))
+        self.fdia.setGeometry(QtCore.QRect(180, 110, 60, 20))
         #self.fdia.setObjectName("yobikei")
         self.comboBox_fdia = QtGui.QComboBox(Dialog)
-        self.comboBox_fdia.setGeometry(QtCore.QRect(220, 60, 50, 20))
+        self.comboBox_fdia.setGeometry(QtCore.QRect(220, 110, 50, 20))
         self.comboBox_fdia.setObjectName("comboBox_fdia")
         #首下長さ
         self.kubisita = QtGui.QLabel('Neck length',Dialog)
-        self.kubisita.setGeometry(QtCore.QRect(10, 90, 110, 20))
+        self.kubisita.setGeometry(QtCore.QRect(10, 113, 110, 20))
         self.kubisita.setAlignment(QtCore.Qt.AlignLeft)
         #self.kubisita.setObjectName("kubisita")
         self.lineEdit = QtGui.QLineEdit(Dialog)
-        self.lineEdit.setGeometry(QtCore.QRect(100, 90, 50, 20))
+        self.lineEdit.setGeometry(QtCore.QRect(100, 113, 50, 20))
         self.lineEdit.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit.setObjectName("lineEdit")
         #ねじ部長さ
         self.nejibu = QtGui.QLabel('Screw length',Dialog)
-        self.nejibu.setGeometry(QtCore.QRect(10, 110, 110, 20))
+        self.nejibu.setGeometry(QtCore.QRect(10, 135, 110, 20))
         self.nejibu.setAlignment(QtCore.Qt.AlignLeft)
         self.nejibu.setObjectName("nejibu")
         self.lineEdit_2 = QtGui.QLineEdit(Dialog)
-        self.lineEdit_2.setGeometry(QtCore.QRect(100, 110, 50, 20))
+        self.lineEdit_2.setGeometry(QtCore.QRect(100, 135, 50, 20))
         self.lineEdit_2.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_2.setObjectName("lineEdit_2")
         #checkboxフランジ部
         self.checkboxf = QtGui.QCheckBox('Flange',Dialog)
-        self.checkboxf.setGeometry(QtCore.QRect(190, 85, 65, 23))
+        self.checkboxf.setGeometry(QtCore.QRect(190, 160, 65, 23))
         #checkboxねじ表示
         self.checkbox = QtGui.QCheckBox('Screw display',Dialog)
-        self.checkbox.setGeometry(QtCore.QRect(190, 110, 100, 23))
+        self.checkbox.setGeometry(QtCore.QRect(190, 135, 100, 23))
         self.checkbox.setObjectName("checkbox")
         #creat
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(30, 145, 250, 25))
+        self.pushButton.setGeometry(QtCore.QRect(30, 185, 250, 25))
         self.pushButton.setObjectName("pushButton")
         #img
         self.img = QtGui.QLabel(Dialog)
-        self.img.setGeometry(QtCore.QRect(30, 175, 250, 100))
+        self.img.setGeometry(QtCore.QRect(30, 220, 250, 100))
         self.img.setAlignment(QtCore.Qt.AlignCenter)
         self.retranslateUi(Dialog)
 
@@ -127,12 +131,24 @@ class Ui_Dialog(object):
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create_screw)
         QtCore.QObject.connect(self.checkbox, QtCore.SIGNAL("checked()"), self.create_screw)
+        QtCore.QObject.connect(self.pushButton_jpn, QtCore.SIGNAL("pressed()"), self.japan)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
 
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Screw Library", None))
 
+    def japan(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label=obj.Label
+        JPN=self.le_jpn.text()
+        try:
+            obj.addProperty("App::PropertyString", "JPN",'Base')
+            obj.JPN=JPN
+        except:
+            obj.JPN=JPN
     def on_type(self):
         global key
         key=self.comboBox_type.currentText()[:2]
@@ -162,8 +178,10 @@ class Ui_Dialog(object):
             ta=ScrData.u_bolt_st
         elif key=='12':
             ta=ScrData.u_band_st   
-        elif key=='13':
-            return       
+        
+        sa=ScrData.b_lst
+        JPN=sa[key]
+        self.le_jpn.setText(JPN)
 
         self.comboBox_standard.clear()
         self.comboBox_standard.addItems(ta)

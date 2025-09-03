@@ -232,7 +232,7 @@ class Ui_Dialog(object):
                         
         
     def read_data(self):
-         #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+         print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
          selection = Gui.Selection.getSelection()
          # Partsグループが選択されているかチェック
          if selection:
@@ -265,7 +265,7 @@ class Ui_Dialog(object):
          global row_N
          global col_type
          global col_shp
-         #print('777777777777')
+         print('777777777777')
          selection = Gui.Selection.getSelection()
          # Partsグループが選択されているかチェック
          if selection:
@@ -293,7 +293,7 @@ class Ui_Dialog(object):
                          #Pitch=Gui.Selection.addSelection('sprAssy','Part002','Part001.Cut001.Fusion001.Body001.Pad001.Sprocket001.Pitch')
                          print(Pitch)
                          
-                         
+                         spreadsheet.set('Type',type)
                          spreadsheet.set('B5',N1)
                          spreadsheet.set('B6',N2)
                          

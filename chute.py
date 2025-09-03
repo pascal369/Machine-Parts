@@ -12,7 +12,7 @@ from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
 
-type=['inlet','outlet','chute']
+type=['inlet','outlet','chute','chute3']
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
@@ -101,7 +101,9 @@ class Ui_Dialog(object):
         elif self.comboBox_type.currentText()=='inlet':
             fname='inlet.png'    
         elif self.comboBox_type.currentText()=='outlet':
-            fname='outlet.png'       
+            fname='outlet.png'    
+        elif self.comboBox_type.currentText()=='chute3':
+            fname='chute3.png'          
 
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "prt_data",'chute_data',fname)
@@ -151,6 +153,14 @@ class Ui_Dialog(object):
             self.le_sita0.setText(spreadsheet.getContents('sita0')) 
             self.le_sita1.setText(spreadsheet.getContents('sita1')) 
             self.le_FL.setText(spreadsheet.getContents('FL')) 
+        elif self.comboBox_type.currentText()=='chute3' :
+            self.le_W0.setText(spreadsheet.getContents('w0')) 
+            self.le_L0.setText(spreadsheet.getContents('l0'))  
+            self.le_sita0.setText(spreadsheet.getContents('sita0')) 
+            self.le_FL.setText(spreadsheet.getContents('h0')) 
+            self.le_W1.setText('') 
+            self.le_L1.setText('')  
+            self.le_sita1.setText('')     
 
     def update(self):
          w0=self.le_W0.text()
@@ -162,7 +172,7 @@ class Ui_Dialog(object):
          FL=self.le_FL.text()
          try:
              if self.comboBox_type.currentText()=='inlet':
-                 print('aaaaaaaaaaaaaaa')
+                 #print('aaaaaaaaaaaaaaa')
                  spreadsheet.set('w0',w0)
                  spreadsheet.set('l0',l0)
                  spreadsheet.set('sita0',sita0)
@@ -180,8 +190,14 @@ class Ui_Dialog(object):
                  spreadsheet.set('sita0',sita0)
                  spreadsheet.set('sita1',sita1)
                  spreadsheet.set('FL',FL)
+             elif self.comboBox_type.currentText()=='chute3':
+                 #print('aaaaaaaaaaaaaaa')
+                 spreadsheet.set('w0',w0)
+                 spreadsheet.set('l0',l0)
+                 spreadsheet.set('sita0',sita0)
+                 spreadsheet.set('h0',FL)    
          except:
-             print('bbbbbbbbbbbbbbbbbbbbbbbbbb')      
+             return 
          App.ActiveDocument.recompute()
 
     def create(self): 
@@ -191,6 +207,9 @@ class Ui_Dialog(object):
              fname='outlet.FCStd'    
          elif self.comboBox_type.currentText()=='chute':
              fname='chute.FCStd'
+         elif self.comboBox_type.currentText()=='chute3':
+             fname='chute3.FCStd'    
+
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','chute_data',fname) 
          try:

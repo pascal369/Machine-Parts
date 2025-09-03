@@ -25,7 +25,6 @@ from shft_data import paramShaftMeter
 from shft_data import paramShaftBothMeter
 from shft_data import ShaftData
 
-
 DEBUG = True # set to True to show debug messages
 #JIS B 1181
 class ViewProvider:
@@ -231,6 +230,8 @@ class Ui_Dialog(object):
             obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
             obj.addProperty("App::PropertyFloat", "D",'shaft').D=D
             obj.addProperty("App::PropertyString", "type",'shaft').type=key
+            st='d'+str(D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st
 
             paramShaftBasic.Basic(obj) 
             obj.ViewObject.Proxy=0
@@ -242,13 +243,7 @@ class Ui_Dialog(object):
             base=os.path.dirname(os.path.abspath(__file__))
             joined_path = os.path.join(base, 'shft_data',fname) 
             Gui.ActiveDocument.mergeProject(joined_path)
-            #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-            #ry:
-            #   Gui.ActiveDocument.mergeProject(joined_path)
-            #xcept:
-            #   doc=App.newDocument()
-            #   Gui.ActiveDocument.mergeProject(joined_path)    
-            #return    
+
         elif  key=='02_keyway_2' :
             global key1
             D=float(self.le_D.text()) 

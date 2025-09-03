@@ -39,38 +39,45 @@ class Ui_Dialog(object):
         global fname
         global joined_path
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 330)
+        Dialog.resize(300, 350)
         Dialog.move(1000, 0)
+
+        #和文
+        self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
+        self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
+        self.le_la = QtGui.QLineEdit('シーブ',Dialog)
+        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
         #タイプ　Type
         self.label_type = QtGui.QLabel('Type',Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 13, 120, 12))
+        self.label_type.setGeometry(QtCore.QRect(10, 35, 120, 12))
         self.comboBox_type = QtGui.QComboBox(Dialog)
-        self.comboBox_type.setGeometry(QtCore.QRect(130, 10, 100, 22))
+        self.comboBox_type.setGeometry(QtCore.QRect(130, 35, 100, 22))
         
         #選定係数D/d
         self.label_sel = QtGui.QLabel('SelectionFactor',Dialog)
-        self.label_sel.setGeometry(QtCore.QRect(10, 38, 120, 12))
+        self.label_sel.setGeometry(QtCore.QRect(10, 60, 120, 12))
         self.comboBox_sel = QtGui.QComboBox(Dialog)
-        self.comboBox_sel.setGeometry(QtCore.QRect(130, 35, 100, 22))
+        self.comboBox_sel.setGeometry(QtCore.QRect(130, 60, 100, 22))
         
         #呼び径　nominal diameter
         self.label_nominal = QtGui.QLabel('Wire nominal Dia',Dialog)
-        self.label_nominal.setGeometry(QtCore.QRect(10, 63, 150, 12))
+        self.label_nominal.setGeometry(QtCore.QRect(10, 85, 150, 12))
         self.comboBox_nominal = QtGui.QComboBox(Dialog)
-        self.comboBox_nominal.setGeometry(QtCore.QRect(130, 60, 100, 22))
+        self.comboBox_nominal.setGeometry(QtCore.QRect(130, 85, 100, 22))
         #実行
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 100, 200, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 113, 200, 22))
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(50, 125, 100, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(50, 135, 100, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(155, 125, 95, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(155, 135, 95, 22))
 
         #png
         self.label_5 = QtGui.QLabel(Dialog)
-        self.label_5.setGeometry(QtCore.QRect(50, 160, 200, 150))
+        self.label_5.setGeometry(QtCore.QRect(50, 170, 200, 150))
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName("label_5")
         
@@ -93,18 +100,36 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.upDate)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.readData)
-
+        QtCore.QObject.connect(self.pushButton_la, QtCore.SIGNAL("pressed()"), self.japan)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Sheave", None))
         
+    def japan(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label=obj.Label
+        JPN=self.le_la.text()
+        try:
+            obj.addProperty("App::PropertyString", "JPN",'Base')
+            obj.JPN=JPN
+        except:
+            obj.JPN=JPN
+
     def readData(self):
         print(self.comboBox_nominal.currentText())
         global spreadsheet_sheave
         global Brg
         global Csnap
         selection = Gui.Selection.getSelection()
+        for obj in selection:
+            try:
+                JPN=obj.JPN
+                self.le_la.setText(JPN)
+            except:
+                pass
         if selection:
             selected_object = selection[0]
             if selected_object.TypeId == "App::Part":
@@ -133,8 +158,11 @@ class Ui_Dialog(object):
         self.label_5.setPixmap(QtGui.QPixmap(joined_path))
         
     def upDate(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
         key0=self.comboBox_type.currentText()
-        print(self.comboBox_nominal.currentText())
+        #print(self.comboBox_nominal.currentText())
         for i in range(16,26):
             d=self.comboBox_nominal.currentText()
             print(d)
@@ -207,6 +235,12 @@ class Ui_Dialog(object):
                                     spreadsheet_sheave.set('J27',spreadsheet_sheave.getContents('J'+str(m))) 
                                     spreadsheet_sheave.set('K27',spreadsheet_sheave.getContents('K'+str(m))) 
                                     break
+                        JPN=self.le_la.text()
+                        try:
+                            obj.addProperty("App::PropertyString", "JPN",'Base')
+                            obj.JPN=JPN
+                        except:
+                            obj.JPN=JPN        
                         App.ActiveDocument.recompute()
 
 

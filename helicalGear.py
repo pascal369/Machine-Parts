@@ -231,7 +231,9 @@ class Ui_Dialog(object):
                          self.label_M.setText(spreadsheet.getContents('m0'))
                          self.label_N1.setText(spreadsheet.getContents('z1'))
                          self.label_N2.setText(spreadsheet.getContents('z2'))
-                         
+         else:
+             print('Select the object!')
+             return                
 
             
     def setIchi(self):
@@ -262,45 +264,46 @@ class Ui_Dialog(object):
          #    return
          App.ActiveDocument.recompute()
     def update(self):
-         m0=self.comboBox_mod.currentText()
-         z1=self.le_N.text()
-         z2=self.le_N2.text()
-         beta=self.le_beta.text()
-         b1=self.le_B.text()
-         b2=self.le_B2.text()
-         dia1=self.le_dia.text()
-         dia2=self.le_dia2.text()
-         L1=float(m0)*(float(z1)+float(z2))/2
-         Bdia1=self.le_Bdia.text()
-         Bdia2=self.le_Bdia2.text()
-         bb1=self.le_BB.text()
-         bb2=self.le_BB2.text()
+         try:
+             m0=self.comboBox_mod.currentText()
+             z1=self.le_N.text()
+             z2=self.le_N2.text()
+             beta=self.le_beta.text()
+             b1=self.le_B.text()
+             b2=self.le_B2.text()
+             dia1=self.le_dia.text()
+             dia2=self.le_dia2.text()
+             L1=float(m0)*(float(z1)+float(z2))/2
+             Bdia1=self.le_Bdia.text()
+             Bdia2=self.le_Bdia2.text()
+             bb1=self.le_BB.text()
+             bb2=self.le_BB2.text()
+    
+             spreadsheet.set('beta',beta) 
+             
+             pcd1=float(m0)*float(z1)
+             pcd2=float(m0)*float(z2)
+             spreadsheet.set('m0',str(m0))
+             spreadsheet.set('z1',str(z1))
+             spreadsheet.set('z2',str(z2))
+             spreadsheet.set('b1',str(b1))
+             spreadsheet.set('b2',str(b2))
+             spreadsheet.set('dia1',str(dia1))
+             spreadsheet.set('dia2',str(dia2))
+             spreadsheet.set('Bdia1',str(Bdia1))
+             spreadsheet.set('Bdia2',str(Bdia2))
+             spreadsheet.set('bb1',str(bb1))
+             spreadsheet.set('bb2',str(bb2))
+            
+             self.label_M.setText(m0)
+             self.label_N1.setText(z1)
+             self.label_N2.setText(z2)
+             self.label_pcd1.setText(str(pcd1))
+             self.label_pcd2.setText(str(pcd2))
+             self.label_L1.setText(str(L1))
+         except:
+             pass
 
-         spreadsheet.set('beta',beta) 
-
-         
-         pcd1=float(m0)*float(z1)
-         pcd2=float(m0)*float(z2)
-         spreadsheet.set('m0',str(m0))
-         spreadsheet.set('z1',str(z1))
-         spreadsheet.set('z2',str(z2))
-         spreadsheet.set('b1',str(b1))
-         spreadsheet.set('b2',str(b2))
-         spreadsheet.set('dia1',str(dia1))
-         spreadsheet.set('dia2',str(dia2))
-         spreadsheet.set('Bdia1',str(Bdia1))
-         spreadsheet.set('Bdia2',str(Bdia2))
-         spreadsheet.set('bb1',str(bb1))
-         spreadsheet.set('bb2',str(bb2))
-        
-         self.label_M.setText(m0)
-         self.label_N1.setText(z1)
-         self.label_N2.setText(z2)
-         self.label_pcd1.setText(str(pcd1))
-         self.label_pcd2.setText(str(pcd2))
-         self.label_L1.setText(str(L1))
-         
-         
          App.ActiveDocument.recompute()
     
    
@@ -313,6 +316,7 @@ class Ui_Dialog(object):
          except:
             doc=App.newDocument()
             Gui.ActiveDocument.mergeProject(joined_path)
+
          Gui.SendMsgToActiveView("ViewFit")   
 
 class main():

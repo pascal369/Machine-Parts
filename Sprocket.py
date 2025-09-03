@@ -324,7 +324,7 @@ class Ui_Dialog(object):
          #print(A,Pitch,x)
          if A==0:
              return
-         self.le_kiten.setText(str(round(A*Pitch/x,3)))
+         self.le_kiten.setText(str((A*Pitch/x)))
          kiten=self.le_kiten.text()
          CLj=shtAssy.getContents('CLj')
          

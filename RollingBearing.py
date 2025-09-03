@@ -24,36 +24,42 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(300, 350)
         Dialog.move(1000, 0)
+        #和文
+        self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
+        self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
+        self.le_la = QtGui.QLineEdit(Dialog)
+        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
         #タイプ　Type
         self.label_type = QtGui.QLabel(Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 13, 150, 12))
+        self.label_type.setGeometry(QtCore.QRect(10, 38, 150, 12))
         self.comboBox_type = QtGui.QComboBox(Dialog)
-        self.comboBox_type.setGeometry(QtCore.QRect(80, 10, 200, 22))
+        self.comboBox_type.setGeometry(QtCore.QRect(80, 35, 200, 22))
 
         #シリーズ　Series
         self.label_ser = QtGui.QLabel(Dialog)
-        self.label_ser.setGeometry(QtCore.QRect(10, 38, 120, 12))
+        self.label_ser.setGeometry(QtCore.QRect(10, 63, 120, 12))
         self.comboBox_ser = QtGui.QComboBox(Dialog)
-        self.comboBox_ser.setGeometry(QtCore.QRect(80, 35, 80, 22))
+        self.comboBox_ser.setGeometry(QtCore.QRect(80, 60, 80, 22))
 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel(Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 63, 150, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 88, 150, 12))
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 85, 80, 22))
         #実行
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 100, 200, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 110, 200, 22))
 
         #png
         self.label_5 = QtGui.QLabel(Dialog)
-        self.label_5.setGeometry(QtCore.QRect(50, 125, 200, 200))
-        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_5.setGeometry(QtCore.QRect(50, 145, 200, 200))
+        self.label_5.setAlignment(QtCore.Qt.AlignTop)
         self.label_5.setObjectName("label_5")
 
         self.comboBox_type.addItems(RollingBrg_Data.BType)
-        #self.comboBox_ser.addItems(RollingBrg_Data.BSer)
-        #self.comboBox_dia.addItems(RollingBrg_Data.BDia)
+        self.comboBox_ser.addItems(RollingBrg_Data.BSer)
+        self.comboBox_dia.addItems(RollingBrg_Data.BDia)
 
         self.comboBox_type.setCurrentIndex(1)
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
@@ -66,6 +72,7 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
+        QtCore.QObject.connect(self.pushButton_la, QtCore.SIGNAL("pressed()"), self.japan)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
@@ -73,20 +80,35 @@ class Ui_Dialog(object):
         self.label_type.setText(QtGui.QApplication.translate("Dialog", "Type", None)) 
         self.label_ser.setText(QtGui.QApplication.translate("Dialog", "Series", None)) 
         self.label_dia.setText(QtGui.QApplication.translate("Dialog", "Nominal dia", None))    
-        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
+        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None)) 
+         
+    def japan(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label=obj.Label
+        JPN=self.le_la.text()
+        try:
+            obj.addProperty("App::PropertyString", "JPN",'Base')
+            obj.JPN=JPN
+        except:
+            obj.JPN=JPN
+
     def onType(self):
          global type
          type=self.comboBox_type.currentText()
+         i=self.comboBox_type.currentIndex()
          self.comboBox_ser.clear()
          if type=='Ball Bearings':
              self.comboBox_ser.addItems(RollingBrg_Data.BSer)
+             
          elif type=='Angular Ball Bearings':
              self.comboBox_ser.addItems(RollingBrg_Data.ASer)    
          elif type=='Tapered roller bearings': 
              self.comboBox_ser.hide()  
              self.comboBox_dia.hide()
-             self.comboBox_ser.addItems(RollingBrg_Data.TprSer)
-             return
+             #self.comboBox_ser.addItems(RollingBrg_Data.TprSer)
+             #return
          #elif type=='Roller Bearings': 
          #    self.comboBox_ser.hide()  
          #    self.comboBox_dia.hide()
@@ -96,7 +118,8 @@ class Ui_Dialog(object):
               self.comboBox_dia.hide()
               self.comboBox_ser.addItems(RollingBrg_Data.CylSer)
 
-         
+         self.le_la.setText(RollingBrg_Data.BType_jpn[i])
+
          label=type
          pic=label+'.png'  
          base=os.path.dirname(os.path.abspath(__file__))

@@ -11,7 +11,7 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
-from prt_data.CSnap_data import paramCSnap
+#from prt_data.CSnap_data import paramCSnap
 
 ODia=['6','8','10','12','16','20',]
 wireDia={'6':('8',),
@@ -25,36 +25,45 @@ wireDia={'6':('8',),
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 320)
+        Dialog.resize(300, 350)
         Dialog.move(1000, 0)
+        
+        #和文
+        self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
+        self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
+        self.le_la = QtGui.QLineEdit('シャックル',Dialog)
+        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
+
+        #呼び径　nominal diameter
+        self.label_dia = QtGui.QLabel('nominal',Dialog)
+        self.label_dia.setGeometry(QtCore.QRect(10, 35, 50, 12))
+        self.comboBox_dia = QtGui.QComboBox(Dialog)
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 35, 80, 22))
+        #ワイヤー径
+        self.label_wdia = QtGui.QLabel('WireDia',Dialog)
+        self.label_wdia.setGeometry(QtCore.QRect(80, 65, 160, 12))
+
+        #作成
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
+        self.pushButton.setGeometry(QtCore.QRect(60, 85, 50, 22))
+        #更新
+        self.pushButton3 = QtGui.QPushButton('upDate',Dialog)
+        self.pushButton3.setGeometry(QtCore.QRect(150, 85, 50, 22))
+        #インポート
+        self.pushButton2 = QtGui.QPushButton('Import',Dialog)
+        self.pushButton2.setGeometry(QtCore.QRect(60, 110, 180, 22))
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(50, 115, 200, 200))
+        self.label_6.setGeometry(QtCore.QRect(75, 135, 150, 200))
         self.label_6.setText("")
+        self.label_6.setAlignment(QtCore.Qt.AlignTop)
+
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "prt_data",'WireRope',"shackle.png")
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
-        
-        #呼び径　nominal diameter
-        self.label_dia = QtGui.QLabel('nominal',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 13, 150, 12))
-        self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 10, 80, 22))
-        #ワイヤー径
-        self.label_wdia = QtGui.QLabel('WireDia',Dialog)
-        self.label_wdia.setGeometry(QtCore.QRect(80, 38, 160, 12))
-
-        #作成
-        self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(60, 60, 50, 22))
-        #更新
-        self.pushButton3 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(150, 60, 50, 22))
-        #インポート
-        self.pushButton2 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(60, 85, 180, 22))
 
 
         self.comboBox_dia.addItems(ODia)
@@ -64,14 +73,29 @@ class Ui_Dialog(object):
         self.comboBox_dia.currentIndexChanged[int].connect(self.onDia) 
         self.comboBox_dia.setCurrentIndex(0)
 
+
+
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.import_data)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
+        QtCore.QObject.connect(self.pushButton_la, QtCore.SIGNAL("pressed()"), self.japan)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Shackle", None))
 
+    def japan(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label=obj.Label
+        JPN=self.le_la.text()
+        try:
+            obj.addProperty("App::PropertyString", "JPN",'Base')
+            obj.JPN=JPN
+        except:
+            obj.JPN=JPN
+    
     def onDia(self):
         key=self.comboBox_dia.currentText()
         sa=wireDia[key]
@@ -81,7 +105,14 @@ class Ui_Dialog(object):
         global Bolt
         global Nut
         global spreadsheet
+        
         selection = Gui.Selection.getSelection()
+        for obj in selection:
+            try:
+                JPN=obj.JPN
+                self.le_la.setText(JPN)
+            except:
+                pass
         if selection:
              selected_object = selection[0]
              if selected_object.TypeId == "App::Part":
@@ -92,15 +123,17 @@ class Ui_Dialog(object):
                      elif obj.Label[:4] == "Bolt":
                          Bolt = obj  
                      elif obj.Label[:3] == "Nut":
-                         Nut = obj      
+                         Nut = obj  
 
-                         key=spreadsheet.getContents('B2')
-                         self.comboBox_dia.setCurrentText(key)
-                         sa=wireDia[key]
-                         self.label_wdia.setText('wireDia(max)=  '+sa[0])
-        return
-
+                     key=spreadsheet.getContents('B2')
+                     self.comboBox_dia.setCurrentText(key)
+                     sa=wireDia[key]
+                     self.label_wdia.setText('wireDia(max)=  '+sa[0])
+                      
     def update(self):
+         c00 = Gui.Selection.getSelection()
+         if c00:
+             obj = c00[0]
          key=self.comboBox_dia.currentText()
          for i in range(3,12):
              if key==spreadsheet.getContents('B'+str(i)):
@@ -126,10 +159,15 @@ class Ui_Dialog(object):
                  spreadsheet.set('J2',str(bolt))
          Bolt.dia=spreadsheet.getContents('J2')[1:]  
          Nut.dia=spreadsheet.getContents('J2')[1:] 
-               
+         JPN=self.le_la.text()
+         try:
+             obj.addProperty("App::PropertyString", "JPN",'Base')
+             obj.JPN=JPN
+         except:
+             obj.JPN=JPN
          App.ActiveDocument.recompute()
 
-    def create(self): 
+    def create(self):         
          dia=self.comboBox_dia.currentText()
          fname='ShackleSB.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
@@ -139,7 +177,7 @@ class Ui_Dialog(object):
          except:
             doc=App.newDocument()
             Gui.ActiveDocument.mergeProject(joined_path)
-         
+
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
@@ -147,4 +185,6 @@ class main():
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
         # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)            
+        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
+        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
+     
