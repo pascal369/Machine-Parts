@@ -100,6 +100,11 @@ class Ui_Dialog(object):
         self.le_ct.setGeometry(QtCore.QRect(180, 160, 50, 20))
         self.le_ct.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_ct.setText('1')
+
+        #massUpdate
+        self.pushButton_mUp = QtGui.QPushButton('massUpdate',Dialog)
+        self.pushButton_mUp.setGeometry(QtCore.QRect(230, 160, 110, 23))
+
         #質量入力
         self.pushButton_m3 = QtGui.QPushButton('massImput[kg]',Dialog)
         self.pushButton_m3.setGeometry(QtCore.QRect(80, 185, 100, 23))
@@ -109,9 +114,9 @@ class Ui_Dialog(object):
         self.le_mass.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_mass.setText('10.0')
         #密度
-        self.lbl_gr = QtGui.QLabel('SpecificGravity',Dialog)
-        self.lbl_gr.setGeometry(QtCore.QRect(80, 210, 80, 12))
-        self.lbl_gr.setAlignment(QtCore.Qt.AlignCenter)  
+        self.pushButton_gr = QtGui.QPushButton('SpecificGravity',Dialog)
+        self.pushButton_gr.setGeometry(QtCore.QRect(80, 210, 100, 23))
+        self.pushButton_gr.setObjectName("pushButton")  
         self.le_gr = QtGui.QLineEdit(Dialog)
         self.le_gr.setGeometry(QtCore.QRect(180, 210, 50, 20))
         self.le_gr.setAlignment(QtCore.Qt.AlignCenter)  
@@ -144,13 +149,23 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton_st, QtCore.SIGNAL("pressed()"), self.standard)
         QtCore.QObject.connect(self.pushButton_mt, QtCore.SIGNAL("pressed()"), self.material)
         QtCore.QObject.connect(self.pushButtonS, QtCore.SIGNAL("pressed()"), self.sketchLength)
-
+        QtCore.QObject.connect(self.pushButton_gr, QtCore.SIGNAL("pressed()"), self.specificGr)
+        QtCore.QObject.connect(self.pushButton_mUp, QtCore.SIGNAL("pressed()"), self.massUpdate)
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", 'Machine_Parts(JIS_Standard)', None))
         
+    def massUpdate(self):
+        doc = App.ActiveDocument
+        for i,obj in enumerate(doc.Objects):
+            try:
+                if obj.count > 0:
+                    obj.mass=obj.Shape.Volume*obj.g0/10**6
+            except:
+                pass            
+
     def japan(self):
         c00 = Gui.Selection.getSelection()
         if c00:
@@ -167,18 +182,17 @@ class Ui_Dialog(object):
         c00 = Gui.Selection.getSelection()
         if c00:
             obj = c00[0]
-        #label=obj.Label
         Standard=self.le_st.text()
         try:
             obj.addProperty("App::PropertyString", "Standard",'Standard')
             obj.Standard=Standard
         except:
-            obj.Standard=Standard      
+            obj.Standard=Standard     
+
     def material(self):
         c00 = Gui.Selection.getSelection()
         if c00:
             obj = c00[0]
-        #label=obj.Label
         material=self.comboBox_mt.currentText()
         print(material)
         try:
@@ -186,7 +200,6 @@ class Ui_Dialog(object):
             obj.material=material
         except:
             obj.material=material      
-
 
     def language(self):
         doc = App.activeDocument()
@@ -215,6 +228,18 @@ class Ui_Dialog(object):
         except:
             obj.count=count 
 
+    def specificGr(self):
+        c00 = Gui.Selection.getSelection()
+        if c00:
+            obj = c00[0]
+        label='mass[kg]'
+        g0=float(self.le_gr.text())
+        try:
+            obj.addProperty("App::PropertyFloat", "g0",label)
+            obj.g0=g0
+        except:
+            obj.g0=g0 
+
     def sketchLength(self):
         obj = Gui.Selection.getSelection()[0]  # 選択されたオブジェクトを取得
         if obj is None or obj.TypeId != "Sketcher::SketchObject":
@@ -238,6 +263,7 @@ class Ui_Dialog(object):
             obj.mass=g
         except:
             obj.mass=g
+        obj.g0=1.0    
          
     def massCulc(self):
         c00 = Gui.Selection.getSelection()
@@ -301,6 +327,10 @@ class Ui_Dialog(object):
                         pass
                     
                     spreadsheet.set(f"E{row}", f"{n:.2f}")   # count
+                    try:
+                        obj.mass=obj.Shape.Volume*obj.g0/10**6
+                    except:
+                        pass
                     spreadsheet.set(f"F{row}", f"{obj.mass:.2f}")  # unit
                     spreadsheet.set(f"G{row}", f"{obj.mass*n:.2f}")  # mass
                 except:
@@ -385,7 +415,7 @@ class Ui_Dialog(object):
         elif buhin=='Handle' or buhin=='DumpCar':
             self.comboBox_buhin2.hide()  
         jpn=buhin_jpn[i]
-        print(jpn)
+        #print(jpn)
         self.le_jpn.setText(jpn)   
         
     def create(self):
