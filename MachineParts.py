@@ -160,11 +160,11 @@ class Ui_Dialog(object):
     def massUpdate(self):
         doc = App.ActiveDocument
         for i,obj in enumerate(doc.Objects):
-            try:
-                if obj.count > 0:
+            if obj.count > 0 :
+                try:
                     obj.mass=obj.Shape.Volume*obj.g0/10**6
-            except:
-                pass            
+                except:
+                    pass
 
     def japan(self):
         c00 = Gui.Selection.getSelection()
@@ -330,6 +330,7 @@ class Ui_Dialog(object):
                     try:
                         obj.mass=obj.Shape.Volume*obj.g0/10**6
                     except:
+                        #obj.mass=obj.Shape.Volume/10**6
                         pass
                     spreadsheet.set(f"F{row}", f"{obj.mass:.2f}")  # unit
                     spreadsheet.set(f"G{row}", f"{obj.mass*n:.2f}")  # mass
