@@ -120,7 +120,6 @@ class HxgNut:#00六角ナット
         c00=c00.cut(c20)
         doc=App.ActiveDocument
         Gui.Selection.addSelection(doc.Name,obj.Name)
-        #Gui.runCommand('Draft_Move',0) 
         obj.Shape=c00
         
       

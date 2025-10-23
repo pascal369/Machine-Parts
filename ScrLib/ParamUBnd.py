@@ -83,6 +83,7 @@ class UBlt:
         c0=wface.revolve(Base.Vector(0,0,0),Base.Vector(0.0,0.0,1.0),360)
         #ねじ断面
         if Thread==True:
+            c1=c1.fuse(c2)  
             p1=(D1/2,0,-a)
             p2=(D1/2,0,a)
             p3=(r0,0,p/2)
@@ -103,39 +104,10 @@ class UBlt:
             makeSolid=True
             isFrenet=True
             pipe = Part.Wire(helix).makePipeShell([cutProfile],makeSolid,isFrenet)
-            
-            if flange==True:
-                pipe.Placement=App.Placement(App.Vector(-(C+D0+2*t)/2,0,-1.5*stem_length),App.Rotation(App.Vector(0,0,1),0))
-            else:
-                pipe.Placement=App.Placement(App.Vector(-(C+D0+2*t)/2,0,-1.5*stem_length),App.Rotation(App.Vector(0,0,1),0))
-            for i in range(2):
-                if i==1:
-                    if flange==True:
-                        pipe.Placement=App.Placement(App.Vector((C+D0+2*t)/2,0,-1.5*stem_length),App.Rotation(App.Vector(0,0,1),0))
-                    else:
-                        pipe.Placement=App.Placement(App.Vector((C+D0+2*t)/2,0,-1.5*stem_length),App.Rotation(App.Vector(0,0,1),0))
-                    
-                    #c2.translate(Base.Vector(0,0,-1.5*stem_length))
-                    c2=c2.cut(pipe)
-                    #Part.show(c2)
-                #Part.show(pipe)
-                #c2.translate(Base.Vector(0,0,-1.5*stem_length))
-             #Part.show(c2)
-                c1=c1.cut(pipe)
-                c1.cut(c02)
-                c1.fuse(c02)
-                #Part.show(pipe)
-            #c2.translate(Base.Vector(0,0,L3+thread_length))
-            c1=c1.fuse(c2)  
-            #Part.show(c2) 
         else:
-            #c2.translate(Base.Vector(0,0,L3+thread_length))
             c1=c1.fuse(c2)  
-             
-
 
         #バンド
-        
         R=C/2
         p1=(-R,0,0)
         p2=(0,0,R)
@@ -156,14 +128,25 @@ class UBlt:
         makeSolid=True
         isFrenet=True
         c2 = Part.Wire(aWire).makePipeShell([profile],makeSolid,isFrenet)
+
         if Thread==True:
             c1.translate(Base.Vector(0,0,0))
-
-
+            for i in range(2):
+                if i==0:
+                    if flange==True:
+                        pipe.Placement=App.Placement(App.Vector((C+D0+2*t)/2,0,0),App.Rotation(App.Vector(0,0,1),0))
+                    else:
+                        pipe.Placement=App.Placement(App.Vector((C+D0+2*t)/2,0,-0),App.Rotation(App.Vector(0,0,1),0))
+                        #Part.show(pipe)
+                        c1=c1.cut(pipe)
+                elif i==1:
+                    if flange==True:
+                        pipe.Placement=App.Placement(App.Vector(-(C+D0+2*t)/2,0,0),App.Rotation(App.Vector(0,0,1),0))
+                    else:
+                        pipe.Placement=App.Placement(App.Vector(-(C+D0+2*t)/2,0,),App.Rotation(App.Vector(0,0,1),0))    
+                        c1=c1.cut(pipe)
         c1.translate(Base.Vector(0,0,-1.5*stem_length))
-
         c01=c1.fuse(c2)
         doc=App.ActiveDocument
         Gui.Selection.addSelection(doc.Name,obj.Name)
-        
         obj.Shape=c01
