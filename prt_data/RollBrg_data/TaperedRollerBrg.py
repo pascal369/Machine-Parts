@@ -39,37 +39,40 @@ class Ui_Dialog(object):
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
         self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
         self.le_la = QtGui.QLineEdit('円錐ころ軸受',Dialog)
-        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setGeometry(QtCore.QRect(105, 10, 155, 22))
         self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
         #タイプ　Type
         self.label_type = QtGui.QLabel('Type',Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 38, 120, 12))
+        self.label_type.setGeometry(QtCore.QRect(10, 38, 120, 22))
+        self.label_type.setStyleSheet("color: gray;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
         self.comboBox_type.setGeometry(QtCore.QRect(80, 35, 165, 22))
 
         #シリーズ　Series
         self.label_ser = QtGui.QLabel('Series',Dialog)
-        self.label_ser.setGeometry(QtCore.QRect(10, 63, 50, 12))
+        self.label_ser.setGeometry(QtCore.QRect(10, 63, 50, 22))
         self.label_ser.setAlignment(QtCore.Qt.AlignRight)
+        self.label_ser.setStyleSheet("color: gray;")
         self.comboBox_ser = QtGui.QComboBox(Dialog)
-        self.comboBox_ser.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.comboBox_ser.setGeometry(QtCore.QRect(80, 63, 80, 22))
 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('dia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 88, 50, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 90, 50, 22))
         self.label_dia.setAlignment(QtCore.Qt.AlignRight)
+        self.label_dia.setStyleSheet("color: gray;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 85, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 90, 80, 22))
         #実行
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 110, 180, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 117, 180, 22))
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(140, 135, 80, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(140, 142, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         #self.pushButton2.setGeometry(QtCore.QRect(80, 110, 40, 22))
-        self.pushButton2.setGeometry(QtCore.QRect(50,135,80,22))
+        self.pushButton2.setGeometry(QtCore.QRect(50,142,80,22))
         #png
         self.label_5 = QtGui.QLabel(Dialog)
         self.label_5.setGeometry(QtCore.QRect(80, 170, 250, 200))
@@ -137,10 +140,6 @@ class Ui_Dialog(object):
             self.comboBox_type.setCurrentText(spreadsheet.getContents('B1'))                
             self.comboBox_ser.setCurrentText(spreadsheet.getContents('A1'))            
             self.comboBox_dia.setCurrentText(spreadsheet.getContents('A3'))
-            #print(self.comBox_dia.CurrentText())
-    #def onSereis(self):
-    #    key0=self.comboBox_ser.currentTex()   
-    #    if key0== '02': 
     
     def onType(self):
         #return
@@ -202,9 +201,9 @@ class Ui_Dialog(object):
                          yk=listL[14]
                          g=listL[16]
     def upDate(self):
-        c00 = Gui.Selection.getSelection()
-        if c00:
-            obj = c00[0]
+        #c00 = Gui.Selection.getSelection()
+        #if c00:
+        #    obj = c00[0]
         spreadsheet.set('d',d)
         spreadsheet.set('D',D)
         spreadsheet.set('T0',T0)
@@ -221,22 +220,6 @@ class Ui_Dialog(object):
         spreadsheet.set('yk',yk)
         spreadsheet.set('g0',g)
 
-        JPN=self.le_la.text()
-        try:
-            obj.addProperty("App::PropertyString", "JPN",'Base')
-            obj.JPN=JPN
-        except:
-            obj.JPN=JPN
-        try:
-            #label='mass[kg]'
-            print(g)
-            obj.addProperty("App::PropertyString", "mass",'mass[kg]').mass=g
-            print(g)
-        except:
-            obj.mass=g
-            print('error')
-            pass
-    
         App.ActiveDocument.recompute()      
 
     def create(self):

@@ -39,32 +39,34 @@ class Ui_Dialog(object):
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
         self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
         self.le_la = QtGui.QLineEdit('円筒ころ軸受',Dialog)
-        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setGeometry(QtCore.QRect(105, 10, 160, 22))
         self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
 
         #シリーズ　Series
         self.label_ser = QtGui.QLabel('Series',Dialog)
-        self.label_ser.setGeometry(QtCore.QRect(10, 38, 50, 12))
+        self.label_ser.setGeometry(QtCore.QRect(10, 35, 50, 22))
         self.label_ser.setAlignment(QtCore.Qt.AlignRight)
+        self.label_ser.setStyleSheet("color: gray;")
         self.comboBox_ser = QtGui.QComboBox(Dialog)
         self.comboBox_ser.setGeometry(QtCore.QRect(80, 35, 80, 22))
 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('dia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 58, 60, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 63, 60, 22))
         self.label_dia.setAlignment(QtCore.Qt.AlignRight)
+        self.label_dia.setStyleSheet("color: gray;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 63, 80, 22))
         #実行
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 85, 180, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 90, 185, 22))
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(140, 110, 80, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(145, 113, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         #self.pushButton2.setGeometry(QtCore.QRect(80, 110, 40, 22))
-        self.pushButton2.setGeometry(QtCore.QRect(50,110,80,22))
+        self.pushButton2.setGeometry(QtCore.QRect(50,113,80,22))
         #png
         self.label_5 = QtGui.QLabel(Dialog)
         self.label_5.setGeometry(QtCore.QRect(50, 150, 200, 200))
@@ -73,7 +75,7 @@ class Ui_Dialog(object):
         pic='Cylindorical Roller Bearings.png'  
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base,'png_data',pic)
-        print(joined_path,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+        #print(joined_path,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         self.label_5.setPixmap(QtGui.QPixmap(joined_path))
 
         self.comboBox_ser.addItems(RollingBrg_Data.CylSer)
