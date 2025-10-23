@@ -34,26 +34,28 @@ class Ui_Dialog(object):
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
         self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
         self.le_la = QtGui.QLineEdit('シンブル',Dialog)
-        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setGeometry(QtCore.QRect(105, 10, 175, 22))
         self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
         
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('nominal',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 38, 150, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 38, 150, 22))
+        self.label_dia.setStyleSheet("color: gray;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 35, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(105, 35, 80, 22))
         #ワイヤー径
         self.label_wdia = QtGui.QLabel('WireDia',Dialog)
-        self.label_wdia.setGeometry(QtCore.QRect(80, 63, 150, 12))
+        self.label_wdia.setGeometry(QtCore.QRect(105, 63, 150, 22))
+        self.label_wdia.setStyleSheet("color: gray;")
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(10, 85, 50, 22))
+        self.pushButton.setGeometry(QtCore.QRect(10, 85, 45, 22))
         #更新
         self.pushButton3 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(100, 85, 50, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(102, 85, 45, 22))
         #インポート
         self.pushButton2 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(190, 85, 50, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(194, 85, 45, 22))
 
         #図形
         self.label_6 = QtGui.QLabel(Dialog)

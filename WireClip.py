@@ -27,23 +27,25 @@ wireDia={'8':('8',),
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(300, 320)
+        Dialog.resize(300, 325)
         Dialog.move(1000, 0)
         
         #和文
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
         self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
         self.le_la = QtGui.QLineEdit('ワイヤークリップ',Dialog)
-        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setGeometry(QtCore.QRect(105, 10, 180, 20))
         self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('nominal',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 35, 150, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 35, 150, 22))
+        self.label_dia.setStyleSheet("color: gray;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 35, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(105, 35, 80, 22))
         #ワイヤー径
         self.label_wdia = QtGui.QLabel('WireDia',Dialog)
-        self.label_wdia.setGeometry(QtCore.QRect(80, 60, 150, 12))
+        self.label_wdia.setGeometry(QtCore.QRect(105, 60, 150, 22))
+        self.label_wdia.setStyleSheet("color: gray;")
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(10, 85, 60, 22))
@@ -55,13 +57,14 @@ class Ui_Dialog(object):
         self.pushButton2.setGeometry(QtCore.QRect(200, 85, 60, 22))
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(50, 110, 200, 200))
+        self.label_6.setGeometry(QtCore.QRect(50, 115, 200, 200))
         self.label_6.setText("")
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, "prt_data",'WireRope',"WireClip.png")
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
         self.label_6.setAlignment(QtCore.Qt.AlignTop)
         self.label_6.setObjectName("label_6")
+        
 
         self.comboBox_dia.addItems(ODia)
         self.comboBox_dia.setEditable(True)
@@ -133,9 +136,9 @@ class Ui_Dialog(object):
         #self.japan
 
     def update(self):
-        c00 = Gui.Selection.getSelection()
-        if c00:
-            obj = c00[0]
+        #c00 = Gui.Selection.getSelection()
+        #if c00:
+        #    obj = c00[0]
         key=self.comboBox_dia.currentText()
         for i in range(28,41):
              if key==spreadsheet.getContents('B'+str(i)):
@@ -172,12 +175,12 @@ class Ui_Dialog(object):
         #print(nut.dia)  
         nut.dia=spreadsheet.getContents('J27')[1:]
         All_screw.dia=spreadsheet.getContents('J27')[1:]    
-        JPN=self.le_la.text()
-        try:
-            obj.addProperty("App::PropertyString", "JPN",'Base')
-            obj.JPN=JPN
-        except:
-            obj.JPN=JPN
+        #JPN=self.le_la.text()
+        #try:
+        #    obj.addProperty("App::PropertyString", "JPN",'Base')
+        #    obj.JPN=JPN
+        #except:
+        #    obj.JPN=JPN
         App.ActiveDocument.recompute()
 
     def create(self): 

@@ -43,6 +43,7 @@ class Ui_Dialog(object):
         #アニメーション
         self.label_spin=QtGui.QLabel('Animation',Dialog)
         self.label_spin.setGeometry(QtCore.QRect(10, 270, 150, 22))
+        self.label_spin.setStyleSheet("color: black;")
         self.spinBox=QtGui.QSpinBox(Dialog)
         self.spinBox.setGeometry(100, 270, 75, 50)
         self.spinBox.setMinimum(0.0)  # 最小値を0.0に設定

@@ -36,17 +36,19 @@ class Ui_Dialog(object):
         #タイプ　type
         self.label_type = QtGui.QLabel('Type',Dialog)
         self.label_type.setGeometry(QtCore.QRect(10, 13, 150, 12))
+        self.label_type.setStyleSheet("color: black;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
-        self.comboBox_type.setGeometry(QtCore.QRect(80, 10, 90, 22))
+        self.comboBox_type.setGeometry(QtCore.QRect(80, 9, 90, 22))
         
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('nominalDia',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 38, 150, 12))
+        self.label_dia.setStyleSheet("color: black;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
         self.comboBox_dia.setGeometry(QtCore.QRect(80, 35, 90, 22))
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.pushButton.setGeometry(QtCore.QRect(80, 61, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('upDate',Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(80, 85, 80, 22))

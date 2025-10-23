@@ -27,14 +27,17 @@ class Ui_Dialog(object):
         #type
         self.label_type = QtGui.QLabel('Type',Dialog)
         self.label_type.setGeometry(QtCore.QRect(10, 13, 150, 12))
+        self.label_type.setStyleSheet("color: black;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
         self.comboBox_type.setGeometry(QtCore.QRect(80, 10, 130, 22))
 
         #W
         self.label_0 = QtGui.QLabel('    1                  2',Dialog)
         self.label_0.setGeometry(QtCore.QRect(80, 35, 150, 20))
+        self.label_0.setStyleSheet("color: black;")
         self.label_W = QtGui.QLabel('W',Dialog)
         self.label_W.setGeometry(QtCore.QRect(10, 60, 100, 22))
+        self.label_W.setStyleSheet("color: black;")
         self.le_W0 = QtGui.QLineEdit('300',Dialog)
         self.le_W0.setGeometry(QtCore.QRect(80, 60, 50, 20))
         self.le_W0.setAlignment(QtCore.Qt.AlignCenter)
@@ -45,6 +48,7 @@ class Ui_Dialog(object):
         #L
         self.label_L = QtGui.QLabel('L',Dialog)
         self.label_L.setGeometry(QtCore.QRect(10, 85, 100, 22))
+        self.label_L.setStyleSheet("color: black;")
         self.le_L0 = QtGui.QLineEdit('300',Dialog)
         self.le_L0.setGeometry(QtCore.QRect(80, 85, 50, 20))
         self.le_L0.setAlignment(QtCore.Qt.AlignCenter)
@@ -55,6 +59,7 @@ class Ui_Dialog(object):
         #Angle
         self.label_Angle = QtGui.QLabel('Angle',Dialog)
         self.label_Angle.setGeometry(QtCore.QRect(10, 110, 100, 22))
+        self.label_Angle.setStyleSheet("color: black;")
         self.le_sita0 = QtGui.QLineEdit('0',Dialog)
         self.le_sita0.setGeometry(QtCore.QRect(80, 110, 50, 20))
         self.le_sita0.setAlignment(QtCore.Qt.AlignCenter)
@@ -65,6 +70,7 @@ class Ui_Dialog(object):
         #full length
         self.label_FL = QtGui.QLabel('Full Length',Dialog)
         self.label_FL.setGeometry(QtCore.QRect(10, 135, 100, 22))
+        self.label_FL.setStyleSheet("color: black;")
         self.le_FL = QtGui.QLineEdit('150',Dialog)
         self.le_FL.setGeometry(QtCore.QRect(80, 135, 130, 20))
         self.le_FL.setAlignment(QtCore.Qt.AlignCenter)
@@ -74,10 +80,10 @@ class Ui_Dialog(object):
         self.pushButton.setGeometry(QtCore.QRect(30, 175, 50, 22))
         #更新
         self.pushButton3 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(120, 175, 50, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(125, 175, 50, 22))
         #インポート
         self.pushButton2 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(30, 200, 180, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(30, 200, 185, 22))
 
         self.comboBox_type.addItems(type)
 
@@ -113,7 +119,6 @@ class Ui_Dialog(object):
         return
     def import_data(self):
         global spreadsheet
-        
         selection = Gui.Selection.getSelection()
         if selection:
              selected_object = selection[0]

@@ -26,17 +26,19 @@ class Ui_Dialog(object):
         #シリーズ Series
         self.label_Series = QtGui.QLabel('Series',Dialog)
         self.label_Series.setGeometry(QtCore.QRect(10, 13, 150, 12))
+        self.label_Series.setStyleSheet("color: black;")
         self.comboBox_Series = QtGui.QComboBox(Dialog)
-        self.comboBox_Series.setGeometry(QtCore.QRect(80, 10, 110, 22))
+        self.comboBox_Series.setGeometry(QtCore.QRect(80, 9, 110, 22))
         #パーツ　Parts
         self.label_Parts = QtGui.QLabel('Parts',Dialog)
         self.label_Parts.setGeometry(QtCore.QRect(10, 38, 150, 12))
+        self.label_Parts.setStyleSheet("color: black;")
         self.comboBox_Parts = QtGui.QComboBox(Dialog)
         self.comboBox_Parts.setGeometry(QtCore.QRect(80, 35, 110, 22))
 
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.pushButton.setGeometry(QtCore.QRect(80, 65, 80, 22))
         #更新
         
 

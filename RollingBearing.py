@@ -28,28 +28,31 @@ class Ui_Dialog(object):
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
         self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
         self.le_la = QtGui.QLineEdit(Dialog)
-        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setGeometry(QtCore.QRect(105, 10, 175, 22))
         self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
         #タイプ　Type
         self.label_type = QtGui.QLabel(Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 38, 150, 12))
+        self.label_type.setGeometry(QtCore.QRect(10, 35, 150, 22))
+        self.label_type.setStyleSheet("color: gray;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
         self.comboBox_type.setGeometry(QtCore.QRect(80, 35, 200, 22))
 
         #シリーズ　Series
         self.label_ser = QtGui.QLabel(Dialog)
-        self.label_ser.setGeometry(QtCore.QRect(10, 63, 120, 12))
+        self.label_ser.setGeometry(QtCore.QRect(10, 63, 120, 22))
+        self.label_ser.setStyleSheet("color: gray;")
         self.comboBox_ser = QtGui.QComboBox(Dialog)
-        self.comboBox_ser.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.comboBox_ser.setGeometry(QtCore.QRect(80, 63, 80, 22))
 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel(Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 88, 150, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 90, 150, 12))
+        self.label_dia.setStyleSheet("color: gray;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 85, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 90, 80, 22))
         #実行
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 110, 200, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 120, 200, 22))
 
         #png
         self.label_5 = QtGui.QLabel(Dialog)
@@ -101,7 +104,8 @@ class Ui_Dialog(object):
          self.comboBox_ser.clear()
          if type=='Ball Bearings':
              self.comboBox_ser.addItems(RollingBrg_Data.BSer)
-             
+             self.comboBox_ser.show()  
+             self.comboBox_dia.show()
          elif type=='Angular Ball Bearings':
              self.comboBox_ser.addItems(RollingBrg_Data.ASer)    
          elif type=='Tapered roller bearings': 

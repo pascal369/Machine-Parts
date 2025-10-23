@@ -119,30 +119,34 @@ class Ui_Dialog(object):
         self.label_6.setObjectName("label_6")
         
         #呼び径　nominal diameter
-        self.label_dia = QtGui.QLabel(Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(50, 13, 150, 12))
+        self.label_dia = QtGui.QLabel('nominal Dia',Dialog)
+        self.label_dia.setGeometry(QtCore.QRect(50, 13, 150, 22))
+        self.label_dia.setStyleSheet("color: black;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
         self.comboBox_dia.setGeometry(QtCore.QRect(130, 10, 90, 22))
+        self.comboBox_dia.setEditable(True)
+        self.comboBox_dia.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #作成
-        self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(130, 40, 80, 22))
+        self.pushButton = QtGui.QPushButton('Create',Dialog)
+        self.pushButton.setGeometry(QtCore.QRect(35, 40, 80, 22))
         #更新
-        self.pushButton2 = QtGui.QPushButton(Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(130, 65, 80, 22))
-
+        self.pushButton2 = QtGui.QPushButton('upDate',Dialog)
+        self.pushButton2.setGeometry(QtCore.QRect(130, 40, 80, 22))
+        #インポート
+        self.pushButton3 = QtGui.QPushButton('Import',Dialog)
+        self.pushButton3.setGeometry(QtCore.QRect(35, 65, 185, 22))
 
         self.comboBox_dia.addItems(CDia)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.Import)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "JIS B 2402-1 Oil Seal", None))
-        self.label_dia.setText(QtGui.QApplication.translate("Dialog", "nominalDia", None))    
-        self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
-        self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "upDate", None))  
-
-    def update(self):
+        
+    def Import(self):
+         global spreadsheet
          selection = Gui.Selection.getSelection()
          if selection:
              selected_object = selection[0]
@@ -150,14 +154,17 @@ class Ui_Dialog(object):
                  parts_group = selected_object
                  for obj in parts_group.Group:
                      if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
-                         #Gui.Selection.addSelection(spreadsheet)
-         # 選択したスプレッドシートを取得
-         if selection:
-             for obj in selection:
-                 if obj.TypeId == "Spreadsheet::Sheet":
-                     # スプレッドシートが見つかった場合の処理
-                     spreadsheet = obj
+                         spreadsheet = obj  
+          
+    def update(self):
+        
+        #                 #Gui.Selection.addSelection(spreadsheet)
+        # # 選択したスプレッドシートを取得
+        # if selection:
+        #     for obj in selection:
+        #         if obj.TypeId == "Spreadsheet::Sheet":
+        #             # スプレッドシートが見つかった場合の処理
+        #             spreadsheet = obj
 
                      key=self.comboBox_dia.currentText()
                      sa=CDim[key]

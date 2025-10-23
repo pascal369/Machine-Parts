@@ -26,86 +26,96 @@ class Ui_Dialog(object):
         
         #形状
         self.label_type = QtGui.QLabel('Shape',Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 13, 100, 12))
+        self.label_type.setGeometry(QtCore.QRect(10, 10, 100, 22))
+        self.label_type.setStyleSheet("color: black;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
         self.comboBox_type.setGeometry(QtCore.QRect(110, 10, 110, 22))
+        self.comboBox_type.setEditable(True)
+        self.comboBox_type.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #モジュール
         self.label_mod = QtGui.QLabel('Module',Dialog)
-        self.label_mod.setGeometry(QtCore.QRect(10, 38, 100, 12))
+        self.label_mod.setGeometry(QtCore.QRect(10, 35, 100, 22))
+        self.label_mod.setStyleSheet("color: black;")
         self.comboBox_mod = QtGui.QComboBox(Dialog)
-        self.comboBox_mod.setGeometry(QtCore.QRect(110, 35, 110, 22))
-
+        self.comboBox_mod.setGeometry(QtCore.QRect(110, 38, 110, 22))
+        self.comboBox_mod.setEditable(True)
+        self.comboBox_mod.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #ねじれ角 helixAngle
         self.label_beta = QtGui.QLabel('helixAngle[deg]',Dialog)
         self.label_beta.setGeometry(QtCore.QRect(10, 63, 100, 22))
+        self.label_beta.setStyleSheet("color: black;")
         self.le_beta = QtGui.QLineEdit('21.5',Dialog)
-        self.le_beta.setGeometry(QtCore.QRect(110, 60, 110, 22))
+        self.le_beta.setGeometry(QtCore.QRect(110, 66, 110, 22))
         self.le_beta.setAlignment(QtCore.Qt.AlignCenter)
         
 
         self.label00=QtGui.QLabel('Pinion　　　Gear',Dialog)
         self.label00.setGeometry(QtCore.QRect(65, 110, 200, 22))
         self.label00.setAlignment(QtCore.Qt.AlignCenter)
+        self.label00.setStyleSheet("color: black;")
         #歯数
         self.label_N = QtGui.QLabel('Number of Teeth',Dialog)
         self.label_N.setGeometry(QtCore.QRect(10, 138, 100, 22))
+        self.label_N.setStyleSheet("color: black;")
         self.le_N = QtGui.QLineEdit('25',Dialog)
         self.le_N.setGeometry(QtCore.QRect(110,135, 50, 20))
         self.le_N.setAlignment(QtCore.Qt.AlignCenter)
         self.le_N2 = QtGui.QLineEdit('25',Dialog)
-        self.le_N2.setGeometry(QtCore.QRect(160, 135, 50, 20))
+        self.le_N2.setGeometry(QtCore.QRect(165, 135, 50, 20))
         self.le_N2.setAlignment(QtCore.Qt.AlignCenter)
 
         #歯幅
         self.label_B = QtGui.QLabel('Teeth Width',Dialog)
         self.label_B.setGeometry(QtCore.QRect(10, 163, 100, 22))
+        self.label_B.setStyleSheet("color: black;")
         self.le_B = QtGui.QLineEdit('15',Dialog)
         self.le_B.setGeometry(QtCore.QRect(110,160, 50, 20))
         self.le_B.setAlignment(QtCore.Qt.AlignCenter)
         self.le_B2 = QtGui.QLineEdit('15',Dialog)
-        self.le_B2.setGeometry(QtCore.QRect(160,160, 50, 20))
+        self.le_B2.setGeometry(QtCore.QRect(165,160, 50, 20))
         self.le_B2.setAlignment(QtCore.Qt.AlignCenter)
 
         #穴径
         self.label_dia = QtGui.QLabel('Hole Diameter',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 188, 100, 22))
+        self.label_dia.setStyleSheet("color: black;")
         self.le_dia = QtGui.QLineEdit('15',Dialog)
         self.le_dia.setGeometry(QtCore.QRect(110, 185, 50, 20))
         self.le_dia.setAlignment(QtCore.Qt.AlignCenter)
         self.le_dia2 = QtGui.QLineEdit('15',Dialog)
-        self.le_dia2.setGeometry(QtCore.QRect(160, 185, 50, 20))
+        self.le_dia2.setGeometry(QtCore.QRect(165, 185, 50, 20))
         self.le_dia2.setAlignment(QtCore.Qt.AlignCenter)
 
         #ボス径
         self.label_Bdia = QtGui.QLabel('Boss Diameter',Dialog)
         self.label_Bdia.setGeometry(QtCore.QRect(10, 213, 100, 22))
+        self.label_Bdia.setStyleSheet("color: black;")
         self.le_Bdia = QtGui.QLineEdit('60',Dialog)
         self.le_Bdia.setGeometry(QtCore.QRect(110, 210, 50, 20))
         self.le_Bdia.setAlignment(QtCore.Qt.AlignCenter)
         self.le_Bdia2 = QtGui.QLineEdit('60',Dialog)
-        self.le_Bdia2.setGeometry(QtCore.QRect(160, 210, 50, 20))
+        self.le_Bdia2.setGeometry(QtCore.QRect(165, 210, 50, 20))
         self.le_Bdia2.setAlignment(QtCore.Qt.AlignCenter)
         #ボス幅
         self.label_BB = QtGui.QLabel('Boss Width',Dialog)
         self.label_BB.setGeometry(QtCore.QRect(10, 238, 100, 22))
+        self.label_BB.setStyleSheet("color: black;")
         self.le_BB = QtGui.QLineEdit('25',Dialog)
         self.le_BB.setGeometry(QtCore.QRect(110, 235, 50, 20))
         self.le_BB.setAlignment(QtCore.Qt.AlignCenter)
         self.le_BB2 = QtGui.QLineEdit('25',Dialog)
-        self.le_BB2.setGeometry(QtCore.QRect(160, 235, 50, 20))
+        self.le_BB2.setGeometry(QtCore.QRect(165, 235, 50, 20))
         self.le_BB2.setAlignment(QtCore.Qt.AlignCenter)
-
-        
 
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 285, 80, 22))
+        self.pushButton.setGeometry(QtCore.QRect(45, 285, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton(Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(130, 285, 80, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(140, 285, 80, 22))
         #インポートデータ
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(50, 310, 170, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(45, 310, 185, 22))
 
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
@@ -118,35 +128,58 @@ class Ui_Dialog(object):
         self.label_pg=QtGui.QLabel('Pinion　　　　　Gear',Dialog)
         self.label_pg.setGeometry(QtCore.QRect(45, 510, 200, 22))
         self.label_pg.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_pg.setStyleSheet("color: black;")
+
         self.label_Mod=QtGui.QLabel('Modele',Dialog)
         self.label_Mod.setGeometry(QtCore.QRect(10, 535, 200, 22))
+        self.label_mod.setStyleSheet("color: black;")
+
         self.label_M=QtGui.QLabel('***',Dialog)
         self.label_M.setGeometry(QtCore.QRect(50, 535, 200, 22))
         self.label_M.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_M.setStyleSheet("color: black;")
+
         self.label_N=QtGui.QLabel('Number of Teeth',Dialog)
         self.label_N.setGeometry(QtCore.QRect(10, 560, 200, 22))
+        self.label_N.setStyleSheet("color: black;")
+
         self.label_N1=QtGui.QLabel('***',Dialog)
         self.label_N1.setGeometry(QtCore.QRect(90, 560, 50, 22))
         self.label_N1.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_N1.setStyleSheet("color: black;")
+
         self.label_N2=QtGui.QLabel('***',Dialog)
         self.label_N2.setGeometry(QtCore.QRect(160, 560, 50, 22))
         self.label_N2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_N2.setStyleSheet("color: black;")
+
         self.label_pcd=QtGui.QLabel('P.C.D',Dialog)
         self.label_pcd.setGeometry(QtCore.QRect(10, 585, 200, 22))
+        self.label_pcd.setStyleSheet("color: black;")
+
         self.label_pcd1=QtGui.QLabel('***',Dialog)
         self.label_pcd1.setGeometry(QtCore.QRect(90, 585, 50, 22))
         self.label_pcd1.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_pcd1.setStyleSheet("color: black;")
+
         self.label_pcd2=QtGui.QLabel('***',Dialog)
         self.label_pcd2.setGeometry(QtCore.QRect(160, 585, 50, 22))
         self.label_pcd2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_pcd2.setStyleSheet("color: black;")
+
         self.label_L=QtGui.QLabel('Center Distance',Dialog)
         self.label_L.setGeometry(QtCore.QRect(10, 610, 200, 22))
+        self.label_L.setStyleSheet("color: black;")
+
         self.label_L1=QtGui.QLabel('***',Dialog)
         self.label_L1.setGeometry(QtCore.QRect(50, 610, 200, 22))
         self.label_L1.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_L1.setStyleSheet("color: black;")
         
         self.label_spin=QtGui.QLabel('Animation',Dialog)
         self.label_spin.setGeometry(QtCore.QRect(10, 643, 150, 22))
+        self.label_spin.setStyleSheet("color: black;")
+
         self.spinBox=QtGui.QSpinBox(Dialog)
         self.spinBox.setGeometry(80, 640, 75, 50)
         self.spinBox.setMinimum(0.0)  # 最小値を0.0に設定
@@ -172,7 +205,6 @@ class Ui_Dialog(object):
 
         self.spinBox.valueChanged[int].connect(self.spinMove)
         self.spinBox_Ichi.valueChanged[int].connect(self.setIchi)
-       
         
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
@@ -237,13 +269,9 @@ class Ui_Dialog(object):
 
             
     def setIchi(self):
-        #global A
         N1=self.label_N1.text()
         A=self.spinBox_Ichi.value()
         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
-        #print(A)
-        #self.spinBox.setValue(A)
-
         App.ActiveDocument.recompute()
     
     def spinMove(self):

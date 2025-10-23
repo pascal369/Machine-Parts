@@ -12,10 +12,10 @@ import FreeCAD, Part, math
 from math import pi
 
 buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Screws','Pins','Shaft','Snap Ring',
-       'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Shaped Steel','Planar shape','One-touch window'
+       'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Planar shape','One-touch window'
        ,'Handle','Chute','DumpCar']
 buhin_jpn=['ワイヤロープ','転がり軸受','すべり軸受','ギヤアセンブリ','駆動チェンアセンブリ','チェン','ねじ類','ピン類','軸','止め輪',
-       'オイルシール','グランドパッキン','ばね','エンドプレート','キープレート','軸継手','形鋼','平面形状','ワンタッチ窓'
+       'オイルシール','グランドパッキン','ばね','エンドプレート','キープレート','軸継手','平面形状','ワンタッチ窓'
        ,'ハンドル','シュート','ダンプカー']
 chain=['Roller Chain','Water treatment chain','Link Chains']
 chain_jpn=['ローラーチェン','水処理用チェン','リンクチェン']
@@ -47,70 +47,76 @@ class Ui_Dialog(object):
         Dialog.move(1000, 0)
         #部品
         self.comboBox_buhin = QtGui.QComboBox(Dialog)
-        self.comboBox_buhin.setGeometry(QtCore.QRect(80, 11, 130, 20))
+        self.comboBox_buhin.setGeometry(QtCore.QRect(80, 9, 130, 23))
+        self.comboBox_buhin.setEditable(True)
+        self.comboBox_buhin.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
+
         self.label_buhin = QtGui.QLabel('Parts',Dialog)
-        self.label_buhin.setGeometry(QtCore.QRect(11, 11, 61, 16))
+        self.label_buhin.setGeometry(QtCore.QRect(11, 9, 61, 16))
+        self.label_buhin.setStyleSheet("color: black;")
         #言語
         self.pushButton_la=QtGui.QPushButton('language',Dialog)
-        self.pushButton_la.setGeometry(QtCore.QRect(210, 10, 130, 23))
+        self.pushButton_la.setGeometry(QtCore.QRect(215, 9, 130, 23))
         self.comboBox_lan = QtGui.QComboBox(Dialog)
-        self.comboBox_lan.setGeometry(QtCore.QRect(210, 35, 130, 22))
+        self.comboBox_lan.setGeometry(QtCore.QRect(215, 35, 130, 23))
         self.comboBox_lan.setEditable(True)
         self.comboBox_lan.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #部品2
         self.comboBox_buhin2 = QtGui.QComboBox(Dialog)
-        self.comboBox_buhin2.setGeometry(QtCore.QRect(80, 36, 130, 20))
+        self.comboBox_buhin2.setGeometry(QtCore.QRect(80, 35, 130, 23))
+        self.comboBox_buhin2.setEditable(True)
+        self.comboBox_buhin2.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         self.label_buhin2 = QtGui.QLabel('Parts2',Dialog)
-        self.label_buhin2.setGeometry(QtCore.QRect(11, 36, 61, 16))
-
+        self.label_buhin2.setGeometry(QtCore.QRect(11, 35, 61, 16))
+        self.label_buhin2.setStyleSheet("color: black;")
         #jpn text
         self.pushButton_jpn = QtGui.QPushButton('Jpn Text',Dialog)
-        self.pushButton_jpn.setGeometry(QtCore.QRect(80, 60, 50, 23))
+        self.pushButton_jpn.setGeometry(QtCore.QRect(80, 61, 50, 23))
         self.le_jpn = QtGui.QLineEdit(Dialog)
-        self.le_jpn.setGeometry(QtCore.QRect(170, 63, 170, 20))
+        self.le_jpn.setGeometry(QtCore.QRect(175, 61, 170, 23))
         self.le_jpn.setAlignment(QtCore.Qt.AlignCenter)  
 
         #standard
         self.pushButton_st = QtGui.QPushButton('Standard',Dialog)
-        self.pushButton_st.setGeometry(QtCore.QRect(80, 85, 50, 23))
+        self.pushButton_st.setGeometry(QtCore.QRect(80, 86, 50, 23))
         self.le_st = QtGui.QLineEdit(Dialog)
-        self.le_st.setGeometry(QtCore.QRect(170, 88, 170, 20))
+        self.le_st.setGeometry(QtCore.QRect(175, 86, 170, 23))
         self.le_st.setAlignment(QtCore.Qt.AlignCenter) 
 
         #material
         self.pushButton_mt = QtGui.QPushButton('Material',Dialog)
         self.pushButton_mt.setGeometry(QtCore.QRect(80, 110, 50, 23))
         self.comboBox_mt = QtGui.QComboBox(Dialog)
-        self.comboBox_mt.setGeometry(QtCore.QRect(170, 110, 170, 22))
+        self.comboBox_mt.setGeometry(QtCore.QRect(175, 110, 170, 22))
         self.comboBox_mt.setEditable(True)
         self.comboBox_mt.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
 
 
         #質量計算
         self.pushButton_m = QtGui.QPushButton('massCulculation',Dialog)
-        self.pushButton_m.setGeometry(QtCore.QRect(80, 135, 130, 23))
+        self.pushButton_m.setGeometry(QtCore.QRect(80, 136, 130, 23))
         self.pushButton_m.setObjectName("pushButton") 
         #質量集計
         self.pushButton_m2 = QtGui.QPushButton('massTally_SpreadSheet',Dialog)
-        self.pushButton_m2.setGeometry(QtCore.QRect(210, 135, 130, 23))
+        self.pushButton_m2.setGeometry(QtCore.QRect(215, 136, 130, 23))
         #count
         self.pushButton_ct = QtGui.QPushButton('Count',Dialog)
         self.pushButton_ct.setGeometry(QtCore.QRect(80, 160, 100, 23))
         self.le_ct = QtGui.QLineEdit(Dialog)
-        self.le_ct.setGeometry(QtCore.QRect(180, 160, 50, 20))
+        self.le_ct.setGeometry(QtCore.QRect(185, 160, 50, 23))
         self.le_ct.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_ct.setText('1')
 
         #massUpdate
         self.pushButton_mUp = QtGui.QPushButton('massUpdate',Dialog)
-        self.pushButton_mUp.setGeometry(QtCore.QRect(230, 160, 110, 23))
+        self.pushButton_mUp.setGeometry(QtCore.QRect(240, 160, 105, 23))
 
         #質量入力
         self.pushButton_m3 = QtGui.QPushButton('massImput[kg]',Dialog)
         self.pushButton_m3.setGeometry(QtCore.QRect(80, 185, 100, 23))
         self.pushButton_m3.setObjectName("pushButton")  
         self.le_mass = QtGui.QLineEdit(Dialog)
-        self.le_mass.setGeometry(QtCore.QRect(180, 185, 50, 20))
+        self.le_mass.setGeometry(QtCore.QRect(185, 185, 50, 23))
         self.le_mass.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_mass.setText('10.0')
         #密度
@@ -118,18 +124,18 @@ class Ui_Dialog(object):
         self.pushButton_gr.setGeometry(QtCore.QRect(80, 210, 100, 23))
         self.pushButton_gr.setObjectName("pushButton")  
         self.le_gr = QtGui.QLineEdit(Dialog)
-        self.le_gr.setGeometry(QtCore.QRect(180, 210, 50, 20))
+        self.le_gr.setGeometry(QtCore.QRect(185, 210, 50, 23))
         self.le_gr.setAlignment(QtCore.Qt.AlignCenter)  
         self.le_gr.setText('7.85')
 
         #sketchLength
         self.pushButtonS = QtGui.QPushButton('SketchLength',Dialog)
-        self.pushButtonS.setGeometry(QtCore.QRect(180, 235, 75, 23))
+        self.pushButtonS.setGeometry(QtCore.QRect(185, 235, 75, 23))
         self.pushButtonS.setObjectName("pushButton")
 
         #実行S
         self.pushButton = QtGui.QPushButton('Execution',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(80, 235, 75, 23))
+        self.pushButton.setGeometry(QtCore.QRect(80, 235, 100, 23))
         self.pushButton.setObjectName("pushButton")
         self.comboBox_buhin.addItems(buhin)
 
@@ -201,21 +207,6 @@ class Ui_Dialog(object):
         except:
             obj.material=material      
 
-    def language(self):
-        doc = App.activeDocument()
-        if doc:
-            group_names = []
-            for obj in doc.Objects:
-                try:
-                    gengo=self.comboBox_lan.currentText()
-                    label2=obj.JPN
-                    label=self.comboBox_buhin.currentText()
-                    if gengo=='Japanese':
-                       obj.Label=label2
-                    else:
-                       obj.Label=label 
-                except:
-                    pass     
     def countCulc(self):
         c00 = Gui.Selection.getSelection()
         if c00:
@@ -443,14 +434,13 @@ class Ui_Dialog(object):
          elif buhin=='Pins':
              if buhin2=='Cotter Pin':
                  import CotterPin
-                   
          elif buhin=='Rolling bearing':
             import RollingBearing  
             RollingBearing 
          elif buhin=='Plain bearing':
             import plainBrg   
          elif buhin=='Screws':
-             import Screws
+             import ScrewsM
          elif buhin=='Shaft':
            if buhin2=='Shaft':
                import Shaft 
@@ -473,7 +463,6 @@ class Ui_Dialog(object):
          elif buhin=='Gland Packing':
              if buhin2=='Gland Packing Assy':
                  import GlandpackingAssy 
-
          elif buhin=='One-touch window':
              import OneTouchWindow  
              return
@@ -482,7 +471,6 @@ class Ui_Dialog(object):
                import TensionCoilSpring
            elif buhin2=='Compression coil springs':    
                import CompressionCoilSpring
-
          elif buhin=='End Plate':
                import EndPlate    
          elif buhin=='Key Plate':
@@ -491,7 +479,7 @@ class Ui_Dialog(object):
            if buhin2=='Tube Split Joint':
                import SplitTubeJoint   
          elif buhin=='Planar shape':
-              import Pln_shape  
+              import Pln_shapeM  
          elif buhin=='Shaped Steel':
               import Shaped_steel   
          elif buhin=='GearAssy':

@@ -46,21 +46,22 @@ class Ui_Dialog(object):
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('nominal',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(35, 13, 150, 12))
+        self.label_dia.setStyleSheet("color: black;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
         self.comboBox_dia.setGeometry(QtCore.QRect(80, 10, 80, 22))
         #ワイヤー径
         self.label_wdia = QtGui.QLabel('BoltDia',Dialog)
         self.label_wdia.setGeometry(QtCore.QRect(80, 38, 150, 12))
-
+        self.label_wdia.setStyleSheet("color: black;")
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(15, 60, 85, 22))
+        self.pushButton.setGeometry(QtCore.QRect(13, 60, 85, 22))
         #更新
         self.pushButton3 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(100, 60, 85, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(105, 60, 85, 22))
         #インポート
         self.pushButton2 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(190, 60, 85, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(200, 60, 85, 22))
 
 
         self.comboBox_dia.addItems(ODia)
@@ -85,7 +86,7 @@ class Ui_Dialog(object):
         self.label_wdia.setText('boltDia(max)=  '+sa[0])
 
     def import_data(self):
-        
+        global spreadsheet
         selection = Gui.Selection.getSelection()
         if selection:
              selected_object = selection[0]
@@ -105,35 +106,26 @@ class Ui_Dialog(object):
 
 
     def update(self):
-         # 選択したオブジェクトを取得
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
-                         key=self.comboBox_dia.currentText()
-                         #print(key)
-                         for i in range(4,16):
-                             if key==spreadsheet.getContents('A'+str(i))[1:]:
-                                 d0=spreadsheet.getContents('B'+str(i))
-                                 D0=spreadsheet.getContents('C'+str(i))
-                                 a0=spreadsheet.getContents('D'+str(i))
-                                 H0=spreadsheet.getContents('E'+str(i))
-                                 bdia=spreadsheet.getContents('F'+str(i))
-                                 l0=spreadsheet.getContents('G'+str(i))
-                                 
-                                 spreadsheet.set('A3',spreadsheet.getContents('A'+str(i)))
-                                 spreadsheet.set('B3',str(d0))
-                                 spreadsheet.set('C3',str(D0))
-                                 spreadsheet.set('D3',str(a0))
-                                 spreadsheet.set('E3',str(H0))
-                                 spreadsheet.set('F3',str(bdia))
-                                 spreadsheet.set('G3',str(l0))
-                                 
-                         App.ActiveDocument.recompute()
+         key=self.comboBox_dia.currentText()
+         #print(key)
+         for i in range(4,16):
+             if key==spreadsheet.getContents('A'+str(i))[1:]:
+                 d0=spreadsheet.getContents('B'+str(i))
+                 D0=spreadsheet.getContents('C'+str(i))
+                 a0=spreadsheet.getContents('D'+str(i))
+                 H0=spreadsheet.getContents('E'+str(i))
+                 bdia=spreadsheet.getContents('F'+str(i))
+                 l0=spreadsheet.getContents('G'+str(i))
+                 
+                 spreadsheet.set('A3',spreadsheet.getContents('A'+str(i)))
+                 spreadsheet.set('B3',str(d0))
+                 spreadsheet.set('C3',str(D0))
+                 spreadsheet.set('D3',str(a0))
+                 spreadsheet.set('E3',str(H0))
+                 spreadsheet.set('F3',str(bdia))
+                 spreadsheet.set('G3',str(l0))
+                 
+         App.ActiveDocument.recompute()
 
     def create(self): 
          dia=self.comboBox_dia.currentText()

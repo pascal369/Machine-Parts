@@ -59,28 +59,34 @@ class Ui_Dialog(object):
 
         #パッキン幅　packing width
         self.label_S = QtGui.QLabel('gland Packing width',Dialog)
-        self.label_S.setGeometry(QtCore.QRect(10, 13, 130, 22))
+        self.label_S.setGeometry(QtCore.QRect(40, 13, 130, 22))
+        self.label_S.setStyleSheet("color: black;")
         self.comboBox_S = QtGui.QComboBox(Dialog)
-        self.comboBox_S.setGeometry(QtCore.QRect(150, 13, 50, 22))
+        self.comboBox_S.setGeometry(QtCore.QRect(150, 13, 60, 22))
         self.comboBox_S.listIndex=11
+        self.comboBox_S.setEditable(True)
+        self.comboBox_S.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         
         #適用軸径shaft diameter
         self.label_shaftdia = QtGui.QLabel('Applicable shaft dia',Dialog)
-        self.label_shaftdia.setGeometry(QtCore.QRect(60, 38, 200, 22))
-        #self.label_shaftdia.setText("適用軸径 3～12")
+        self.label_shaftdia.setGeometry(QtCore.QRect(40, 38, 200, 22))
+        self.label_shaftdia.setText("適用軸径 3～12")
+        self.label_shaftdia.setStyleSheet("color: black;")
         #軸径
         self.label_dia = QtGui.QLabel('shaft dia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 63, 100, 22))
+        self.label_dia.setGeometry(QtCore.QRect(40, 63, 100, 22))
+        self.label_dia.setStyleSheet("color: black;")
         self.le_dia = QtGui.QLineEdit(Dialog)
-        self.le_dia.setGeometry(QtCore.QRect(150, 63, 50, 20))
+        self.le_dia.setGeometry(QtCore.QRect(150, 63, 60, 20))
         self.le_dia.setAlignment(QtCore.Qt.AlignCenter)
 
+        
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(40, 95, 50, 22))
+        self.pushButton.setGeometry(QtCore.QRect(35, 95, 50, 22))
         #インポート
         self.pushButton4 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton4.setGeometry(QtCore.QRect(40, 120, 180, 22))
+        self.pushButton4.setGeometry(QtCore.QRect(35, 120, 185, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('upDate',Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(130, 95, 50, 22))
@@ -127,20 +133,20 @@ class Ui_Dialog(object):
         return    
     
     def update(self):
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
+        #selection = Gui.Selection.getSelection()
+        #if selection:
+        #    selected_object = selection[0]
+        #    if selected_object.TypeId == "App::Part":
+        #        parts_group = selected_object
+        #        for obj in parts_group.Group:
+        #            if obj.TypeId == "Spreadsheet::Sheet":
+        #                spreadsheet = obj
 
-                         dia=self.le_dia.text()
-                         S0=self.comboBox_S.currentText()
-                         spreadsheet.set('s0',str(S0))
-                         spreadsheet.set('d0',dia)
-                         App.ActiveDocument.recompute()
+         dia=self.le_dia.text()
+         S0=self.comboBox_S.currentText()
+         spreadsheet.set('s0',str(S0))
+         spreadsheet.set('d0',dia)
+         App.ActiveDocument.recompute()
 
     def create(self): 
 

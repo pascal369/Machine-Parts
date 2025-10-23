@@ -32,14 +32,18 @@ class Ui_Dialog(object):
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
         self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
         self.le_la = QtGui.QLineEdit('シャックル',Dialog)
-        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
+        self.le_la.setGeometry(QtCore.QRect(105, 10, 160, 22))
         self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
 
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('nominal',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 35, 50, 12))
+        self.label_dia.setStyleSheet("color: gray;")
+        self.label_dia.setAlignment(QtCore.Qt.AlignCenter) 
+        #self.label_dia.setAlignment(QtCore.AlignCenter)
+
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 35, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(105, 35, 80, 22))
         #ワイヤー径
         self.label_wdia = QtGui.QLabel('WireDia',Dialog)
         self.label_wdia.setGeometry(QtCore.QRect(80, 65, 160, 12))
@@ -49,13 +53,13 @@ class Ui_Dialog(object):
         self.pushButton.setGeometry(QtCore.QRect(60, 85, 50, 22))
         #更新
         self.pushButton3 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(150, 85, 50, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(155, 85, 50, 22))
         #インポート
         self.pushButton2 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(60, 110, 180, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(60, 110, 185, 22))
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(75, 135, 150, 200))
+        self.label_6.setGeometry(QtCore.QRect(75, 140, 150, 200))
         self.label_6.setText("")
         self.label_6.setAlignment(QtCore.Qt.AlignTop)
 
@@ -131,9 +135,9 @@ class Ui_Dialog(object):
                      self.label_wdia.setText('wireDia(max)=  '+sa[0])
                       
     def update(self):
-         c00 = Gui.Selection.getSelection()
-         if c00:
-             obj = c00[0]
+         #c00 = Gui.Selection.getSelection()
+         #if c00:
+         #    obj = c00[0]
          key=self.comboBox_dia.currentText()
          for i in range(3,12):
              if key==spreadsheet.getContents('B'+str(i)):
@@ -159,12 +163,13 @@ class Ui_Dialog(object):
                  spreadsheet.set('J2',str(bolt))
          Bolt.dia=spreadsheet.getContents('J2')[1:]  
          Nut.dia=spreadsheet.getContents('J2')[1:] 
-         JPN=self.le_la.text()
-         try:
-             obj.addProperty("App::PropertyString", "JPN",'Base')
-             obj.JPN=JPN
-         except:
-             obj.JPN=JPN
+
+        #JPN=self.le_la.text()
+        #try:
+        #    obj.addProperty("App::PropertyString", "JPN",'Base')
+        #    obj.JPN=JPN
+        #except:
+        #    obj.JPN=JPN
          App.ActiveDocument.recompute()
 
     def create(self):         

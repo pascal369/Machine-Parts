@@ -25,68 +25,76 @@ class Ui_Dialog(object):
         Dialog.move(1000, 0)
         #形状
         self.label_type = QtGui.QLabel('Shape',Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 13, 100, 12))
+        self.label_type.setGeometry(QtCore.QRect(10, 13, 100, 22))
+        self.label_type.setStyleSheet("color: black;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
         self.comboBox_type.setGeometry(QtCore.QRect(110, 10, 100, 22))
+        self.comboBox_type.setEditable(True)
+        self.comboBox_type.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
+
         #軸角 axialAngle
         self.label_ax = QtGui.QLabel('axialAngle[deg]',Dialog)
         self.label_ax.setGeometry(QtCore.QRect(10, 38, 100, 22))
+        self.label_ax.setStyleSheet("color: black;")
         self.le_ax = QtGui.QLineEdit('90',Dialog)
-        self.le_ax.setGeometry(QtCore.QRect(110, 35, 100, 20))
+        self.le_ax.setGeometry(QtCore.QRect(110, 38, 100, 22))
         self.le_ax.setAlignment(QtCore.Qt.AlignCenter)
         self.le_ax.setReadOnly(True)
         
         #モジュール
         self.label_mod = QtGui.QLabel('Module',Dialog)
-        self.label_mod.setGeometry(QtCore.QRect(10, 63, 100, 12))
+        self.label_mod.setGeometry(QtCore.QRect(10, 63, 100, 22))
+        self.label_mod.setStyleSheet("color: black;")
         self.comboBox_mod = QtGui.QComboBox(Dialog)
-        self.comboBox_mod.setGeometry(QtCore.QRect(110, 60, 100, 22))
-
+        self.comboBox_mod.setGeometry(QtCore.QRect(110, 63, 100, 22))
+        self.comboBox_mod.setEditable(True)
+        self.comboBox_mod.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
 
         #基準圧力角
         self.label_alpha = QtGui.QLabel('pressureAngle[deg]',Dialog)
-        self.label_alpha.setGeometry(QtCore.QRect(10, 88, 100, 22))
+        self.label_alpha.setGeometry(QtCore.QRect(10, 90, 100, 22))
+        self.label_alpha.setStyleSheet("color: black;")
         self.le_alpha = QtGui.QLineEdit('20',Dialog)
-        self.le_alpha.setGeometry(QtCore.QRect(110, 85, 100, 20))
+        self.le_alpha.setGeometry(QtCore.QRect(110, 90, 100, 22))
         self.le_alpha.setAlignment(QtCore.Qt.AlignCenter)
         #ねじれ角
         self.label_beta = QtGui.QLabel('helixAngle[deg]',Dialog)
         self.label_beta.setGeometry(QtCore.QRect(10, 113, 100, 22))
+        self.label_beta.setStyleSheet("color: black;")
         self.le_beta = QtGui.QLineEdit('0',Dialog)
-        self.le_beta.setGeometry(QtCore.QRect(110, 110, 100, 20))
+        self.le_beta.setGeometry(QtCore.QRect(110, 113, 100, 22))
         self.le_beta.setAlignment(QtCore.Qt.AlignCenter)
-        #ねじれ方向
-        #self.label_betaK = QtGui.QLabel('pinionHelixDirection',Dialog)
-        #self.label_betaK.setGeometry(QtCore.QRect(10, 138, 100, 22))
-        #self.comboBox_betaK = QtGui.QComboBox(Dialog)
-        #self.comboBox_betaK.setGeometry(QtCore.QRect(135, 135, 75, 22))
         
         self.label_pg1=QtGui.QLabel('Pinion　　　Gear',Dialog)
         self.label_pg1.setGeometry(QtCore.QRect(60, 135, 200, 22))
+        self.label_pg1.setStyleSheet("color: black;")
         self.label_pg1.setAlignment(QtCore.Qt.AlignCenter)
 
         #歯数
         self.label_z = QtGui.QLabel('Number o of Teeth',Dialog)
         self.label_z.setGeometry(QtCore.QRect(10, 163, 100, 22))
+        self.label_z.setStyleSheet("color: black;")
         self.le_z1 = QtGui.QLineEdit('20',Dialog)
-        self.le_z1.setGeometry(QtCore.QRect(110, 160, 45, 20))
+        self.le_z1.setGeometry(QtCore.QRect(110, 160, 45, 22))
         self.le_z1.setAlignment(QtCore.Qt.AlignCenter)
         self.le_z2 = QtGui.QLineEdit('40',Dialog)
-        self.le_z2.setGeometry(QtCore.QRect(165, 160, 45, 20))
+        self.le_z2.setGeometry(QtCore.QRect(165, 160, 45, 22))
         self.le_z2.setAlignment(QtCore.Qt.AlignCenter)
         
 
         #歯幅
         self.label_B = QtGui.QLabel('Tooth Width',Dialog)
         self.label_B.setGeometry(QtCore.QRect(10, 188, 100, 22))
+        self.label_B.setStyleSheet("color: black;")
         self.le_B = QtGui.QLineEdit('22',Dialog)
-        self.le_B.setGeometry(QtCore.QRect(110, 185, 100, 20))
+        self.le_B.setGeometry(QtCore.QRect(110, 185, 100, 22))
         self.le_B.setAlignment(QtCore.Qt.AlignCenter)
         
 
         #穴径
         self.label_dia = QtGui.QLabel('Hole Diameter',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 213, 100, 22))
+        self.label_dia.setStyleSheet("color: black;")
         self.le_dia1 = QtGui.QLineEdit('15',Dialog)
         self.le_dia1.setGeometry(QtCore.QRect(110, 210, 45, 20))
         self.le_dia1.setAlignment(QtCore.Qt.AlignCenter)
@@ -97,33 +105,35 @@ class Ui_Dialog(object):
         #ボス径
         self.label_Bdia = QtGui.QLabel('Boss Diameter',Dialog)
         self.label_Bdia.setGeometry(QtCore.QRect(10, 238, 100, 22))
+        self.label_Bdia.setStyleSheet("color: black;")
         self.le_Bdia1 = QtGui.QLineEdit('45',Dialog)
-        self.le_Bdia1.setGeometry(QtCore.QRect(110, 235, 50, 20))
+        self.le_Bdia1.setGeometry(QtCore.QRect(110, 235, 45, 20))
         self.le_Bdia1.setAlignment(QtCore.Qt.AlignCenter)
         self.le_Bdia2 = QtGui.QLineEdit('45',Dialog)
-        self.le_Bdia2.setGeometry(QtCore.QRect(165, 235, 50, 20))
+        self.le_Bdia2.setGeometry(QtCore.QRect(165, 235, 45, 20))
         self.le_Bdia2.setAlignment(QtCore.Qt.AlignCenter)
 
         #ボス幅
         self.label_BB = QtGui.QLabel('Boss Width',Dialog)
         self.label_BB.setGeometry(QtCore.QRect(10, 263, 100, 22))
+        self.label_BB.setStyleSheet("color: black;")
         self.le_BB1 = QtGui.QLineEdit('16',Dialog)
-        self.le_BB1.setGeometry(QtCore.QRect(110, 260, 50, 20))
+        self.le_BB1.setGeometry(QtCore.QRect(110, 260, 45, 20))
         self.le_BB1.setAlignment(QtCore.Qt.AlignCenter)
         self.le_BB2 = QtGui.QLineEdit('16',Dialog)
-        self.le_BB2.setGeometry(QtCore.QRect(165, 260, 50, 20))
+        self.le_BB2.setGeometry(QtCore.QRect(165, 260, 45, 20))
         self.le_BB2.setAlignment(QtCore.Qt.AlignCenter)
 
 
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 288, 60, 22))
+        self.pushButton.setGeometry(QtCore.QRect(45, 288, 60, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton(Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(140, 288, 60, 22))
         #インポートデータ
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(50, 310, 180, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(45, 313, 185, 22))
 
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
@@ -134,6 +144,7 @@ class Ui_Dialog(object):
 
         self.label_spin=QtGui.QLabel('Animation',Dialog)
         self.label_spin.setGeometry(QtCore.QRect(10, 560, 150, 22))
+        self.label_spin.setStyleSheet("color: black;")
         self.spinBox=QtGui.QSpinBox(Dialog)
         self.spinBox.setGeometry(80, 560, 75, 50)
         self.spinBox.setMinimum(0.0)  # 最小値を0.0に設定
@@ -149,18 +160,10 @@ class Ui_Dialog(object):
         self.spinBox_Ichi.setValue(0.0)
         self.spinBox_Ichi.setAlignment(QtCore.Qt.AlignCenter)
 
-
-
-        #self.comboBox_ichi = QtGui.QComboBox(Dialog)
-        #self.comboBox_ichi.setGeometry(QtCore.QRect(180, 585, 50, 30))
-
         self.comboBox_type.addItems(sperType)
         self.comboBox_type.setEditable(True)
         self.comboBox_mod.addItems(sperMOD)
         self.comboBox_mod.setEditable(True)
-        #self.comboBox_ichi.addItems(sperIchi)
-        #self.comboBox_ichi.setEditable(True)
-        #self.comboBox_betaK.addItems(helix)
 
         self.comboBox_type.setCurrentIndex(1)
         self.comboBox_type.currentIndexChanged[int].connect(self.onShape) 
@@ -172,8 +175,6 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onShape)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setParts)
 
         self.comboBox_mod.setCurrentText('2')

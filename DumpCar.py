@@ -28,9 +28,10 @@ class Ui_Dialog(object):
         
         #ton
         self.label_ton = QtGui.QLabel(Dialog)
-        self.label_ton.setGeometry(QtCore.QRect(10, 13, 150, 12))
+        self.label_ton.setGeometry(QtCore.QRect(10, 13, 150, 22))
+        self.label_ton.setStyleSheet("color: black;")
         self.comboBox_ton = QtGui.QComboBox(Dialog)
-        self.comboBox_ton.setGeometry(QtCore.QRect(80, 10, 90, 22))
+        self.comboBox_ton.setGeometry(QtCore.QRect(80, 8, 90, 22))
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(80, 35, 80, 22))

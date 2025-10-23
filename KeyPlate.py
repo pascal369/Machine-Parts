@@ -29,15 +29,18 @@ class Ui_Dialog(object):
         
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('nominalDia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 13, 160, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 13, 160, 22))
+        self.label_dia.setStyleSheet("color: black;")
         self.le_dia = QtGui.QLineEdit('30',Dialog)
         self.le_dia.setGeometry(QtCore.QRect(80, 10, 90, 22))
+        self.le_dia.setAlignment(QtCore.Qt.AlignCenter) 
         #軸長　
         self.label_L = QtGui.QLabel('shaftLength',Dialog)
-        self.label_L.setGeometry(QtCore.QRect(10, 38, 160, 12))
+        self.label_L.setGeometry(QtCore.QRect(10, 38, 160, 22))
+        self.label_L.setStyleSheet("color: black;")
         self.le_L = QtGui.QLineEdit('50',Dialog)
         self.le_L.setGeometry(QtCore.QRect(80, 35, 90, 22))
-
+        self.le_L.setAlignment(QtCore.Qt.AlignCenter) 
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(80, 60, 90, 22))

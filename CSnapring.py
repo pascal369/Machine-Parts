@@ -78,18 +78,21 @@ class Ui_Dialog(object):
         
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('Nominal',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 13, 150, 12))
+        self.label_dia.setGeometry(QtCore.QRect(10, 8, 150, 12))
+        self.label_dia.setStyleSheet("color: black;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 10, 80, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 8, 90, 22))
+        self.comboBox_dia.setEditable(True)
+        self.comboBox_dia.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(80, 35, 80, 22))
+        self.pushButton.setGeometry(QtCore.QRect(10, 60, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(105, 60, 80, 22))
         #Import
         self.pushButton3 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(80, 85, 80, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(10, 85, 185, 22))
 
 
         self.comboBox_dia.addItems(CDia)
@@ -97,6 +100,7 @@ class Ui_Dialog(object):
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.import_data)
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Snap Ring", None))
@@ -115,28 +119,32 @@ class Ui_Dialog(object):
                         
     def update(self):
          # スプレッドシートを選択
-         selection = Gui.Selection.getSelection()
-         if selection:
-             selected_object = selection[0]
-             if selected_object.TypeId == "App::Part":
-                 parts_group = selected_object
-                 for obj in parts_group.Group:
-                     if obj.TypeId == "Spreadsheet::Sheet":
-                         spreadsheet = obj
-
-                         key=self.comboBox_dia.currentText()
-                         #print(key)
-                         sa=CDim[key]
-                         spreadsheet.set('B2',key)
-                         spreadsheet.set('B3',str(sa[0]))
-                         spreadsheet.set('B4',str(sa[1]))
-                         spreadsheet.set('B5',str(sa[2]))
-                         spreadsheet.set('B6',str(sa[3]))
-                         spreadsheet.set('B7',str(sa[4]))
-                         spreadsheet.set('B8',str(sa[5]))
-                         spreadsheet.set('B9',str(sa[6]))
-                         spreadsheet.set('B10',str(sa[7]))
-                     App.ActiveDocument.recompute()
+        #selection = Gui.Selection.getSelection()
+        #if selection:
+        #    selected_object = selection[0]
+        #    if selected_object.TypeId == "App::Part":
+        #        parts_group = selected_object
+        #        for obj in parts_group.Group:
+        #            if obj.TypeId == "Spreadsheet::Sheet":
+        #                spreadsheet = obj
+         key=self.comboBox_dia.currentText()
+         #print(key)
+         sa=CDim[key]
+         spreadsheet.set('B2',key)
+         spreadsheet.set('B3',str(sa[0]))
+         spreadsheet.set('B4',str(sa[1]))
+         spreadsheet.set('B5',str(sa[2]))
+         spreadsheet.set('B6',str(sa[3]))
+         spreadsheet.set('B7',str(sa[4]))
+         spreadsheet.set('B8',str(sa[5]))
+         spreadsheet.set('B9',str(sa[6]))
+         spreadsheet.set('B10',str(sa[7]))
+        #D=self.comboBox_dia.currentText()
+            #st='d'+str(D)
+            #label=obj.Label
+            #obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
+            #obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st   
+         App.ActiveDocument.recompute()
 
     def create(self): 
          fname='CSnap_shaft.FCStd'
@@ -147,6 +155,10 @@ class Ui_Dialog(object):
          except:
             doc=App.newDocument()
             Gui.ActiveDocument.mergeProject(joined_path)
+         App.ActiveDocument.recompute() 
+
+
+
          
 class main():
         d = QtGui.QWidget()
@@ -155,4 +167,5 @@ class main():
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
         # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)            
+        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd') 
+        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)                    

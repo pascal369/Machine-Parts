@@ -33,40 +33,41 @@ CDim={
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(450, 300)
+        Dialog.resize(450, 250)
         Dialog.move(1000, 0)
         
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(240, 10, 200, 250))
+        self.label_6.setGeometry(QtCore.QRect(240, 0, 200, 250))
         self.label_6.setText("")
-        
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
         
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel('NominalDia',Dialog)
         self.label_dia.setGeometry(QtCore.QRect(10, 13, 150, 12))
+        self.label_dia.setStyleSheet("color: black;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
-        self.comboBox_dia.setGeometry(QtCore.QRect(80, 10, 100, 22))
+        self.comboBox_dia.setGeometry(QtCore.QRect(80, 8, 100, 22))
         #パーツ　parts
         self.label_parts = QtGui.QLabel('Parts',Dialog)
         self.label_parts.setGeometry(QtCore.QRect(10, 38, 150, 12))
+        self.label_parts.setStyleSheet("color: black;")
         self.comboBox_parts = QtGui.QComboBox(Dialog)
         self.comboBox_parts.setGeometry(QtCore.QRect(80, 35, 100, 22))
         #軸径　nominal diameter
         self.label_sdia = QtGui.QLabel('shaftDia',Dialog)
         self.label_sdia.setGeometry(QtCore.QRect(10, 63, 150, 12))
+        self.label_sdia.setStyleSheet("color: black;")
         self.le_sdia = QtGui.QLineEdit('30',Dialog)
-        self.le_sdia.setGeometry(QtCore.QRect(80, 60, 100, 22))
+        self.le_sdia.setGeometry(QtCore.QRect(80, 61, 100, 22))
 
         #chainLength
         self.label_cL = QtGui.QLabel('chainLength',Dialog)
         self.label_cL.setGeometry(QtCore.QRect(10, 88, 150, 12))
+        self.label_cL.setStyleSheet("color: black;")
         self.le_cL = QtGui.QLineEdit('2000',Dialog)
         self.le_cL.setGeometry(QtCore.QRect(80, 85, 100, 22))
-
-
 
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
@@ -116,7 +117,6 @@ class Ui_Dialog(object):
         global sketch_m
         parts=self.comboBox_parts.currentText()
         selection = Gui.Selection.getSelection()
-
         if selection:
              selected_object = selection[0]
              if selected_object.TypeId == "App::Part":
@@ -131,8 +131,6 @@ class Ui_Dialog(object):
                          shtLink = obj 
                      elif obj.Label[:5] == "Wheel":
                          Wheel = obj      
-
-
                      elif obj.Label[:8]=='sketch_m':
                          sketch_m=obj  
 

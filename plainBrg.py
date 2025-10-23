@@ -39,31 +39,36 @@ class Ui_Dialog(object):
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
         self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
         self.le_la = QtGui.QLineEdit('すべり軸受',Dialog)
-        self.le_la.setGeometry(QtCore.QRect(100, 10, 160, 20))
-        self.le_la.setAlignment(QtCore.Qt.AlignLeft) 
+        self.le_la.setGeometry(QtCore.QRect(105, 10, 155, 22))
+        self.le_la.setAlignment(QtCore.Qt.AlignCenter) 
         #タイプ　Type
-        self.label_type = QtGui.QLabel(Dialog)
-        self.label_type.setGeometry(QtCore.QRect(10, 38, 120, 12))
+        self.label_type = QtGui.QLabel('Type',Dialog)
+        self.label_type.setGeometry(QtCore.QRect(10, 38, 120, 22))
+        self.label_type.setStyleSheet("color: gray;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
-        self.comboBox_type.setGeometry(QtCore.QRect(80, 35, 165, 22))
+        self.comboBox_type.setGeometry(QtCore.QRect(80, 35, 180, 22))
+        self.comboBox_type.setEditable(True)
+        self.comboBox_type.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
 
         #シリーズ　Series
-        self.label_ser = QtGui.QLabel(Dialog)
+        self.label_ser = QtGui.QLabel('Series(d*D)',Dialog)
         self.label_ser.setGeometry(QtCore.QRect(10, 63, 120, 12))
+        self.label_ser.setStyleSheet("color: gray;")
         self.comboBox_ser = QtGui.QComboBox(Dialog)
-        self.comboBox_ser.setGeometry(QtCore.QRect(80, 60, 80, 22))
+        self.comboBox_ser.setGeometry(QtCore.QRect(80, 63, 80, 22))
 
-        #呼び径　nominal diameter
-        self.label_length = QtGui.QLabel(Dialog)
-        self.label_length.setGeometry(QtCore.QRect(10, 88, 150, 12))
+        #長さ
+        self.label_length = QtGui.QLabel('Length(L)',Dialog)
+        self.label_length.setGeometry(QtCore.QRect(10, 90, 150, 12))
+        self.label_length.setStyleSheet("color: gray;")
         self.comboBox_length = QtGui.QComboBox(Dialog)
-        self.comboBox_length.setGeometry(QtCore.QRect(80, 85, 80, 22))
+        self.comboBox_length.setGeometry(QtCore.QRect(80, 90, 80, 22))
         #実行
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(50, 125, 200, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 125, 205, 22))
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(110, 150, 140, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(115, 150, 140, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(50, 150, 60, 22))
@@ -124,6 +129,7 @@ class Ui_Dialog(object):
 
     def readData(self):
         global spreadsheet_500SP
+        global bushing500SP
         selection = Gui.Selection.getSelection()
         if selection:
             selected_object = selection[0]
@@ -133,11 +139,11 @@ class Ui_Dialog(object):
                     print(obj.Label)
                     if obj.Label=='Spreadsheet_500SP':
                         spreadsheet_500SP=obj
-                    if obj.TypeId =="Spreadsheet::Sheet":
-                        spreadsheet = obj
+                    elif obj.Label =="bushing500SP":
+                        bushing500SP=obj
                         #print(spreadsheet.getContents('A2'))
-                        self.comboBox_ser.setCurrentText(spreadsheet.getContents('A2')[1:])
-                        self.comboBox_length.setCurrentText(spreadsheet.getContents('D2'))
+                self.comboBox_ser.setCurrentText(spreadsheet_500SP.getContents('A2')[1:])
+                self.comboBox_length.setCurrentText(spreadsheet_500SP.getContents('D2'))
          
     def onType(self):
         key0=self.comboBox_type.currentIndex()
@@ -173,9 +179,9 @@ class Ui_Dialog(object):
                  
          
     def upDate(self):
-        c00 = Gui.Selection.getSelection()
-        if c00:
-            obj = c00[0]
+        #c00 = Gui.Selection.getSelection()
+        #if c00:
+        #    obj = c00[0]
         length=self.comboBox_length.currentText()
         print('outDia=',outDia)
         spreadsheet_500SP.set('series',series)
@@ -184,27 +190,27 @@ class Ui_Dialog(object):
         spreadsheet_500SP.set('length',length)
         App.ActiveDocument.recompute() 
 
-        JPN=self.le_la.text()
-        try:
-            obj.addProperty("App::PropertyString", "JPN",'Base')
-            obj.JPN=JPN
-        except:
-            obj.JPN=JPN
+        #JPN=self.le_la.text()
+        #try:
+        #    obj.addProperty("App::PropertyString", "JPN",'Base')
+        #    obj.JPN=JPN
+        #except:
+        #    obj.JPN=JPN
        
         label='mass[kg]'
         g0=7.85
-        g=obj.Shape.Volume*g0*1000/10**9  
+        g=bushing500SP.Shape.Volume*g0*1000/10**9  
         try:
-            obj.addProperty("App::PropertyFloat", "mass",label)
-            obj.mass=g
+            bushing500SP.addProperty("App::PropertyFloat", "mass",label)
+            bushing500SP.mass=g
         except:
             pass
         Standard=self.comboBox_ser.currentText()
         try:
-            obj.addProperty("App::PropertyString", "Standard",'Base')
-            obj.Standard=Standard
+            bushing500SP.addProperty("App::PropertyString", "Standard",'Base')
+            bushing500SP.Standard=Standard
         except:
-            obj.Standard=Standard
+            bushing500SP.Standard=Standard
 
     def create(self): 
         fname='bushing_500SP.FCStd'

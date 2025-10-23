@@ -21,29 +21,35 @@ class Ui_Dialog(object):
         
         #軸径　nominal diameter
         self.label_dia = QtGui.QLabel('shaftDia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(50, 13, 150, 12))
+        self.label_dia.setGeometry(QtCore.QRect(50, 13, 150, 22))
+        self.label_dia.setStyleSheet("color: black;")
         self.le_dia = QtGui.QLineEdit('100',Dialog)
         self.le_dia.setGeometry(QtCore.QRect(130, 10, 100, 22))
+        self.le_dia.setAlignment(QtCore.Qt.AlignCenter)
         #ボルト径　bolt diameter
         self.label_blt = QtGui.QLabel('boltDia',Dialog)
-        self.label_blt.setGeometry(QtCore.QRect(50, 38, 150, 12))
+        self.label_blt.setGeometry(QtCore.QRect(50, 38, 150, 22))
+        self.label_blt.setStyleSheet("color: black;")
         self.combo_blt = QtGui.QComboBox(Dialog)
         self.combo_blt.setGeometry(QtCore.QRect(130, 35, 100, 22))
         self.combo_blt.setEditable(True)
+        self.combo_blt.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #板厚　
         self.label_t = QtGui.QLabel('Plate thickness',Dialog)
-        self.label_t.setGeometry(QtCore.QRect(50, 63, 150, 12))
+        self.label_t.setGeometry(QtCore.QRect(50, 63, 150, 22))
+        self.label_t.setStyleSheet("color: black;")
         self.le_t = QtGui.QLineEdit('10',Dialog)
-        self.le_t.setGeometry(QtCore.QRect(130, 60, 100, 22))
+        self.le_t.setGeometry(QtCore.QRect(130, 63, 100, 22))
+        self.le_t.setAlignment(QtCore.Qt.AlignCenter)
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(20, 95, 90, 22))
+        self.pushButton.setGeometry(QtCore.QRect(15, 95, 90, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(110, 95, 80, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(108, 95, 80, 22))
         #インポート
         self.pushButton3 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(190, 95, 90, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(200, 95, 90, 22))
 
          #図形
         self.label_6 = QtGui.QLabel(Dialog)

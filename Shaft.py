@@ -40,76 +40,90 @@ class Ui_Dialog(object):
         Dialog.move(1000, 0)
         #shape type
         self.shape = QtGui.QLabel('ShapeType',Dialog)
-        self.shape.setGeometry(QtCore.QRect(30, 15, 50, 12))
+        self.shape.setGeometry(QtCore.QRect(30, 8, 50, 22))
+        self.shape.setStyleSheet("color: black;")
         self.combo_shape = QtGui.QComboBox(Dialog)
-        self.combo_shape.setGeometry(QtCore.QRect(100, 10, 159, 22))
+        self.combo_shape.setGeometry(QtCore.QRect(100, 8, 159, 22))
         #screw dia
         self.screw_dia = QtGui.QLabel('Screw dia',Dialog)
         self.screw_dia.setGeometry(QtCore.QRect(30, 40, 50, 12))
+        self.screw_dia.setStyleSheet("color: black;")
         self.combo_sc_dia = QtGui.QComboBox(Dialog)
         self.combo_sc_dia.setGeometry(QtCore.QRect(100, 35, 69, 22))
         #width screw dia display
         self.checkbox = QtGui.QCheckBox('Screw display',Dialog)
         self.checkbox.setGeometry(QtCore.QRect(180, 35, 120, 23))
+        self.checkbox.setStyleSheet("color: black;")
         #dim D
         self.lbl_D = QtGui.QLabel('D[mm]',Dialog)
         self.lbl_D.setGeometry(QtCore.QRect(30, 65, 50, 12))
+        self.lbl_D.setStyleSheet("color: black;")
         self.le_D = QtGui.QLineEdit(Dialog)
         self.le_D.setGeometry(QtCore.QRect(100, 65, 50, 20))
         self.le_D.setAlignment(QtCore.Qt.AlignCenter)
         #dim L
         self.lbl_L = QtGui.QLabel('L[mm]',Dialog)
         self.lbl_L.setGeometry(QtCore.QRect(170, 70, 50, 12))
+        self.lbl_L.setStyleSheet("color: black;")
         self.le_L = QtGui.QLineEdit(Dialog)
         self.le_L.setGeometry(QtCore.QRect(220, 65, 50, 20))
         self.le_L.setAlignment(QtCore.Qt.AlignCenter)
         #dim L1
         self.lbl_L1 = QtGui.QLabel('L1[mm]',Dialog)
         self.lbl_L1.setGeometry(QtCore.QRect(30, 100, 50, 12))
+        self.lbl_L1.setStyleSheet("color: black;")
         self.le_L1 = QtGui.QLineEdit(Dialog)
         self.le_L1.setGeometry(QtCore.QRect(100, 95, 50, 20))
         self.le_L1.setAlignment(QtCore.Qt.AlignCenter)
         #dim L2
         self.lbl_L2 = QtGui.QLabel('L2[mm]',Dialog)
         self.lbl_L2.setGeometry(QtCore.QRect(170, 100, 50, 12))
+        self.lbl_L2.setStyleSheet("color: black;")
         self.le_L2 = QtGui.QLineEdit(Dialog)
         self.le_L2.setGeometry(QtCore.QRect(220, 95, 50, 20))
         self.le_L2.setAlignment(QtCore.Qt.AlignCenter)
         #dim L3
         self.lbl_L3 = QtGui.QLabel('L3[mm]',Dialog)
         self.lbl_L3.setGeometry(QtCore.QRect(30, 125, 50, 12))
+        self.lbl_L3.setStyleSheet("color: black;")
         self.le_L3 = QtGui.QLineEdit(Dialog)
         self.le_L3.setGeometry(QtCore.QRect(100, 120, 50, 20))
         self.le_L3.setAlignment(QtCore.Qt.AlignCenter)
         #dim d0
         self.lbl_d0 = QtGui.QLabel('d0[mm]',Dialog)
         self.lbl_d0.setGeometry(QtCore.QRect(170, 125, 50, 12))
+        self.lbl_d0.setStyleSheet("color: black;")
         self.le_d0 = QtGui.QLineEdit(Dialog)
         self.le_d0.setGeometry(QtCore.QRect(220, 120, 50, 20))
         self.le_d0.setAlignment(QtCore.Qt.AlignCenter)
         #c_shaped retaining_ring
         self.lbl_c = QtGui.QLabel('C_shaped retaining ring D',Dialog)
         self.lbl_c.setGeometry(QtCore.QRect(30, 150, 150, 12))
+        self.lbl_c.setStyleSheet("color: black;")
         self.combo_c = QtGui.QComboBox(Dialog)
         self.combo_c.setGeometry(QtCore.QRect(170, 145, 50, 22))
         #dim m
         self.lbl_m = QtGui.QLabel('m[mm]',Dialog)
         self.lbl_m.setGeometry(QtCore.QRect(60, 175, 50, 12))
+        self.lbl_m.setStyleSheet("color: black;")
         self.le_m = QtGui.QLineEdit(Dialog)
         self.le_m.setGeometry(QtCore.QRect(100, 170, 50, 20))
         self.le_m.setAlignment(QtCore.Qt.AlignCenter)
         #dim n
         self.lbl_n = QtGui.QLabel('n[mm]',Dialog)
         self.lbl_n.setGeometry(QtCore.QRect(185, 175, 60, 12))
+        self.lbl_n.setStyleSheet("color: black;")
         self.le_n = QtGui.QLineEdit(Dialog)
         self.le_n.setGeometry(QtCore.QRect(220, 170, 50, 20))
         self.le_n.setAlignment(QtCore.Qt.AlignCenter)
         #key_size
         self.lbl_key = QtGui.QLabel('key_size',Dialog)
         self.lbl_key.setGeometry(QtCore.QRect(30, 200, 240, 12))
+        self.lbl_key.setStyleSheet("color: black;")
         #key_display
         self.checkbox2 = QtGui.QCheckBox('with key',Dialog)
         self.checkbox2.setGeometry(QtCore.QRect(180, 200, 195, 23))
+        self.checkbox2.setStyleSheet("color: black;")
         #create
         self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(30, 225, 240, 22))
@@ -120,6 +134,7 @@ class Ui_Dialog(object):
         
         self.mtrl = QtGui.QLabel('Specific gravity of material',Dialog)
         self.mtrl.setGeometry(QtCore.QRect(30, 428, 150, 12))
+        self.mtrl.setStyleSheet("color: black;")
         self.le_mtrl = QtGui.QLineEdit(Dialog)
         self.le_mtrl.setGeometry(QtCore.QRect(180, 425, 50, 20))
         self.le_mtrl.setAlignment(QtCore.Qt.AlignCenter)
@@ -250,6 +265,9 @@ class Ui_Dialog(object):
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = False
+
+            st='d'+str(D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st    
              
             paramShaftKeyway.KeyWay(obj) 
             obj.ViewObject.Proxy=0
@@ -278,6 +296,9 @@ class Ui_Dialog(object):
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = False
+
+            st='d'+str(D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st    
              
             paramShaftKeyway.KeyWay(obj) 
             obj.ViewObject.Proxy=0
@@ -298,6 +319,9 @@ class Ui_Dialog(object):
             n=float(sa[4])
             obj.addProperty("App::PropertyFloat", "n",'shaft').n=n
 
+            st='d'+str(obj.D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st   
+            
             paramShaftSnap.CShapeSnpGv(obj) 
             obj.ViewObject.Proxy=0
             App.ActiveDocument.recompute() 
@@ -323,6 +347,9 @@ class Ui_Dialog(object):
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = False
+
+            st='d'+str(obj.D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st    
 
             paramShaftSnapKey.CShapeSnpKy(obj) 
             obj.ViewObject.Proxy=0
@@ -358,6 +385,9 @@ class Ui_Dialog(object):
             else:
                 obj.addProperty("App::PropertyBool",'thread','screw').thread = False
 
+            st='d'+str(D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st        
+
             paramShaftBrgNut.ScrBrg5(obj) 
             obj.ViewObject.Proxy=0
             App.ActiveDocument.recompute()           
@@ -392,7 +422,10 @@ class Ui_Dialog(object):
             if self.checkbox2.isChecked():
                 obj.addProperty("App::PropertyBool",'Key','keyway').Key = True
             else:
-                obj.addProperty("App::PropertyBool",'Key','keyway').Key = False    
+                obj.addProperty("App::PropertyBool",'Key','keyway').Key = False   
+
+            st=str(obj.ScrewDia)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st         
             
             paramShaftLockNut.ScrBrg6(obj) 
             obj.ViewObject.Proxy=0
@@ -408,6 +441,10 @@ class Ui_Dialog(object):
             obj.addProperty("App::PropertyFloat", "L",'tube').L=L
             obj.addProperty("App::PropertyFloat", "D",'tube').D=D
             obj.addProperty("App::PropertyFloat", "d0",'tube').d0=d0
+
+            st='d'+str(d0)+'x D'+str(D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st   
+
             paramShaftTube.Tube(obj) 
             obj.ViewObject.Proxy=0
             App.ActiveDocument.recompute() 
@@ -458,6 +495,9 @@ class Ui_Dialog(object):
 
             obj.addProperty("App::PropertyFloat", "L",'shaft').L=L
             obj.addProperty("App::PropertyFloat", "L1",'shaft').L1=L1
+
+            st='d'+str(D)+'x'+str(L)+'L'
+            obj.addProperty("App::PropertyString", 'Standard','Standard').Standard=st   
 
             if self.checkbox.isChecked():
                 obj.addProperty("App::PropertyBool",'thread','screw').thread = True

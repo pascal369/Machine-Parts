@@ -64,8 +64,11 @@ class Ui_Dialog(object):
         #呼び径　nominal diameter
         self.label_dia = QtGui.QLabel(Dialog)
         self.label_dia.setGeometry(QtCore.QRect(50, 13, 150, 12))
+        self.label_dia.setStyleSheet("color: black;")
         self.comboBox_dia = QtGui.QComboBox(Dialog)
         self.comboBox_dia.setGeometry(QtCore.QRect(130, 10, 90, 22))
+        self.comboBox_dia.setEditable(True)
+        self.comboBox_dia.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
         self.pushButton.setGeometry(QtCore.QRect(130, 35, 80, 22))
