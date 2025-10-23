@@ -52,9 +52,7 @@ class KeyWay:
             c2=wface.extrude(Base.Vector(0,0,t))
             c1=c1.cut(c2)
             if Key==True:
-                #Part.show(c2)
                 c1=c1.fuse(c2)
-            #Part.show(c1)    
         elif key=='keyway_2':
             L3=L1-2*r
             p1=(L2+r,r,z)
@@ -72,9 +70,7 @@ class KeyWay:
             c2=wface.extrude(Base.Vector(0,0,t))
             c1=c1.cut(c2)
             if Key==True:
-                #Part.show(c2)
                 c1=c1.fuse(c2)
-
             
         g=c1.Volume*7850/10**9 
         label='mass[kg]'
