@@ -28,8 +28,8 @@ spring_jpn=['引張コイルバネ','圧縮コイルバネ']
 bearing=['単列深溝形玉軸受','複列円錐ころ軸受_外向']
 shaft=['Shaft','Screw shaft']
 shaft_jpn=['軸','スクリュー軸']
-joint=['Tube Split Joint',]
-joint_jpn=['筒割形軸継手',]
+joint=['Tube Split Joint','ChainCoupling']
+joint_jpn=['筒割形軸継手','チェンカップリング']
 Gear=['Helical gears','Worm Gear','Bevel gear','Planetary gears','Hypocycloidal gear']
 Gear_jpn=['ヘリカルギヤ','ウオームギヤ','ベベルギヤ','プラネタリーギヤ','ハイポサイクロイドギヤ']
 GlandP=['Gland Packing Assy',]
@@ -478,6 +478,8 @@ class Ui_Dialog(object):
          elif buhin=='Joint':
            if buhin2=='Tube Split Joint':
                import SplitTubeJoint   
+           elif buhin2=='ChainCoupling':
+               import chainCup    
          elif buhin=='Planar shape':
               import Pln_shapeM  
          elif buhin=='Shaped Steel':
