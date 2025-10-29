@@ -11,10 +11,10 @@ from FreeCAD import Base
 import FreeCAD, Part, math
 from math import pi
 
-buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Screws','Pins','Shaft','Snap Ring',
+buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Sprocket','Screws','Pins','Shaft','Snap Ring',
        'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Planar shape','One-touch window'
        ,'Handle','Chute','DumpCar']
-buhin_jpn=['ワイヤロープ','転がり軸受','すべり軸受','ギヤアセンブリ','駆動チェンアセンブリ','チェン','ねじ類','ピン類','軸','止め輪',
+buhin_jpn=['ワイヤロープ','転がり軸受','すべり軸受','ギヤアセンブリ','駆動チェンアセンブリ','チェン','スプロケット','ねじ類','ピン類','軸','止め輪',
        'オイルシール','グランドパッキン','ばね','エンドプレート','キープレート','軸継手','平面形状','ワンタッチ窓'
        ,'ハンドル','シュート','ダンプカー']
 chain=['Roller Chain','Water treatment chain','Link Chains']
@@ -453,6 +453,8 @@ class Ui_Dialog(object):
                import SewageChainWB  
            elif buhin2=='Link Chains':    
                import LinkChain 
+         elif buhin=='Sprocket':
+             import sprocketOnly      
          elif buhin=='Snap Ring':
            if buhin2=='for shafts':
                import CSnapring
