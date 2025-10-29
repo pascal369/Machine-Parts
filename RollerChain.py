@@ -149,24 +149,24 @@ class Ui_Dialog(object):
              fname='InnerLink.FCStd'
          elif type=='Offset Link':
              fname='OffsetLink.FCStd'    
-         elif type=='SprocketA':
-             fname='sprocket_A.FCStd' 
-         elif type=='SprocketB':
-             fname='sprocket_B.FCStd'  
-         elif type=='SprocketC':
-             fname='sprocket_C.FCStd'  
-         elif type=='Outer Link2':
-             fname='OuterLink2.FCStd'
-         elif type=='Inner Link2':
-             fname='InnerLink2.FCStd'
-         elif type=='Offset Link2':
-             fname='OffsetLink2.FCStd'    
-         elif type=='SprocketA2':
-             fname='sprocket_A2.FCStd' 
-         elif type=='SprocketB2':
-             fname='sprocket_B2.FCStd'  
-         elif type=='SprocketC2':
-             fname='sprocket_C2.FCStd'           
+        #elif type=='SprocketA':
+        #    import sprocketOnly
+        #elif type=='SprocketB':
+        #    Import sprocketOnly
+        #elif type=='SprocketC':
+        #    Import sprocketOnly
+        #elif type=='Outer Link2':
+        #    fname='OuterLink2.FCStd'
+        #elif type=='Inner Link2':
+        #    fname='InnerLink2.FCStd'
+        #elif type=='Offset Link2':
+        #    fname='OffsetLink2.FCStd'    
+        #elif type=='SprocketA2':
+        #    Import sprocketOnly
+        #elif type=='SprocketB2':
+        #    Import sprocketOnly 
+        #elif type=='SprocketC2':
+        #    Import sprocketOnly        
          
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Chain_data','RollerChain',fname) 
