@@ -12,8 +12,8 @@ from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
 from prt_data.CSnap_data import paramCSnap
-Type=['Outer Link','Inner Link','Offset Link','SprocketA','SprocketB','SprocketC',
-      'Outer Link2','Inner Link2','Offset Link2','SprocketA2','SprocketB2','SprocketC2',]
+Type=['Outer Link','Inner Link','Offset Link',
+      'Outer Link2','Inner Link2','Offset Link2',]
 nominalDia=['25','35','40','50','60','80','100','120','140','160','180','200','240',]
 # D,      Pich,        h0,     t0,         W0,        d,      d2,     h1      c0
 RDim={
