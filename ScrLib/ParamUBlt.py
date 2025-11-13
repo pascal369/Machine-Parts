@@ -33,10 +33,11 @@ class UBlt:
             global c1
             global c02
             global c03
+            global d
             #global stem_length
             sa=ScrData.haikan_u[dia]
             size1=sa[0]
-            #d0=float(size1[1:])
+            d=float(size1[1:])
             if flange==False:
                 C=sa[1]
             else:
@@ -46,7 +47,7 @@ class UBlt:
                     C=sa[5]  
                 elif fdia=='10k':  
                     C=sa[6]    
-            #stem_length=C/2
+            
             L=sa[2]
             l=sa[3]
             sa=ScrData.regular[size1]
@@ -144,5 +145,6 @@ class UBlt:
         c01=c1.fuse(c2)
         doc=App.ActiveDocument
         Gui.Selection.addSelection(doc.Name,obj.Name)
-        #Gui.runCommand('Draft_Move',0) 
+        obj.C=C
+        obj.d=d
         obj.Shape=c01
