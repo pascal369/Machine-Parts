@@ -717,6 +717,10 @@ class Ui_Dialog(object):
                 i=self.comboBox_fdia.currentIndex()
                 obj.fdia=ScrData.flange_st[i] 
 
+                sa=ScrData.haikan_u[obj.dia]
+                C=sa[1]
+                d=sa[0][1:]
+
                 if self.checkbox.isChecked():
                     obj.addProperty("App::PropertyBool",'Thread',label).Thread = True
                 else:
@@ -727,7 +731,10 @@ class Ui_Dialog(object):
                 else:
                     obj.addProperty("App::PropertyBool",'flange',label).flange = False    
                 obj.addProperty("App::PropertyFloat", "stem_length",label).stem_length=L1
-                obj.addProperty("App::PropertyFloat", "thread_length",label).thread_length=L2    
+                obj.addProperty("App::PropertyFloat", "thread_length",label).thread_length=L2 
+                obj.addProperty("App::PropertyFloat", "C",label).C=C
+                obj.addProperty("App::PropertyFloat", "d",label).d=float(d)
+
                 ParamUBlt.UBlt(obj)
                 obj.ViewObject.Proxy=0
                 #FreeCAD.ActiveDocument.recompute()     
@@ -736,7 +743,6 @@ class Ui_Dialog(object):
                 L1=float(self.lineEdit.text())
                 L2=float(self.lineEdit_2.text())
                 obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
-
                 obj.addProperty("App::PropertyEnumeration", "dia",label)   
                 obj.dia=ScrData.U_size
                 i=self.comboBox_dia.currentIndex()
