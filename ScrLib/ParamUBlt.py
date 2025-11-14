@@ -145,6 +145,6 @@ class UBlt:
         c01=c1.fuse(c2)
         doc=App.ActiveDocument
         Gui.Selection.addSelection(doc.Name,obj.Name)
-        obj.C=C
+        obj.C0=C
         obj.d=d
         obj.Shape=c01
