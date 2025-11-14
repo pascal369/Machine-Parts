@@ -732,7 +732,7 @@ class Ui_Dialog(object):
                     obj.addProperty("App::PropertyBool",'flange',label).flange = False    
                 obj.addProperty("App::PropertyFloat", "stem_length",label).stem_length=L1
                 obj.addProperty("App::PropertyFloat", "thread_length",label).thread_length=L2 
-                obj.addProperty("App::PropertyFloat", "C",label).C=C
+                obj.addProperty("App::PropertyFloat", "C0",label).C0=C
                 obj.addProperty("App::PropertyFloat", "d",label).d=float(d)
 
                 ParamUBlt.UBlt(obj)
