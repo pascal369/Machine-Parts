@@ -59,8 +59,7 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Handle", None))
         self.label_ton.setText(QtGui.QApplication.translate("Dialog", "Capacity", None))    
         self.pushButton.setText(QtGui.QApplication.translate("Dialog", "Create", None))  
-        #self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "upDate", None))  
-        #self.pushButton3.setText(QtGui.QApplication.translate("Dialog", "import", None))  
+ 
     def on_type(self):
         Capacity=self.comboBox_ton.currentText()
         if Capacity=='4t':
@@ -73,19 +72,6 @@ class Ui_Dialog(object):
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
-        
-    #def import_data(self):
-    #    global spreadsheet
-    #    
-    #    selection = Gui.Selection.getSelection()
-    #    if selection:
-    #         selected_object = selection[0]
-            #if selected_object.TypeId == "App::Part":
-            #    parts_group = selected_object
-            #    for obj in parts_group.Group:
-            #       if obj.TypeId == "Spreadsheet::Sheet":
-            #           spreadsheet = obj
-    
 
     def create(self): 
          Capacity=self.comboBox_ton.currentText()
@@ -99,14 +85,11 @@ class Ui_Dialog(object):
          #doc=App.newDocument()
          #print(joined_path)
          Gui.ActiveDocument.mergeProject(joined_path)
-        
-
-         
+     
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)               
+                       

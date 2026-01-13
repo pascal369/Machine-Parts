@@ -129,7 +129,7 @@ class Ui_Dialog(object):
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data',"RollBrg_data",'png_data',pic)
          self.label_5.setPixmap(QtGui.QPixmap(joined_path))
-         print(joined_path)
+         #print(joined_path)
              
     
     def onSer(self):
@@ -192,8 +192,7 @@ class Ui_Dialog(object):
                    sa=RollingBrg_Data.Adim72[dia]
               elif series=='73':
                    sa=RollingBrg_Data.Adim73[dia]     
-
-                   
+                  
               label='Angular Ball bearing'
               modelNo=sa[5]
               D=sa[1]
@@ -227,16 +226,23 @@ class Ui_Dialog(object):
          #     elif series=='Self-aligning' :
          #          sa=RollingBrg_Data.ADia 
          elif key0=='Tapered roller bearings':
-              from prt_data.RollBrg_data import TaperedRollerBrg
-              TaperedRollerBrg
-                        
+             import importlib
+             import sys
+             module_name = 'prt_data.RollBrg_data.TaperedRollerBrg'
+             if module_name in sys.modules:
+                 importlib.reload(sys.modules[module_name])
+             else:
+                 import prt_data.RollBrg_data.TaperedRollerBrg
+             return          
          elif key0=='Cylindorical Roller Bearings':
-              #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-              from prt_data.RollBrg_data import CylindoricalRollerBrg
-              CylindoricalRollerBrg
+              import importlib
+              import sys
+              module_name = 'prt_data.RollBrg_data.CylindoricalRollerBrg'
+              if module_name in sys.modules:
+                  importlib.reload(sys.modules[module_name])
+              else:
+                  import prt_data.RollBrg_data.CylindoricalRollerBrg
               return
-
-                  
 
          fname=series+key0+str(dia)+'.FCStd' 
          base=os.path.dirname(os.path.abspath(__file__))
@@ -256,7 +262,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        # スクリプトのウィンドウを取得
-        #script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint) 
+        

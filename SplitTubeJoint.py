@@ -71,7 +71,7 @@ class Ui_Dialog(object):
         self.comboBox_dia.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
         #作成
         self.pushButton = QtGui.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(130, 35, 80, 22))
+        self.pushButton.setGeometry(QtCore.QRect(130, 38, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton(Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(130, 60, 80, 22))
@@ -135,8 +135,6 @@ class Ui_Dialog(object):
 
 
     def create(self): 
-         #global fname
-         #global joined_path
          fname='SplitTubeJoint.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Joint_data','SplitTubeJoint',fname) 
@@ -153,4 +151,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)            
+        

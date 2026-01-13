@@ -274,8 +274,6 @@ class Ui_Dialog(object):
             q1=8.75
         elif float(M)>16.00:
             q1=8.00                    
-
-        
         
         fname=key+'.png'
         base=os.path.dirname(os.path.abspath(__file__))
@@ -286,15 +284,14 @@ class Ui_Dialog(object):
           global spreadsheet
           global worm
           global wheel
+          global key2
           selection = Gui.Selection.getSelection()
-          #if selection:
-          #    selection = Gui.Selection.getSelection()
           if selection:
              selected_object = selection[0]
              if selected_object.TypeId == "App::Part":
                  parts_group = selected_object
                  for obj in parts_group.Group:
-                     print(obj.Label)
+                     #print(obj.Label)
                      if obj.Label[:4]=='worm':
                          worm=obj
                      elif obj.Label[:5]=='wheel':
@@ -344,8 +341,6 @@ class Ui_Dialog(object):
                          self.label_pcd2.setText(str(pcd2))
                          self.label_L1.setText(str(a))
     
-    
-    
     def setIchi(self):
 
         r1 = self.spinBox_ichi.value()
@@ -353,7 +348,7 @@ class Ui_Dialog(object):
         App.ActiveDocument.recompute()
     
     def spinMove(self):
-         
+         print(key2)
          N1=self.label_N1.text()
          N2=self.label_N2.text()
          r1 = self.spinBox.value()
@@ -361,8 +356,10 @@ class Ui_Dialog(object):
          A=self.spinBox_ichi.value()
          x=10
          worm.Placement.Rotation=App.Rotation(App.Vector(1,0,0),x*(r1+A))
-         wheel.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-x*r2)
-    
+         if key2[1:]=='wormAssy_B':
+              wheel.Placement.Rotation=App.Rotation(App.Vector(0,1,0),x*r2)
+         else:
+              wheel.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-x*r2)
     def update(self):
               mod=float(self.comboBox_mod.currentText()) #モジュール
               spreadsheet.set('m0',str(mod))
@@ -372,10 +369,8 @@ class Ui_Dialog(object):
               a=float(self.le_a.text())
               d2=mod*N2
               d1=(a - d2 / 2) * 2
-              #print(d1)
               Qv=d1 / mod
               ganma=round(math.atan(mod * N1 / d1)*57.3,3)
-              print(ganma)
               spreadsheet.set('z1',str(N1))
               spreadsheet.set('z2',str(N2))
               spreadsheet.set('ganma',str(ganma))
@@ -413,10 +408,7 @@ class Ui_Dialog(object):
          fname=key+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Gear_data',fname) 
-         
-         doc=App.newDocument()
          Gui.ActiveDocument.mergeProject(joined_path)
-         Gui.SendMsgToActiveView("ViewFit")   
 
 class main():
         d = QtGui.QWidget()
@@ -424,7 +416,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        # スクリプトのウィンドウを取得
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)             
+        

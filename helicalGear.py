@@ -211,7 +211,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
-        
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setIchi)
         
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "helicalGear", None))
@@ -228,7 +228,7 @@ class Ui_Dialog(object):
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))    
 
     def read_data(self):
-         global spreadsheet
+         global mySht
          global Pinion
          global Gear
          selection = Gui.Selection.getSelection()
@@ -242,109 +242,113 @@ class Ui_Dialog(object):
                          Pinion=obj
                      elif obj.Label[:4]=='Gear':
                          Gear=obj    
-                     elif obj.TypeId =="Spreadsheet::Sheet":
-                         spreadsheet = obj
+                     elif obj.Label =="mySht":
+                         mySht = obj
 
                          
-                         self.comboBox_type.setCurrentText(spreadsheet.getContents('A1'))
-                         self.comboBox_mod.setCurrentText(spreadsheet.getContents('m0'))
-                         self.le_N.setText(spreadsheet.getContents('z1'))
-                         self.le_N2.setText(spreadsheet.getContents('z2'))
-                         self.le_B.setText(spreadsheet.getContents('b1')) 
-                         self.le_B2.setText(spreadsheet.getContents('b2'))   
-                         self.le_dia.setText(spreadsheet.getContents('dia1'))  
-                         self.le_dia2.setText(spreadsheet.getContents('dia2'))  
-                         self.le_Bdia.setText(spreadsheet.getContents('Bdia1')) 
-                         self.le_Bdia2.setText(spreadsheet.getContents('Bdia2'))  
-                         self.le_BB.setText(spreadsheet.getContents('bb1')) 
-                         self.le_BB2.setText(spreadsheet.getContents('bb2')) 
+                         self.comboBox_type.setCurrentText(mySht.getContents('A1'))
+                         self.comboBox_mod.setCurrentText(mySht.getContents('m0'))
+                         self.le_N.setText(mySht.getContents('z1'))
+                         self.le_N2.setText(mySht.getContents('z2'))
+                         self.le_B.setText(mySht.getContents('b1')) 
+                         self.le_B2.setText(mySht.getContents('b2'))   
+                         self.le_dia.setText(mySht.getContents('dia1'))  
+                         self.le_dia2.setText(mySht.getContents('dia2'))  
+                         self.le_Bdia.setText(mySht.getContents('Bdia1')) 
+                         self.le_Bdia2.setText(mySht.getContents('Bdia2'))  
+                         self.le_BB.setText(mySht.getContents('bb1')) 
+                         self.le_BB2.setText(mySht.getContents('bb2')) 
                          
 
-                         self.label_M.setText(spreadsheet.getContents('m0'))
-                         self.label_N1.setText(spreadsheet.getContents('z1'))
-                         self.label_N2.setText(spreadsheet.getContents('z2'))
+                         self.label_M.setText(mySht.getContents('m0'))
+                         self.label_N1.setText(mySht.getContents('z1'))
+                         self.label_N2.setText(mySht.getContents('z2'))
          else:
              print('Select the object!')
              return                
 
             
     def setIchi(self):
+        global A
         N1=self.label_N1.text()
-        A=self.spinBox_Ichi.value()
+        A=self.spinBox_Ichi.value()/2
         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
         App.ActiveDocument.recompute()
     
     def spinMove(self):
-         #try:
-         N1=self.label_N1.text()
-         if N1=='***':
+         try:
+             N1=self.label_N1.text()
+             if N1=='***':
+                 return
+             N2=self.label_N2.text()
+             #A=self.spinBox_Ichi.value()/2
+             r1 = self.spinBox.value()*3
+             r2 =r1*float(N1)/float(N2)
+            
+             #A=float(N1)/360
+             #print(r1,r2)
+             Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1-A)
+             Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2)
+         except:
              return
-         N2=self.label_N2.text()
-         A=self.spinBox_Ichi.value()
-         r1 = self.spinBox.value()*5
-         r2 =r1*float(N1)/float(N2)
-        
-         #A=float(N1)/360
-         #print(r1,r2)
-         Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1-A)
-         Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2)
-         #except:
-         #    return
          App.ActiveDocument.recompute()
     def update(self):
-         try:
-             m0=self.comboBox_mod.currentText()
-             z1=self.le_N.text()
-             z2=self.le_N2.text()
-             beta=self.le_beta.text()
-             b1=self.le_B.text()
-             b2=self.le_B2.text()
-             dia1=self.le_dia.text()
-             dia2=self.le_dia2.text()
-             L1=float(m0)*(float(z1)+float(z2))/2
-             Bdia1=self.le_Bdia.text()
-             Bdia2=self.le_Bdia2.text()
-             bb1=self.le_BB.text()
-             bb2=self.le_BB2.text()
-    
-             spreadsheet.set('beta',beta) 
-             
-             pcd1=float(m0)*float(z1)
-             pcd2=float(m0)*float(z2)
-             spreadsheet.set('m0',str(m0))
-             spreadsheet.set('z1',str(z1))
-             spreadsheet.set('z2',str(z2))
-             spreadsheet.set('b1',str(b1))
-             spreadsheet.set('b2',str(b2))
-             spreadsheet.set('dia1',str(dia1))
-             spreadsheet.set('dia2',str(dia2))
-             spreadsheet.set('Bdia1',str(Bdia1))
-             spreadsheet.set('Bdia2',str(Bdia2))
-             spreadsheet.set('bb1',str(bb1))
-             spreadsheet.set('bb2',str(bb2))
-            
-             self.label_M.setText(m0)
-             self.label_N1.setText(z1)
-             self.label_N2.setText(z2)
-             self.label_pcd1.setText(str(pcd1))
-             self.label_pcd2.setText(str(pcd2))
-             self.label_L1.setText(str(L1))
-         except:
-             pass
-
+         
+         #try:
+         m0=self.comboBox_mod.currentText()
+         
+         z1=self.le_N.text()
+         z2=self.le_N2.text()
+         beta=self.le_beta.text()
+         b1=self.le_B.text()
+         b2=self.le_B2.text()
+         dia1=self.le_dia.text()
+         dia2=self.le_dia2.text()
+         L1=float(m0)*(float(z1)+float(z2))/2
+         Bdia1=self.le_Bdia.text()
+         Bdia2=self.le_Bdia2.text()
+         bb1=self.le_BB.text()
+         bb2=self.le_BB2.text()
+         #App.ActiveDocument.recompute()
+         #return
+         mySht.set('beta',beta) 
+         
+         pcd1=float(m0)*float(z1)
+         pcd2=float(m0)*float(z2)
+         #App.ActiveDocument.recompute()
+         #return
+         mySht.set('m0',str(m0))
+         mySht.set('z1',str(z1))
+         mySht.set('z2',str(z2))
+         mySht.set('b1',str(b1))
+         mySht.set('b2',str(b2))
+         mySht.set('dia1',str(dia1))
+         mySht.set('dia2',str(dia2))
+         mySht.set('Bdia1',str(Bdia1))
+         mySht.set('Bdia2',str(Bdia2))
+         mySht.set('bb1',str(bb1))
+         mySht.set('bb2',str(bb2))
+         
+         self.label_M.setText(m0)
+         self.label_N1.setText(z1)
+         self.label_N2.setText(z2)
+         #return
+         self.label_pcd1.setText(str(pcd1))
+         self.label_pcd2.setText(str(pcd2))
+         self.label_L1.setText(str(L1))
          App.ActiveDocument.recompute()
-    
    
     def create(self): 
          fname=key+'.FCStd'
+         
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Gear_data',fname) 
          try:
             Gui.ActiveDocument.mergeProject(joined_path)
+            print(joined_path)
          except:
             doc=App.newDocument()
             Gui.ActiveDocument.mergeProject(joined_path)
-
          Gui.SendMsgToActiveView("ViewFit")   
 
 class main():
@@ -353,7 +357,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        # スクリプトのウィンドウを取得
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)             
+        

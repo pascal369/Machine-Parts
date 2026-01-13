@@ -100,13 +100,14 @@ class Ui_Dialog(object):
         self.comboBox_shape.addItems(sprShape)
         self.comboBox_shape.setEditable(True)
         self.comboBox_N.setEditable(True)
+        self.comboBox_N.addItems(sprTeeth)
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
         #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
 
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
         
@@ -198,8 +199,8 @@ class Ui_Dialog(object):
                 self.le_dia.setText(shtSproB.getContents('dia'))
                 N1=shtSproB.getContents('N0')
                 self.comboBox_N.setCurrentText(N1)
-                pitch=shtSproB.getContents('p0')
-                pcd=shtSproB.getContents('pcd')
+                #pitch=shtSproB.getContents('p0')
+                #pcd=shtSproB.getContents('pcd')
 
     def update(self):
          global b0
@@ -293,6 +294,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        # 閉じるボタンを無効にする
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
+        

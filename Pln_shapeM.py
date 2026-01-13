@@ -9,32 +9,32 @@ from math import pi
 import Draft
 import FreeCAD as App
 import FreeCADGui as Gui
-from pln_dataM import plndata
-from pln_dataM import ParamCircle
-from pln_dataM import ParamSemiCircle
-from pln_dataM import ParamQuadrant
-from pln_dataM import ParamRing
-from pln_dataM import ParamSemiRing
-from pln_dataM import ParamOval
-from pln_dataM import ParamOvalRing
-from pln_dataM import ParamRectang
-from pln_dataM import ParamLShape
-from pln_dataM import ParamChannel
-from pln_dataM import ParamTShape
-from pln_dataM import ParamHShape
-from pln_dataM import ParamFrame
-from pln_dataM import ParamD_Cut
-from pln_dataM import ParamD_Cut2
-from pln_dataM import ParamRightTriangle
-from pln_dataM import ParamTrapezoid
-from pln_dataM import ParamTrapezoidR
-from pln_dataM import ParamFanShaped
-from pln_dataM import ParamFanShaped2
-from pln_dataM import ParamBracket
-from pln_dataM import ParamDharma
-from pln_dataM import ParamBasePlate
-from pln_dataM import ParamUShape
-from pln_dataM import ParamChainCover
+from pln_data import plndata
+from pln_data import ParamCircle
+from pln_data import ParamSemiCircle
+from pln_data import ParamQuadrant
+from pln_data import ParamRing
+from pln_data import ParamSemiRing
+from pln_data import ParamOval
+from pln_data import ParamOvalRing
+from pln_data import ParamRectang
+from pln_data import ParamLShape
+from pln_data import ParamChannel
+from pln_data import ParamTShape
+from pln_data import ParamHShape
+from pln_data import ParamFrame
+from pln_data import ParamD_Cut
+from pln_data import ParamD_Cut2
+from pln_data import ParamRightTriangle
+from pln_data import ParamTrapezoid
+from pln_data import ParamTrapezoidR
+from pln_data import ParamFanShaped
+from pln_data import ParamFanShaped2
+from pln_data import ParamBracket
+from pln_data import ParamDharma
+from pln_data import ParamBasePlate
+from pln_data import ParamUShape
+from pln_data import ParamChainCover
 DEBUG = True # set to True to show debug messages
 class ViewProvider:
     def __init__(self, obj):
@@ -222,7 +222,6 @@ class Ui_Dialog(object):
         #print(key)            
         if key==0:
             pic='0_circle.png'
-            print(pic) 
         elif key==1:
             pic='1_semi_circle.png'  
         elif key==2:
@@ -295,7 +294,7 @@ class Ui_Dialog(object):
 
 
         base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, "pln_dataM",pic)
+        joined_path = os.path.join(base, "pln_data",pic)
         self.img.setPixmap(QtGui.QPixmap(joined_path))  
          
     def retranslateUi(self, Dialog):
@@ -734,8 +733,4 @@ class Main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()
-        # スクリプトのウィンドウを取得
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
-
+        

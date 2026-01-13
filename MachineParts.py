@@ -173,16 +173,19 @@ class Ui_Dialog(object):
                     pass
 
     def japan(self):
-        c00 = Gui.Selection.getSelection()
-        if c00:
-            obj = c00[0]
-        label=obj.Label
-        JPN=self.le_jpn.text()
         try:
-            obj.addProperty("App::PropertyString", "JPN",'Base')
-            obj.JPN=JPN
+            c00 = Gui.Selection.getSelection()
+            if c00:
+                obj = c00[0]
+            label=obj.Label
+            JPN=self.le_jpn.text()
+            try:
+                obj.addProperty("App::PropertyString", "JPN",'Base')
+                obj.JPN=JPN
+            except:
+                obj.JPN=JPN
         except:
-            obj.JPN=JPN
+            pass        
 
     def standard(self):
         c00 = Gui.Selection.getSelection()
@@ -415,11 +418,30 @@ class Ui_Dialog(object):
          buhin2=self.comboBox_buhin2.currentText()
          if buhin=='Wire rope':
            if buhin2=='Shackle':
-               import Shackle 
+               import importlib
+               import sys
+               if 'Shackle' not in sys.modules:
+                    import Shackle
+               else:
+                    importlib.reload(sys.modules['Shackle'])
            elif buhin2=='Thimble' :
-               import Thimble
+               #import Thimble
+
+               import importlib
+               import sys
+               if 'Thimble' not in sys.modules:
+                    import Thimble
+               else:
+                    importlib.reload(sys.modules['Thimble'])
            elif buhin2=='Wire Clip' :
-               import WireClip
+               #import WireClip
+
+                import importlib
+                import sys
+                if 'WireClip' not in sys.modules:
+                     import WireClip
+                else:
+                     importlib.reload(sys.modules['WireClip'])
            elif buhin2=='Shackle Assembly':
                fname='shackleAssy.FCStd'  
                base=os.path.dirname(os.path.abspath(__file__))
@@ -430,83 +452,304 @@ class Ui_Dialog(object):
                   doc=App.newDocument()
                   Gui.ActiveDocument.mergeProject(joined_path)  
            elif buhin2=='Sheave':
-             import sheave
+             #import sheave
+
+             import importlib
+             import sys
+             if 'sheave' not in sys.modules:
+                  import sheave
+             else:
+                  importlib.reload(sys.modules['sheave'])
          elif buhin=='Pins':
              if buhin2=='Cotter Pin':
-                 import CotterPin
+                 #import CotterPin
+
+                 import importlib
+                 import sys
+                 if 'CotterPin' not in sys.modules:
+                      import CotterPin
+                 else:
+                      importlib.reload(sys.modules['CotterPin'])
          elif buhin=='Rolling bearing':
-            import RollingBearing  
-            RollingBearing 
+            #import RollingBearing  
+            #RollingBearing 
+
+            import importlib
+            import sys
+            if 'RollingBearing' not in sys.modules:
+                 import RollingBearing
+            else:
+                 importlib.reload(sys.modules['RollingBearing'])
          elif buhin=='Plain bearing':
-            import plainBrg   
+            #import plainBrg  
+            
+            import importlib
+            import sys
+            if 'plainBrg' not in sys.modules:
+                 import plainBrg
+            else:
+                 importlib.reload(sys.modules['plainBrg']) 
          elif buhin=='Screws':
-             import ScrewsM
+             #import ScrewsM
+
+             import importlib
+             import sys
+             if 'ScrewsM' not in sys.modules:
+                  import ScrewsM
+             else:
+                  importlib.reload(sys.modules['ScrewsM'])
          elif buhin=='Shaft':
            if buhin2=='Shaft':
-               import Shaft 
+               #import Shaft 
+
+               import importlib
+               import sys
+               if 'Shaft' not in sys.modules:
+                    import Shaft
+               else:
+                    importlib.reload(sys.modules['Shaft'])
            elif buhin2=='Screw shaft' :
-               import ScrewShaft   
+               #import ScrewShaft   
+
+               import importlib
+               import sys
+               if 'ScrewShaft' not in sys.modules:
+                    import ScrewShaft
+               else:
+                    importlib.reload(sys.modules['ScrewShaft'])
          elif buhin=='Chain':
            if buhin2=='Roller Chain':
-               import RollerChain
+               #import RollerChain
+
+               import importlib
+               import sys
+               if 'RollerChain' not in sys.modules:
+                    import RollerChain
+               else:
+                    importlib.reload(sys.modules['RollerChain'])
            elif buhin2=='Water treatment chain':    
-               import SewageChainWB  
+               #import SewageChainWB 
+
+               import importlib
+               import sys
+               if 'SewageChainWB' not in sys.modules:
+                    import SewageChainWB
+               else:
+                    importlib.reload(sys.modules['SewageChainWB']) 
            elif buhin2=='Link Chains':    
-               import LinkChain 
+               #import LinkChain 
+
+               import importlib
+               import sys
+               if 'LinkChain' not in sys.modules:
+                    import LinkChain
+               else:
+                    importlib.reload(sys.modules['LinkChain'])
          elif buhin=='Sprocket':
-             import sprocketOnly      
+             #import sprocketOnly 
+
+             import importlib
+             import sys
+             if 'sprocketOnly' not in sys.modules:
+                  import sprocketOnly 
+             else:
+                  importlib.reload(sys.modules['sprocketOnly'])     
          elif buhin=='Snap Ring':
            if buhin2=='for shafts':
-               import CSnapring
+               #import CSnapring
+
+               import importlib
+               import sys
+               if 'CSnapring' not in sys.modules:
+                    import CSnapring 
+               else:
+                    importlib.reload(sys.modules['CSnapring'])
            elif buhin2=='for holes':    
-               import CSnapring_hole   
+               #import CSnapring_hole  
+
+               import importlib
+               import sys
+               if 'CSnapring_hole' not in sys.modules:
+                    import CSnapring_hole 
+               else:
+                    importlib.reload(sys.modules['CSnapring_hole']) 
          elif buhin=='Oil seal':
-             import OilSeal
+             #import OilSeal
+
+             import importlib
+             import sys
+             if 'OilSeal' not in sys.modules:
+                  import OilSeal 
+             else:
+                  importlib.reload(sys.modules['OilSeal'])
          elif buhin=='Gland Packing':
              if buhin2=='Gland Packing Assy':
-                 import GlandpackingAssy 
+                 #import GlandpackingAssy 
+
+                 import importlib
+                 import sys
+                 if 'GlandpackingAssy' not in sys.modules:
+                      import GlandpackingAssy 
+                 else:
+                      importlib.reload(sys.modules['GlandpackingAssy'])
          elif buhin=='One-touch window':
-             import OneTouchWindow  
-             return
+             #import OneTouchWindow  
+             #return
+         
+             import importlib
+             import sys
+             if 'OneTouchWindow' not in sys.modules:
+                  import OneTouchWindow 
+             else:
+                  importlib.reload(sys.modules['OneTouchWindow'])
          elif buhin=='Spring':
            if buhin2=='Tensile coil spring':
-               import TensionCoilSpring
+               #import TensionCoilSpring
+
+               import importlib
+               import sys
+               if 'TensionCoilSpring' not in sys.modules:
+                    import TensionCoilSpring 
+               else:
+                    importlib.reload(sys.modules['TensionCoilSpring'])
            elif buhin2=='Compression coil springs':    
-               import CompressionCoilSpring
+               #import CompressionCoilSpring
+
+               import importlib
+               import sys
+               if 'CompressionCoilSpring' not in sys.modules:
+                    import CompressionCoilSpring 
+               else:
+                    importlib.reload(sys.modules['CompressionCoilSpring'])
          elif buhin=='End Plate':
-               import EndPlate    
+               #import EndPlate   
+
+               import importlib
+               import sys
+               if 'EndPlate' not in sys.modules:
+                    import EndPlate 
+               else:
+                    importlib.reload(sys.modules['EndPlate']) 
          elif buhin=='Key Plate':
-               import KeyPlate              
+               #import KeyPlate   
+
+               import importlib
+               import sys
+               if 'KeyPlate' not in sys.modules:
+                    import KeyPlate 
+               else:
+                    importlib.reload(sys.modules['KeyPlate'])            
          elif buhin=='Joint':
-           if buhin2=='Tube Split Joint':
-               import SplitTubeJoint   
-           elif buhin2=='ChainCoupling':
-               import chainCup    
+            import importlib
+            import sys
+            if buhin2=='Tube Split Joint':
+                if 'SplitTubeJoint' not in sys.modules:
+                     import SplitTubeJoint  
+                else:
+                     importlib.reload(sys.modules['SplitTubeJoint']) 
+            elif buhin2=='ChainCoupling':
+                if 'chainCup' not in sys.modules:
+                     import chainCup  
+                else:
+                     importlib.reload(sys.modules['chainCup'])  
          elif buhin=='Planar shape':
-              import Pln_shapeM  
+              #import Pln_shapeM
+
+              import importlib
+              import sys
+              if 'Pln_shapeM' not in sys.modules:
+                   import Pln_shapeM  
+              else:
+                   importlib.reload(sys.modules['Pln_shapeM']) 
          elif buhin=='Shaped Steel':
-              import Shaped_steel   
+              #import Shaped_steel 
+
+              import importlib
+              import sys
+              if 'Shaped_steel' not in sys.modules:
+                   import Shaped_steel  
+              else:
+                   importlib.reload(sys.modules['Shaped_steel'])  
          elif buhin=='GearAssy':
-           if buhin2=='Spur gears':
-              import sperGear
-           elif buhin2=='Helical gears':
-               import helicalGear   
+           if buhin2=='Helical gears':
+               import importlib
+               import sys
+               if 'helicalGear' not in sys.modules:
+                    import helicalGear  
+               else:
+                    importlib.reload(sys.modules['helicalGear'])
            elif buhin2=='Worm Gear':
-               import wormGear  
+               import importlib
+               import sys
+               if 'wormGear' not in sys.modules:
+                    import wormGear  
+               else:
+                    importlib.reload(sys.modules['wormGear']) 
            elif buhin2=='Bevel gear':
-               import bevelGear  
+               #import bevelGear  
+
+               import importlib
+               import sys
+               if 'bevelGear' not in sys.modules:
+                    import bevelGear  
+               else:
+                    importlib.reload(sys.modules['bevelGear'])
            elif buhin2=='Planetary gears':
-               import planetaryGears   
+               #import planetaryGears 
+
+               import importlib
+               import sys
+               if 'planetaryGears' not in sys.modules:
+                    import planetaryGears  
+               else:
+                    importlib.reload(sys.modules['planetaryGears'])  
            elif buhin2=='Hypocycloidal gear':
-               import hypoCycloidGears  
+               #import hypoCycloidGears  
+
+               import importlib
+               import sys
+               if 'hypoCycloidGears' not in sys.modules:
+                    import hypoCycloidGears  
+               else:
+                    importlib.reload(sys.modules['hypoCycloidGears']) 
          elif buhin=='driveChainAssy':
-             import Sprocket  
+             #import Sprocket 
+
+             import importlib
+             import sys
+             if 'Sprocket' not in sys.modules:
+                  import Sprocket  
+             else:
+                  importlib.reload(sys.modules['Sprocket']) 
          elif buhin=='Handle':
-             import Handle
+             #import Handle
+
+             import importlib
+             import sys
+             if 'Handle' not in sys.modules:
+                  import Handle  
+             else:
+                  importlib.reload(sys.modules['Handle'])
          elif buhin=='Chute':
-             import chute  
+             #import chute  
+
+             import importlib
+             import sys
+             if 'chute' not in sys.modules:
+                  import chute  
+             else:
+                  importlib.reload(sys.modules['chute'])
          elif buhin=='DumpCar':
-             import DumpCar      
+             #import DumpCar 
+
+             import importlib
+             import sys
+             if 'DumpCar' not in sys.modules:
+                  import DumpCar  
+             else:
+                  importlib.reload(sys.modules['DumpCar'])
+
+
 
 class main():
         d = QtGui.QWidget()

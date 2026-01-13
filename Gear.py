@@ -110,7 +110,7 @@ class Ui_Dialog(object):
         self.pushButton2.setText(QtGui.QApplication.translate("Dialog", "更新", None))  
 
     def onWidth(self):
-        return
+        #return
         global dmin
         global dmax
         global S0

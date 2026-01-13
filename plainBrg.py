@@ -158,24 +158,26 @@ class Ui_Dialog(object):
          key=self.comboBox_ser.currentText()
          listL=[]
          for i in range(3,36):
-             if key==spreadsheet_500SP.getContents('A'+str(i))[1:]:
-                 print(i,key,spreadsheet_500SP.getContents('A'+str(i))[1:])
-                 for i in range(3,36):
-                     if key==spreadsheet_500SP.getContents('A'+str(i))[1:]:
-                         listL=[]
-                         for j in range(3,13):
-                             listL.append(spreadsheet_500SP.getContents(column_list[j]+str(i)))
-
-                         self.comboBox_length.clear()           
-                         self.comboBox_length.addItems(listL)
-                         series=self.comboBox_ser.currentText()
-
-                         #dia=spreadsheet_500SP.getContents(column_list[1]+str(i))
-                         #outDia=spreadsheet_500SP.getContents(column_list[2]+str(i))
-                 dia=spreadsheet_500SP.getContents('dia')
-                 outDia=spreadsheet_500SP.getContents('outDia')  
-
-                 print(dia,outDia)       
+             try:
+                 if key==spreadsheet_500SP.getContents('A'+str(i))[1:]:
+                     print(i,key,spreadsheet_500SP.getContents('A'+str(i))[1:])
+                     for i in range(3,36):
+                         if key==spreadsheet_500SP.getContents('A'+str(i))[1:]:
+                             listL=[]
+                             for j in range(3,13):
+                                 listL.append(spreadsheet_500SP.getContents(column_list[j]+str(i)))
+    
+                             self.comboBox_length.clear()           
+                             self.comboBox_length.addItems(listL)
+                             series=self.comboBox_ser.currentText()
+    
+                             #dia=spreadsheet_500SP.getContents(column_list[1]+str(i))
+                             #outDia=spreadsheet_500SP.getContents(column_list[2]+str(i))
+                     dia=spreadsheet_500SP.getContents('dia')
+                     outDia=spreadsheet_500SP.getContents('outDia')  
+             except:
+                 pass
+                     #print(dia,outDia)       
                  
          
     def upDate(self):
@@ -229,7 +231,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        # スクリプトのウィンドウを取得
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint) 
+        
