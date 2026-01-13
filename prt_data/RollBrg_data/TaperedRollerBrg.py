@@ -3,7 +3,6 @@ import os
 import sys
 import string
 import Import
-import Spreadsheet
 import DraftVecUtils
 import Sketcher
 import PartDesign
@@ -121,7 +120,7 @@ class Ui_Dialog(object):
         except:
             obj.JPN=JPN
     def readData(self):
-        global spreadsheet
+        global mySht
         selection = Gui.Selection.getSelection()
         for obj in selection:
             try:
@@ -135,21 +134,26 @@ class Ui_Dialog(object):
                 parts_group = selected_object
                 for obj in parts_group.Group:
                     #print(obj.Label)
-                    if obj.TypeId =="Spreadsheet::Sheet":
-                        spreadsheet = obj
-            self.comboBox_type.setCurrentText(spreadsheet.getContents('B1'))                
-            self.comboBox_ser.setCurrentText(spreadsheet.getContents('A1'))            
-            self.comboBox_dia.setCurrentText(spreadsheet.getContents('A3'))
+                    if obj.Label =="mySht":
+                        mySht = obj
+            self.comboBox_type.setCurrentText(mySht.getContents('B1'))                
+            self.comboBox_ser.setCurrentText(mySht.getContents('A1'))            
+            self.comboBox_dia.setCurrentText(mySht.getContents('A3'))
     
     def onType(self):
-        #return
         key0=self.comboBox_type.currentIndex()
         if key0==0:
             self.le_la.setText('複列円錐ころ軸受')
-            spreadsheet.set('B1','DoubleRow')
+            try:
+                mySht.set('B1','DoubleRow')
+            except:
+                pass    
         elif key0==1:
             self.le_la.setText('単列円錐ころ軸受')  
-            spreadsheet.set('B1','SingleRow')  
+            try:
+                mySht.set('B1','SingleRow') 
+            except:
+                pass     
         
     def onDia(self):
          global d
@@ -177,48 +181,51 @@ class Ui_Dialog(object):
          elif key0=='03':
              return  
          for i in range(a,b):
-             if key==spreadsheet.getContents('A'+str(i)):
-                 #print(i,key,spreadsheet.getContents('A'+str(i)))
-                 for i in range(3,27):
-                     if key==spreadsheet.getContents('A'+str(i)):
-                         listL=[]
-                         for j in range(0,17):
-                             listL.append(spreadsheet.getContents(column_list[j]+str(i)))
-                         d=listL[0]
-                         D=listL[1]
-                         T0=listL[2]
-                         b=listL[3]
-                         r=listL[4]
-                         r1=listL[5]
-                         n=listL[6]
-                         x=listL[7]
-                         z=listL[8]
-                         l0=listL[9]
-                         d1=listL[10]
-                         #d2=listL[11]
-                         xi=listL[12]
-                         xk=listL[13]
-                         yk=listL[14]
-                         g=listL[16]
+             try:
+                 if key==mySht.getContents('A'+str(i)):
+                     #print(i,key,mySht.getContents('A'+str(i)))
+                     for i in range(3,27):
+                         if key==mySht.getContents('A'+str(i)):
+                             listL=[]
+                             for j in range(0,17):
+                                 listL.append(mySht.getContents(column_list[j]+str(i)))
+                             d=listL[0]
+                             D=listL[1]
+                             T0=listL[2]
+                             b=listL[3]
+                             r=listL[4]
+                             r1=listL[5]
+                             n=listL[6]
+                             x=listL[7]
+                             z=listL[8]
+                             l0=listL[9]
+                             d1=listL[10]
+                             #d2=listL[11]
+                             xi=listL[12]
+                             xk=listL[13]
+                             yk=listL[14]
+                             g=listL[16]
+             except:
+                 pass                
     def upDate(self):
         #c00 = Gui.Selection.getSelection()
         #if c00:
         #    obj = c00[0]
-        spreadsheet.set('d',d)
-        spreadsheet.set('D',D)
-        spreadsheet.set('T0',T0)
-        spreadsheet.set('b',b)
-        spreadsheet.set('r',r)
-        spreadsheet.set('r1',r1)
-        spreadsheet.set('n',n)
-        spreadsheet.set('x',x)
-        spreadsheet.set('z',z)
-        spreadsheet.set('l0',l0)
-        spreadsheet.set('d1',d1)
-        spreadsheet.set('xi',xi)
-        spreadsheet.set('xk',xk)
-        spreadsheet.set('yk',yk)
-        spreadsheet.set('g0',g)
+        mySht.set('d',d)
+        mySht.set('D',D)
+        mySht.set('T0',T0)
+        mySht.set('b',b)
+        mySht.set('r',r)
+        mySht.set('r1',r1)
+        mySht.set('n',n)
+        mySht.set('x',x)
+        mySht.set('z',z)
+        mySht.set('l0',l0)
+        mySht.set('d1',d1)
+        mySht.set('xi',xi)
+        mySht.set('xk',xk)
+        mySht.set('yk',yk)
+        mySht.set('g0',g)
 
         App.ActiveDocument.recompute()      
 
@@ -243,7 +250,7 @@ class Ui_Dialog(object):
             pass
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, fname) 
-        print(joined_path)
+        #print(joined_path)
         try:
            Gui.ActiveDocument.mergeProject(joined_path)
         except:
@@ -265,7 +272,4 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        # スクリプトのウィンドウを取得
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
-        # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint) 
+        
