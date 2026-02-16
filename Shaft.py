@@ -509,8 +509,10 @@ class Ui_Dialog(object):
             else:    
                 paramShaftMeter.Meter(obj) 
 
-            obj.ViewObject.Proxy=0
-            App.ActiveDocument.recompute()                
+        obj.ViewObject.Proxy= 0  
+        Gui.activateWorkbench("DraftWorkbench")
+        Gui.Selection.addSelection(obj)
+        Gui.runCommand('Draft_Move',0)                
  
 class main():
         d = QtGui.QWidget()

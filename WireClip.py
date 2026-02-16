@@ -121,7 +121,7 @@ class Ui_Dialog(object):
              if selected_object.TypeId == "App::Part":
                  parts_group = selected_object
                  for obj in parts_group.Group:
-                     print(obj.Label)
+                     #print(obj.Label)
                      if obj.Label[:11]=='hexagon_nut':
                          nut=obj
                      elif obj.Label[:9]=='All_screw':
@@ -172,28 +172,60 @@ class Ui_Dialog(object):
                  spreadsheet.set('M27',str(clS))
                  spreadsheet.set('N27',str(cln))
                  spreadsheet.set('O27',str(cll))
-        #print(nut.dia)  
+
         nut.dia=spreadsheet.getContents('J27')[1:]
         All_screw.dia=spreadsheet.getContents('J27')[1:]    
-        #JPN=self.le_la.text()
-        #try:
-        #    obj.addProperty("App::PropertyString", "JPN",'Base')
-        #    obj.JPN=JPN
-        #except:
-        #    obj.JPN=JPN
+        
         App.ActiveDocument.recompute()
 
     def create(self): 
+         doc=App.ActiveDocument
          dia=self.comboBox_dia.currentText()
          fname='WireClip.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','WireRope',fname) 
-         try:
-            Gui.ActiveDocument.mergeProject(joined_path)
-         except:
-            doc=App.newDocument()
-            Gui.ActiveDocument.mergeProject(joined_path)
+
+          # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
          
+         # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "wireClip"  in o.Label or "wireClip"  in o.Name:
+                 move_target = o
+         
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+        
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()

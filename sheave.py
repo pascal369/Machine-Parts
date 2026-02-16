@@ -12,7 +12,7 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
-
+from PySide2 import QtCore
 #type=['plainBrg','rollingBrg',]
 type=['plainBrg',]
 plainBrg=['Ser500SP']
@@ -124,7 +124,7 @@ class Ui_Dialog(object):
             obj.JPN=JPN
 
     def readData(self):
-        print(self.comboBox_nominal.currentText())
+        #print(self.comboBox_nominal.currentText())
         global spreadsheet_sheave
         global Brg
         global Csnap
@@ -140,9 +140,10 @@ class Ui_Dialog(object):
             if selected_object.TypeId == "App::Part":
                 parts_group = selected_object
                 for obj in parts_group.Group:
-                    print(obj.Label)
+                    #print(obj.Label)
                     if obj.Label[:18]=='spreadsheet_sheave':
                         spreadsheet_sheave=obj
+
                     elif obj.Label=='Brg'[:3]:
                         Brg=obj     
                     elif obj.Label=='Csnap'[:5]:
@@ -170,7 +171,7 @@ class Ui_Dialog(object):
         #print(self.comboBox_nominal.currentText())
         for i in range(16,26):
             d=self.comboBox_nominal.currentText()
-            print(i,d)
+            #print(i,d)
             if d==spreadsheet_sheave.getContents('A'+str(i)):
                 i0=i
                 sf=self.comboBox_sel.currentText()
@@ -252,6 +253,7 @@ class Ui_Dialog(object):
                 
      
     def create(self): 
+        doc=App.ActiveDocument
         key0=self.comboBox_type.currentText()
         #print(key0)
         d=self.comboBox_nominal.currentText()
@@ -291,15 +293,62 @@ class Ui_Dialog(object):
                 #return
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base, 'prt_data','WireRope',fname) 
-        try:
-           Gui.ActiveDocument.mergeProject(joined_path)
-        except:
-           doc=App.newDocument()
-           Gui.ActiveDocument.mergeProject(joined_path)
-
-        #Gui.Selection.addSelection('Unnamed','Part')
-        #self.readData  
-        #App.ActiveDocument.recompute()
+        
+         # --- インポート前のオブジェクトリストを取得 ---
+        old_obj_names = [o.Name for o in doc.Objects]
+        
+        # マージ実行
+        Gui.ActiveDocument.mergeProject(joined_path)
+        doc.recompute() # 一旦再計算して内部IDを確定させる
+        # --- インポート後に増えたオブジェクトを特定 ---
+        new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+        
+        if not new_objs:
+            print("Error: オブジェクトが読み込まれませんでした。")
+            return
+        #latticeBeamというラベルを持つものを優先的に探す
+        move_target = None
+        for o in new_objs:
+            if "sheaveA"  in o.Label or "sheaveA"  in o.Name:
+                move_target = o
+            elif "sheaveB"  in o.Label or "sheaveB"  in o.Name:
+                move_target = o 
+            elif "sheaveRBA"  in o.Label or "sheaveRBA"  in o.Name:
+                move_target = o  
+            elif "sheaveRBB"  in o.Label or "sheaveRBB"  in o.Name:
+                move_target = o         
+        
+        # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+        if not move_target:
+            move_target = new_objs[0]
+        view = Gui.ActiveDocument.ActiveView
+        callbacks = {}
+        def move_cb(info):
+            pos = info["Position"]
+            # 重要：ビュー平面上の3D座標を取得
+            p = view.getPoint(pos)
+            if move_target:
+                move_target.Placement.Base = p
+                #view.softRedraw()
+        def click_cb(info):
+            if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                # コールバック解除
+                view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                App.ActiveDocument.recompute()
+                print("Placed: " + move_target.Label)
+        # イベント登録
+        callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+        callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+    #   try:
+    #      Gui.ActiveDocument.mergeProject(joined_path)
+    #   except:
+    #      doc=App.newDocument()
+    #      Gui.ActiveDocument.mergeProject(joined_path)
+#
+    #    #Gui.Selection.addSelection('Unnamed','Part')
+    #    #self.readData  
+    #    #App.ActiveDocument.recompute()
 
 
         

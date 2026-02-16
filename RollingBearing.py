@@ -11,6 +11,8 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
+from pivy import coin
+from PySide2 import QtCore
 from prt_data.RollBrg_data import ParamBallBrg
 from prt_data.RollBrg_data import ParamAngulaBallBrg
 from prt_data.RollBrg_data import RollingBrg_Data
@@ -111,12 +113,7 @@ class Ui_Dialog(object):
          elif type=='Tapered roller bearings': 
              self.comboBox_ser.hide()  
              self.comboBox_dia.hide()
-             #self.comboBox_ser.addItems(RollingBrg_Data.TprSer)
-             #return
-         #elif type=='Roller Bearings': 
-         #    self.comboBox_ser.hide()  
-         #    self.comboBox_dia.hide()
-         #    self.comboBox_ser.addItems(RollingBrg_Data.CylSer)
+
          elif type=='Cylindorical Roller Bearings':  
               self.comboBox_ser.hide()  
               self.comboBox_dia.hide()
@@ -129,8 +126,6 @@ class Ui_Dialog(object):
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data',"RollBrg_data",'png_data',pic)
          self.label_5.setPixmap(QtGui.QPixmap(joined_path))
-         #print(joined_path)
-             
     
     def onSer(self):
          ser=self.comboBox_ser.currentText()
@@ -163,7 +158,7 @@ class Ui_Dialog(object):
               D=sa[1]
               B=sa[2]
               r=sa[3]
-              doc=App.activeDocument()              
+            
               try:
                  obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
               except:
@@ -182,9 +177,7 @@ class Ui_Dialog(object):
               obj.dia=dia[key2] 
               ParamBallBrg.BallBrg(obj)
               obj.ViewObject.Proxy=0
-              App.ActiveDocument.recompute()  
-              Gui.ActiveDocument.ActiveView.fitAll() 
-              return
+
          elif key0=='Angular Ball Bearings':
               if series=='70': 
                    sa=RollingBrg_Data.Adim70[dia]
@@ -217,14 +210,7 @@ class Ui_Dialog(object):
               obj.dia=dia[key2] 
               ParamAngulaBallBrg.BallBrg(obj)
               obj.ViewObject.Proxy=0
-              App.ActiveDocument.recompute()  
-              Gui.ActiveDocument.ActiveView.fitAll() 
-              return
-         #elif key0=='Roller Bearings' :   
-         #     if series=='double-rowoutward':
-         #          sa=RollingBrg_Data.TRDia
-         #     elif series=='Self-aligning' :
-         #          sa=RollingBrg_Data.ADia 
+
          elif key0=='Tapered roller bearings':
              import importlib
              import sys
@@ -244,18 +230,69 @@ class Ui_Dialog(object):
                   import prt_data.RollBrg_data.CylindoricalRollerBrg
               return
 
-         fname=series+key0+str(dia)+'.FCStd' 
-         base=os.path.dirname(os.path.abspath(__file__))
-         joined_path = os.path.join(base, 'prt_data','RollBrg_data',fname) 
-         try:
-             doc=App.activeDocument()
-             Gui.ActiveDocument.mergeProject(joined_path)
-         except:
-             doc=App.newDocument()
-             Gui.ActiveDocument.mergeProject(joined_path)    
-         App.ActiveDocument.recompute()  
-         Gui.ActiveDocument.ActiveView.fitAll()  
-
+         doc = App.ActiveDocument
+         new_obj = doc.ActiveObject 
+           #'Assembly' オブジェクトを探して追加する
+         target_folder = doc.getObject('Assembly')
+         if target_folder:
+             target_folder.addObject(new_obj)
+             doc.recompute()
+         view = Gui.ActiveDocument.ActiveView
+         #obj.ViewObject.Visibility = True
+         sep = coin.SoSeparator()
+         trans = coin.SoTranslation()
+         sep.addChild(trans)
+         view.getSceneGraph().addChild(sep)
+         callbacks = {}
+         # -----------------------------
+         def move_cb(info):
+             pos = info["Position"]
+             p = view.getPoint(pos)
+             trans.translation.setValue(p)
+             obj.Placement.Base = p
+         
+         # -----------------------------
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # ★ 直接 finish() を呼ばない
+                 QtCore.QTimer.singleShot(0, finish)
+         
+         # -----------------------------
+         def key_cb(info):
+             if info.get("Key") == "ESCAPE":
+                 QtCore.QTimer.singleShot(0, cancel)
+         
+         # -----------------------------
+         def finish():
+             try:
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 view.removeEventCallback("SoKeyboardEvent", callbacks["key"])
+             except:
+                 pass
+         
+             #obj.ViewObject.Visibility = True
+         
+             try:
+                 view.getSceneGraph().removeChild(sep)
+             except:
+                 pass
+         
+             App.ActiveDocument.recompute()
+         
+         # -----------------------------
+         def cancel():
+             finish()
+             try:
+                 App.ActiveDocument.removeObject(obj.Name)
+             except:
+                 pass
+         
+         # -----------------------------
+         callbacks["move"]  = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+         callbacks["key"]   = view.addEventCallback("SoKeyboardEvent", key_cb)
+ 
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
