@@ -291,7 +291,6 @@ class Ui_Dialog(object):
              if selected_object.TypeId == "App::Part":
                  parts_group = selected_object
                  for obj in parts_group.Group:
-                     #print(obj.Label)
                      if obj.Label[:4]=='worm':
                          worm=obj
                      elif obj.Label[:5]=='wheel':
@@ -320,7 +319,6 @@ class Ui_Dialog(object):
 
                          w0=round(2*M*(Qv+1)**0.5+1.5*M,1)
                          self.le_Bw.setText(str(w0)) 
-                         #self.le_Bw.setReadOnly(True)
                          self.le_Bdia.setText(spreadsheet.getContents('Bdia'))  
                          self.le_BB.setText(spreadsheet.getContents('BB')) 
                          self.le_a.setText(spreadsheet.getContents('a')) 
@@ -342,13 +340,11 @@ class Ui_Dialog(object):
                          self.label_L1.setText(str(a))
     
     def setIchi(self):
-
         r1 = self.spinBox_ichi.value()
         worm.Placement.Rotation=App.Rotation(App.Vector(1,0,0),10*r1)
         App.ActiveDocument.recompute()
     
     def spinMove(self):
-         print(key2)
          N1=self.label_N1.text()
          N2=self.label_N2.text()
          r1 = self.spinBox.value()
@@ -405,10 +401,56 @@ class Ui_Dialog(object):
               App.ActiveDocument.recompute()
    
     def create(self): 
+         doc=App.ActiveDocument
          fname=key+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Gear_data',fname) 
+         #Gui.ActiveDocument.mergeProject(joined_path)
+            # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+         
+         # マージ実行
          Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "wormAssy_A"  in o.Label or "wormAssy_A"  in o.Name:
+                 move_target = o
+                 break
+             elif "wormAssy_B"  in o.Label or "wormAssy_B"  in o.Name:
+                 move_target = o
+                 break
+              
+
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb) 
 
 class main():
         d = QtGui.QWidget()

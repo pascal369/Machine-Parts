@@ -214,21 +214,16 @@ class Ui_Dialog(object):
 
                  elif obj.Label[:5] =="mySht":
                      mySht = obj
-                 #elif obj.Label [:22]=="shtSpiralBevelGearAssy":
-                 #    mySht = obj    
-             #key=mySht.getContents('A2')
+
              self.comboBox_type.setCurrentText(key)
              fname=key+'.png'
              base=os.path.dirname(os.path.abspath(__file__))
              joined_path = os.path.join(base, "prt_data",'Gear_data',fname)
              self.label_6.setPixmap(QtGui.QPixmap(joined_path))              
              self.comboBox_type.setCurrentText(key)
-             #self.le_ax.setText(mySht.getContents('sigma'))
              self.comboBox_mod.setCurrentText(mySht.getContents('m0'))
              self.le_alpha.setText(mySht.getContents('alphan'))
-             #if key=='spiralBevelAssy':
              self.le_beta.setText(mySht.getContents('beta'))
-                 #self.comboBox_betaK.setCurrentText(mySht.getContents('betaK'))
 
              self.le_z1.setText(mySht.getContents('z1'))
              self.le_z2.setText(mySht.getContents('z2'))
@@ -249,7 +244,6 @@ class Ui_Dialog(object):
      else:
          return
     def setIchi(self):
-        #global A
         A=float(self.spinBox_Ichi.value())
         Pinion.Placement.Rotation=App.Rotation(App.Vector(1,0,0),A)
         self.spinBox.setValue(A)
@@ -275,8 +269,6 @@ class Ui_Dialog(object):
         alphan=float(self.le_alpha.text())
 
         beta=float(self.le_beta.text())
-        #betaK=self.comboBox_betaK.currentText()
-
         z1=float(self.le_z1.text())#歯数              
         z2=float(self.le_z2.text())#歯数  
         alphat=math.atan(math.tan(alphan/57.3)/math.cos(beta/57.3))*57.3
@@ -286,30 +278,7 @@ class Ui_Dialog(object):
         delta2=sigma-delta1
         R=pcd2/(2*math.sin(delta2/57.3))
         b=float(self.le_B.text())#歯幅
-        #if key=='spiralBevelAssy':
-        #    ha2=0.46*m0+0.39*m0/(z2*math.cos(delta1/57.3)/(z1*math.cos(delta2/57.3)))
-        #    ha1=1.7*m0-ha2
-        #    hf1=1.888*m0-ha1
-        #    hf2=1.888*m0-ha2
-        #    sita_f1=math.atan(hf1/R)*57.3
-        #    sita_f2=math.atan(hf2/R)*57.3
-        #    sita_a1=sita_f2
-        #    sita_a2=sita_f1
-        #    delta_a1=delta1+sita_a1
-        #    delta_a2=delta2+sita_a2
-        #    delta_f1=delta1-sita_f1
-        #    delta_f2=delta2-sita_f2
-        #    da1=pcd1+2*ha1*math.cos(delta1/57.3)
-        #    da2=pcd2+2*ha2*math.cos(delta2/57.3)
-        #    x1=R*math.cos(delta1/57.3)-ha1*math.sin(delta1/57.3)
-        #    x2=R*math.cos(delta2/57.3)-ha2*math.sin(delta2/57.3)
-        #    xb1=b*math.cos(delta_a1/57.3)/math.cos(sita_a1/57.3)
-        #    xb2=b*math.cos(delta_a2/57.3)/math.cos(sita_a2/57.3)
-        #    di1=da1-2*b*math.sin(delta_a1/57.3)/math.cos(sita_a1/57.3)
-        #    di2=da2-2*b*math.sin(delta_a2/57.3)/math.cos(sita_a2/57.3)
 
-
-        #elif key=='bevelAssy':
         ha1=m0    
         hf1=1.25*m0
         sita_f1=math.atan(hf1/R)*57.3
@@ -334,13 +303,9 @@ class Ui_Dialog(object):
         BB1=float(self.le_BB1.text())#ボス幅1 
         BB2=float(self.le_BB2.text())#ボス幅2
 
-        #mySht.set('sigma',str(sigma))
         mySht.set('m0',str(m0))
         mySht.set('alphan',str(alphan))
-        #if key=='spiralBevelAssy':
         mySht.set('beta',str(beta))
-        #    mySht.set('betaK',str(betaK))
-        #    mySht.set('alphat',str(alphat))
 
         mySht.set('z1',str(z1))
         mySht.set('z2',str(z2))
@@ -351,17 +316,7 @@ class Ui_Dialog(object):
         mySht.set('delta2',str(delta2))
         mySht.set('R',str(R))
         mySht.set('b',str(b))
-        #if key=='spiralBevelAssy':
-#
-        #    mySht.set('ha2',str(ha2))
-        #    mySht.set('ha1',str(ha1))
-        #    mySht.set('hf1',str(hf1)) 
-        #    mySht.set('hf2',str(hf2)) 
-        #    mySht.set('sita_f1',str(sita_f1))
-        #    mySht.set('sita_f2',str(sita_f2))
-        #    mySht.set('sita_a1',str(sita_a1))
-        #    mySht.set('sita_a2',str(sita_a2))
-        #elif key=='bevelAssy':  
+
         mySht.set('ha',str(ha1))
         mySht.set('hf',str(hf1))
         mySht.set('sita_f',str(sita_f1))
@@ -415,15 +370,53 @@ class Ui_Dialog(object):
         App.ActiveDocument.recompute() 
    
     def create(self): 
+         doc=App.ActiveDocument
          fname=key+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Gear_data',fname) 
-         try:
-            Gui.ActiveDocument.mergeProject(joined_path)
-         except:
-            doc=App.newDocument()
-            Gui.ActiveDocument.mergeProject(joined_path)
-         Gui.SendMsgToActiveView("ViewFit")   
+         
+          # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+         
+         # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "bevelAssy"  in o.Label or "bevelAssy"  in o.Name:
+                 move_target = o
+                 break
+               
+
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)    
 
 class main():
         d = QtGui.QWidget()
