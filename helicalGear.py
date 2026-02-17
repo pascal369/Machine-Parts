@@ -237,12 +237,11 @@ class Ui_Dialog(object):
              if selected_object.TypeId == "App::Part":
                  parts_group = selected_object
                  for obj in parts_group.Group:
-                     #print(obj.Label)
                      if obj.Label[:6]=='Pinion':
                          Pinion=obj
                      elif obj.Label[:4]=='Gear':
                          Gear=obj    
-                     elif obj.Label =="mySht":
+                     elif obj.TypeId == "Spreadsheet::Sheet":
                          mySht = obj
 
                          
@@ -266,7 +265,6 @@ class Ui_Dialog(object):
          else:
              print('Select the object!')
              return                
-
             
     def setIchi(self):
         global A
@@ -281,20 +279,14 @@ class Ui_Dialog(object):
              if N1=='***':
                  return
              N2=self.label_N2.text()
-             #A=self.spinBox_Ichi.value()/2
              r1 = self.spinBox.value()*3
              r2 =r1*float(N1)/float(N2)
-            
-             #A=float(N1)/360
-             #print(r1,r2)
              Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1-A)
              Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2)
          except:
              return
          App.ActiveDocument.recompute()
     def update(self):
-         
-         #try:
          m0=self.comboBox_mod.currentText()
          z1=self.le_N.text()
          z2=self.le_N2.text()
@@ -308,14 +300,9 @@ class Ui_Dialog(object):
          Bdia2=self.le_Bdia2.text()
          bb1=self.le_BB.text()
          bb2=self.le_BB2.text()
-         #App.ActiveDocument.recompute()
-         #return
          mySht.set('beta',beta) 
-         
          pcd1=float(m0)*float(z1)
          pcd2=float(m0)*float(z2)
-         #App.ActiveDocument.recompute()
-         #return
          mySht.set('m0',str(m0))
          mySht.set('z1',str(z1))
          mySht.set('z2',str(z2))
@@ -327,11 +314,9 @@ class Ui_Dialog(object):
          mySht.set('Bdia2',str(Bdia2))
          mySht.set('bb1',str(bb1))
          mySht.set('bb2',str(bb2))
-         
          self.label_M.setText(m0)
          self.label_N1.setText(z1)
          self.label_N2.setText(z2)
-         #return
          self.label_pcd1.setText(str(pcd1))
          self.label_pcd2.setText(str(pcd2))
          self.label_L1.setText(str(L1))
@@ -360,16 +345,22 @@ class Ui_Dialog(object):
          #latticeBeamというラベルを持つものを優先的に探す
          move_target = None
          for o in new_objs:
-             if "helicalAssy_A-B"  in o.Label[:15] or "helicalAssy_A-B"  in o.Name[:15]:
+             if "helicalAssy_A-B"  in o.Label or "helicalAssy_A-B"  in o.Name:
                  move_target = o
+                 break
              elif "helicalAssy_B-B"  in o.Label[:15] or "helicalAssy_B-B"  in o.Name[:15]:
                  move_target = o
+                 break
              elif "helicalAssy_B-C"  in o.Label[:15] or "helicalAssy_B-C"  in o.Name[:15]:
                  move_target = o
+                 break
              elif "helicalAssy_C-C"  in o.Label[:15] or "helicalAssy_C-C"  in o.Name[:15]:
                  move_target = o 
+                 break
              elif "helicalAssy_A-C"  in o.Label[:15] or "helicalAssy_A-C"  in o.Name[:15]:
-                 move_target = o           
+                 move_target = o 
+                 break  
+
          # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
          if not move_target:
              move_target = new_objs[0]
