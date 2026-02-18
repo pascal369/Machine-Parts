@@ -215,11 +215,12 @@ class Ui_Dialog(object):
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+        QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.AssyCulc)
         QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.setClear)
 
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
 
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
@@ -521,9 +522,11 @@ class Ui_Dialog(object):
         global pcd2
         global pitch
 
-        N1=self.label_N1.text()
-        N2=self.label_N2.text()
+        #N1=self.label_N1.text()
+        #N2=self.label_N2.text()
         #pitch=self.label_pitch1.text()
+        N1=self.comboBox_N.currentText()
+        N2=self.comboBox_N2.currentText()
         pitch=shtSproP.getContents('p0')
         Lc=self.le_Lp.text()
         shtAssy.set('CLp',Lc)
@@ -547,9 +550,13 @@ class Ui_Dialog(object):
         Lp=round(Lp,2)
         Lj=int(Lp)
 
+
         self.label_Linkp.setText(str(Lp))
         self.label_Linkj.setText(str(Lj))
         self.label_Lj.setText(str(Lc))
+
+        self.label_N1.setText(N1)
+        self.label_N2.setText(N2)
 
 
         self.label_k1.setText(str(k1))
@@ -717,16 +724,53 @@ class Ui_Dialog(object):
              App.ActiveDocument.recompute() 
 
     def create(self): 
+         doc=App.ActiveDocument
          shp=self.comboBox_shape.currentText()
          fname='Sprocket_'+shp+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Spro_data',fname) 
-         try:
-            Gui.ActiveDocument.mergeProject(joined_path)
-         except:
-            doc=App.newDocument()
-            Gui.ActiveDocument.mergeProject(joined_path)
-         Gui.SendMsgToActiveView("ViewFit")    
+         
+            # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+         
+         # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "sprAssy"  in o.Label or "sprAssy"  in o.Name:
+                 move_target = o
+                      
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+  
 
 class main():
         d = QtGui.QWidget()
