@@ -20,7 +20,7 @@ from PySide import QtCore
 sprType=['ANSI25','ANSI35','ANSI40','ANSI50','ANSI60','ANSI80','ANSI100','ANSI120',
            'ANSI140','ANSI160','ANSI180','ANSI200','ANSI240',]
 sprType2=['ANSI50','ANSI60','ANSI80','ANSI100','ANSI120']
-sprShape=['Assy_1B_1B','Assy_1B_1C','Assy_1C_1C']
+sprShape=['Assy_1B_1B','Assy_1B_1C','Assy_1C_1C',]
 
 sprTeeth=[i for i in range(9,75)]
 string_list = [str(element) for element in sprTeeth]
@@ -215,12 +215,11 @@ class Ui_Dialog(object):
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
-        QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.AssyCulc)
         QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.setClear)
 
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
-        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
+        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
 
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
@@ -254,12 +253,7 @@ class Ui_Dialog(object):
         global sx
         key=self.comboBox_shape.currentText()
         N0=self.comboBox_N.currentText()
-
         key2= self.comboBox_shape.currentText()
-        #fname='Sprocket_'+key2+'.png'
-        #base=os.path.dirname(os.path.abspath(__file__))
-        #joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-        #self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
         
         for k in range(2):
             try:
@@ -522,11 +516,9 @@ class Ui_Dialog(object):
         global pcd2
         global pitch
 
-        #N1=self.label_N1.text()
-        #N2=self.label_N2.text()
+        N1=self.label_N1.text()
+        N2=self.label_N2.text()
         #pitch=self.label_pitch1.text()
-        N1=self.comboBox_N.currentText()
-        N2=self.comboBox_N2.currentText()
         pitch=shtSproP.getContents('p0')
         Lc=self.le_Lp.text()
         shtAssy.set('CLp',Lc)
@@ -550,24 +542,15 @@ class Ui_Dialog(object):
         Lp=round(Lp,2)
         Lj=int(Lp)
 
-
         self.label_Linkp.setText(str(Lp))
         self.label_Linkj.setText(str(Lj))
         self.label_Lj.setText(str(Lc))
-
-        self.label_N1.setText(N1)
-        self.label_N2.setText(N2)
 
 
         self.label_k1.setText(str(k1))
         shtAssy.set('CLp',Lc)
         self.comboBox_shape.setCurrentText('sproAssy')
-
-        #key2= self.comboBox_shape.currentText()
-        #fname='Sprocket_'+key2+'.png'
-        #base=os.path.dirname(os.path.abspath(__file__))
-        #joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-        #self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+        
         App.ActiveDocument.recompute() 
     def update(self):
          global b0
@@ -615,10 +598,16 @@ class Ui_Dialog(object):
                  N1=N0
                  pcd1=int(float(p0)/(math.sin(3.142/float(N0))))
                  shtAssy.set('Teeth1',N1)
+                 shtAssy.set('pcd1',str(pcd1))
+                 self.label_pcd1.setText(str(pcd1))
+                 self.label_N1.setText(N1)
              elif sht_X.Label=='shtSproG':
                  N2=N0
                  pcd2=int(float(p0)/(math.sin(3.142/float(N0))))   
-                 shtAssy.set('Teeth2',N2) 
+                 shtAssy.set('Teeth2',N2)
+                 shtAssy.set('pcd2',str(pcd2))
+                 self.label_pcd2.setText(str(pcd2))
+                 self.label_N2.setText(N2)
              #タイプを選択
              for j in range(0,116):
                  type=self.comboBox_type.currentText()
@@ -729,8 +718,8 @@ class Ui_Dialog(object):
          fname='Sprocket_'+shp+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Spro_data',fname) 
-         
-            # --- インポート前のオブジェクトリストを取得 ---
+
+         # --- インポート前のオブジェクトリストを取得 ---
          old_obj_names = [o.Name for o in doc.Objects]
          
          # マージ実行
@@ -745,9 +734,17 @@ class Ui_Dialog(object):
          #latticeBeamというラベルを持つものを優先的に探す
          move_target = None
          for o in new_objs:
-             if "sprAssy"  in o.Label or "sprAssy"  in o.Name:
+             if "sprocketAssy_1B_1B"  in o.Label or "sprocketAssy_1B_1B"  in o.Name:
                  move_target = o
-                      
+                 break
+             elif "sprocketAssy_1B_1C"  in o.Label or "sprocketAssy_1B_1C"  in o.Name:
+                 move_target = o
+                 break
+             elif "sprocketAssy_1C_1C"  in o.Label or "sprocketAssy_1C_1C"  in o.Name:
+                 move_target = o
+                 break
+              
+
          # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
          if not move_target:
              move_target = new_objs[0]
@@ -769,8 +766,7 @@ class Ui_Dialog(object):
                  print("Placed: " + move_target.Label)
          # イベント登録
          callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
-         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
-  
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)    
 
 class main():
         d = QtGui.QWidget()
@@ -778,4 +774,6 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
-        
+        # 閉じるボタンを無効にする
+        #script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
+        #script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)
