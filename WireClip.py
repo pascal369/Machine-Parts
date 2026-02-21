@@ -136,9 +136,6 @@ class Ui_Dialog(object):
         #self.japan
 
     def update(self):
-        #c00 = Gui.Selection.getSelection()
-        #if c00:
-        #    obj = c00[0]
         key=self.comboBox_dia.currentText()
         for i in range(28,41):
              if key==spreadsheet.getContents('B'+str(i)):

@@ -126,57 +126,98 @@ class Ui_Dialog(object):
         self.comboBox_dia.setCurrentText(spreadsheet.getContents('B2'))
 
     def update(self):
-         key=self.comboBox_dia.currentText()
-         type=self.comboBox_type.currentText()
-         sa=RDim[key]
-         spreadsheet.set('B2',key)
-         spreadsheet.set('B3',str(sa[0]))#pitch
-         spreadsheet.set('B4',str(sa[1]))#h0
-         spreadsheet.set('B5',str(sa[2]))#t0
-         spreadsheet.set('B6',str(sa[3]))#w0
-         spreadsheet.set('B7',str(sa[4]))#d
-         spreadsheet.set('B8',str(sa[5]))#d2
-         spreadsheet.set('B9',str(sa[6]))#h1
-         spreadsheet.set('B10',str(sa[7]))#c0
-         #spreadsheet.set('A1',type)#type
-         App.ActiveDocument.recompute()
-
-    def create(self): 
+         try:
+             key=self.comboBox_dia.currentText()
+             type=self.comboBox_type.currentText()
+             sa=RDim[key]
+             spreadsheet.set('B2',key)
+             spreadsheet.set('B3',str(sa[0]))#pitch
+             spreadsheet.set('B4',str(sa[1]))#h0
+             spreadsheet.set('B5',str(sa[2]))#t0
+             spreadsheet.set('B6',str(sa[3]))#w0
+             spreadsheet.set('B7',str(sa[4]))#d
+             spreadsheet.set('B8',str(sa[5]))#d2
+             spreadsheet.set('B9',str(sa[6]))#h1
+             spreadsheet.set('B10',str(sa[7]))#c0
+             #spreadsheet.set('A1',type)#type
+             App.ActiveDocument.recompute()
+         except:
+             pass
+    def create(self):
+         doc=App.ActiveDocument
          type=self.comboBox_type.currentText()
          if type=='Outer Link':
              fname='OuterLink.FCStd'
          elif type=='Inner Link':
              fname='InnerLink.FCStd'
          elif type=='Offset Link':
-             fname='OffsetLink.FCStd'    
-        #elif type=='SprocketA':
-        #    import sprocketOnly
-        #elif type=='SprocketB':
-        #    Import sprocketOnly
-        #elif type=='SprocketC':
-        #    Import sprocketOnly
-        #elif type=='Outer Link2':
-        #    fname='OuterLink2.FCStd'
-        #elif type=='Inner Link2':
-        #    fname='InnerLink2.FCStd'
-        #elif type=='Offset Link2':
-        #    fname='OffsetLink2.FCStd'    
-        #elif type=='SprocketA2':
-        #    Import sprocketOnly
-        #elif type=='SprocketB2':
-        #    Import sprocketOnly 
-        #elif type=='SprocketC2':
-        #    Import sprocketOnly        
+             fname='OffsetLink.FCStd'  
+         elif type=='Outer Link2':
+             fname='OuterLink2.FCStd'
+         elif type=='Inner Link2':
+             fname='InnerLink2.FCStd'
+         elif type=='Offset Link2':
+             fname='OffsetLink2.FCStd'       
+       
          
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Chain_data','RollerChain',fname) 
 
-         try:
-            doc=App.activeDocument()
-            Gui.ActiveDocument.mergeProject(joined_path)
-         except:
-            doc=App.newDocument()
-            Gui.ActiveDocument.mergeProject(joined_path)
+         # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+         
+         # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "OuterLink"  in o.Label or "OuterLink"  in o.Name:
+                 move_target = o
+                 break
+             elif "InnerLink"  in o.Label or "InnerLink"  in o.Name:
+                 move_target = o
+                 break
+             elif "offsetLink"  in o.Label or "offsetLink"  in o.Name:
+                 move_target = o
+                 
+             elif "OuterLink2"  in o.Label or "OuterLink2"  in o.Name:
+               move_target = o
+               break               
+             elif "InnerLink2"  in o.Label or "InnerLink2"  in o.Name:
+                 move_target = o
+             elif "offsetLink2"  in o.Label or "offsetLink2"  in o.Name:
+                 move_target = o    
+               
+
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb) 
          
 class main():
         d = QtGui.QWidget()

@@ -406,7 +406,7 @@ class Ui_Dialog(object):
          fname='planetaryGears.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Gear_data',fname) 
-          # --- インポート前のオブジェクトリストを取得 ---
+         # --- インポート前のオブジェクトリストを取得 ---
          old_obj_names = [o.Name for o in doc.Objects]
          
          # マージ実行

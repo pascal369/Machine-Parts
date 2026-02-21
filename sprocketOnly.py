@@ -136,13 +136,13 @@ class Ui_Dialog(object):
         for k in range(2):
             try:
                 if k==0:
-                    shtSproB=shtSproB
+                    shtSpro=shtSpro
             except:
                 return         
             N_Lst=[]
             #タイプを選択
             for j in range(0,116):
-                type3=shtSproB.getContents(column_list[j]+str('18'))
+                type3=shtSpro.getContents(column_list[j]+str('18'))
                 type0=self.comboBox_type.currentText()
                 if type0==type3[1:]:
                     break
@@ -159,19 +159,19 @@ class Ui_Dialog(object):
                     sx=s+1    
                 elif key=='1A':
                     sx=s-2
-                key2=shtSproB.getContents(column_list[sx]+str('20'))
+                key2=shtSpro.getContents(column_list[sx]+str('20'))
                 if key==key2[1:]: 
                    break
             col_shp=sx 
             #歯数を設定 
             for i in range(21,57):
-                shp_cell=shtSproB.getContents(column_list[col_shp]+str(i))
+                shp_cell=shtSpro.getContents(column_list[col_shp]+str(i))
                 if shp_cell!='':
                     break
             col_N=i 
             N_Lst=[] 
             for i in range(col_N,57):
-                N_cell=shtSproB.getContents(column_list[col_type]+str(i))
+                N_cell=shtSpro.getContents(column_list[col_type]+str(i))
             string_list = [str(element) for element in N_Lst]
             N_Lst=string_list
             
@@ -179,28 +179,33 @@ class Ui_Dialog(object):
                  self.comboBox_N.clear()
                  self.comboBox_N.addItems(N_Lst)
             try:    
-                self.comboBox_N.setCurrentText(shtSproB.getContents('B7'))
+                self.comboBox_N.setCurrentText(shtSpro.getContents('B7'))
             except:
                 return
     
     def read_data(self):
-         global shtSproB
+         global shtSpro
          selection = Gui.Selection.getSelection()
          if selection:
             selected_object = selection[0]
             if selected_object.TypeId == "App::Part":
                 parts_group = selected_object
                 for obj in parts_group.Group:
-                    if obj.Label[:8]=='shtSproB':
-                        shtSproB=obj 
-                      
-                self.comboBox_type.setCurrentText(shtSproB.getContents('A2')[1:])  
-                self.comboBox_shape.setCurrentText(shtSproB.getContents('A1')[1:])
-                self.le_dia.setText(shtSproB.getContents('dia'))
-                N1=shtSproB.getContents('N0')
+                    if obj.Label[:8]=='shtSpro':
+                        shtSpro=obj 
+                    elif obj.Label[:8]=='shtSproA':
+                        shtSpro=obj
+                    elif obj.Label[:8]=='shtSproB':
+                        shtSpro=obj         
+                    elif obj.Label[:8]=='shtSproC':
+                        shtSpro=obj  
+                self.comboBox_type.setCurrentText(shtSpro.getContents('A2')[1:])  
+                self.comboBox_shape.setCurrentText(shtSpro.getContents('A1')[1:])
+                self.le_dia.setText(shtSpro.getContents('dia'))
+                N1=shtSpro.getContents('N0')
                 self.comboBox_N.setCurrentText(N1)
-                #pitch=shtSproB.getContents('p0')
-                #pcd=shtSproB.getContents('pcd')
+                #pitch=shtSpro.getContents('p0')
+                #pcd=shtSpro.getContents('pcd')
 
     def update(self):
          global b0
@@ -216,27 +221,27 @@ class Ui_Dialog(object):
                  dia=self.le_dia.text()  
              for i in range(3,15):
                  type=self.comboBox_type.currentText()
-                 type3=shtSproB.getContents('A'+str(i))
+                 type3=shtSpro.getContents('A'+str(i))
                  if type==type3[1:]:
                      break
              row_type=i 
-             p0=shtSproB.getContents('B'+str(row_type))
-             r0=shtSproB.getContents('C'+str(row_type))
-             t0=shtSproB.getContents('D'+str(row_type))
-             shtSproB.set('p0',p0)
-             if shtSproB.Label=='shtSproB':
+             p0=shtSpro.getContents('B'+str(row_type))
+             r0=shtSpro.getContents('C'+str(row_type))
+             t0=shtSpro.getContents('D'+str(row_type))
+             shtSpro.set('p0',p0)
+             if shtSpro.Label=='shtSpro':
                  N1=N0
                  pcd1=int(float(p0)/(math.sin(3.142/float(N0))))
-                 shtSproB.set('N0',N1)
+                 shtSpro.set('N0',N1)
              #タイプを選択
              for j in range(0,116):
                  type=self.comboBox_type.currentText()
-                 type3=shtSproB.getContents(column_list[j]+str('18'))
+                 type3=shtSpro.getContents(column_list[j]+str('18'))
                  if type==type3[1:]:
                      break
              col_type=j  
              for m in range(21,56):
-                  N1=shtSproB.getContents(column_list[col_type]+str(m))
+                  N1=shtSpro.getContents(column_list[col_type]+str(m))
                   try:
                       if float(N0)<=float(N1) : 
                           break 
@@ -256,37 +261,83 @@ class Ui_Dialog(object):
                      sx=s+1
                  elif key=='1A':
                     sx=s-2    
-                 key2=shtSproB.getContents(column_list[s]+str('20'))
+                 key2=shtSpro.getContents(column_list[s]+str('20'))
                  if key==key2[1:]: 
                     break
                  col_shp=sx 
-             D0=shtSproB.getContents(column_list[sx]+str(m)) 
+             D0=shtSpro.getContents(column_list[sx]+str(m)) 
              if D0=='':
                  return
              else: 
-                L0=shtSproB.getContents(column_list[sx+4]+str(m)) 
-             shtSproB.set('A2',type)
-             shtSproB.set('B2',p0)
-             shtSproB.set('C2',r0)
-             shtSproB.set('D2',t0)
-             shtSproB.set('E2',N0)
-             shtSproB.set('F2',D0)
-             shtSproB.set('G2',L0)  
-             shtSproB.set('H2',dia)  
-             shtSproB.set('type',type)
+                L0=shtSpro.getContents(column_list[sx+4]+str(m)) 
+             shtSpro.set('A2',type)
+             shtSpro.set('B2',p0)
+             shtSpro.set('C2',r0)
+             shtSpro.set('D2',t0)
+             shtSpro.set('E2',N0)
+             shtSpro.set('F2',D0)
+             shtSpro.set('G2',L0)  
+             shtSpro.set('H2',dia)  
+             shtSpro.set('type',type)
              App.ActiveDocument.recompute() 
 
     def create(self): 
+         doc=App.ActiveDocument
          shp=self.comboBox_shape.currentText()
          fname='Sprocket_'+shp+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Spro_data',fname) 
-         try:
-            Gui.ActiveDocument.mergeProject(joined_path)
-         except:
-            doc=App.newDocument()
-            Gui.ActiveDocument.mergeProject(joined_path)
-         Gui.SendMsgToActiveView("ViewFit")    
+        
+          # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+         
+         # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "Sprocket1A"  in o.Label or "Sprocket1A"  in o.Name:
+                 move_target = o
+                 break
+             elif "Sprocket1B"  in o.Label or "Sprocket1B"  in o.Name:
+                 move_target = o
+                 break
+             elif "Sprocket1C"  in o.Label or "Sprocket1C"  in o.Name:
+                 move_target = o
+                 break
+              
+
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb) 
+
+            
 
 class main():
         d = QtGui.QWidget()
