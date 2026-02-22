@@ -488,11 +488,15 @@ class Ui_Dialog(object):
                 obj = App.ActiveDocument.addObject("Part::FeaturePython",label)
                 obj.addProperty("App::PropertyEnumeration", "dia",label)
                 if key=='00':
+                    #print(st)
                     obj.dia=ScrData.size[3:]
                     i=self.comboBox_dia.currentIndex()
                     obj.dia=ScrData.size[i+3]
                     obj.addProperty("App::PropertyEnumeration", "st",label)
                     obj.st=ScrData.nut_st
+                    i=self.comboBox_standard.currentIndex()
+                    obj.st=ScrData.nut_st[i]
+                    
                 elif key=='08': 
                     obj.dia=ScrData.size[9:]
                     i=self.comboBox_dia.currentIndex()
