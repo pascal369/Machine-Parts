@@ -11,6 +11,8 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
+from pivy import coin
+from PySide2 import QtCore
 from shft_data import paramShaftBasic
 from shft_data import paramShaftKeyway
 from shft_data import paramShaftKey_2
@@ -509,10 +511,73 @@ class Ui_Dialog(object):
             else:    
                 paramShaftMeter.Meter(obj) 
 
-        obj.ViewObject.Proxy= 0  
-        Gui.activateWorkbench("DraftWorkbench")
-        Gui.Selection.addSelection(obj)
-        Gui.runCommand('Draft_Move',0)                
+        obj.ViewObject.Proxy= 0 
+
+        doc = App.ActiveDocument
+        new_obj = doc.ActiveObject 
+
+        #'Assembly' オブジェクトを探して追加する
+        target_folder = doc.getObject('Assembly')
+        if target_folder:
+            target_folder.addObject(new_obj)
+            doc.recompute()
+
+        view = Gui.ActiveDocument.ActiveView
+        obj.ViewObject.Visibility = True
+        sep = coin.SoSeparator()
+        trans = coin.SoTranslation()
+        sep.addChild(trans)
+        view.getSceneGraph().addChild(sep)
+        callbacks = {}
+        
+        # -----------------------------
+        def move_cb(info):
+            pos = info["Position"]
+            p = view.getPoint(pos)
+            trans.translation.setValue(p)
+            obj.Placement.Base = p
+        
+        # -----------------------------
+        def click_cb(info):
+            if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                # ★ 直接 finish() を呼ばない
+                QtCore.QTimer.singleShot(0, finish)
+        
+        # -----------------------------
+        def key_cb(info):
+            if info.get("Key") == "ESCAPE":
+                QtCore.QTimer.singleShot(0, cancel)
+        
+        # -----------------------------
+        def finish():
+            try:
+                view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                view.removeEventCallback("SoKeyboardEvent", callbacks["key"])
+            except:
+                pass
+        
+            obj.ViewObject.Visibility = True
+        
+            try:
+                view.getSceneGraph().removeChild(sep)
+            except:
+                pass
+        
+            App.ActiveDocument.recompute()
+        
+        # -----------------------------
+        def cancel():
+            finish()
+            try:
+                App.ActiveDocument.removeObject(obj.Name)
+            except:
+                pass
+        
+        # -----------------------------
+        callbacks["move"]  = view.addEventCallback("SoLocation2Event", move_cb)
+        callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+        callbacks["key"]   = view.addEventCallback("SoKeyboardEvent", key_cb)                
  
 class main():
         d = QtGui.QWidget()
