@@ -25,7 +25,8 @@ class BallBrg:
             Adim=RollingBrg_Data.Adim70
         elif series=='72':
             Adim=RollingBrg_Data.Adim72
-
+        elif series=='73':
+            Adim=RollingBrg_Data.Adim73
         sa=[]     
         sa=Adim[dia]
         d=sa[0]

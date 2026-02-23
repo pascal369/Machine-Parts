@@ -134,7 +134,7 @@ class Ui_Dialog(object):
                 parts_group = selected_object
                 for obj in parts_group.Group:
                     #print(obj.Label)
-                    if obj.Label =="mySht":
+                    if obj.Label[:5] =="mySht":
                         mySht = obj
             self.comboBox_type.setCurrentText(mySht.getContents('B1'))                
             self.comboBox_ser.setCurrentText(mySht.getContents('A1'))            
@@ -230,41 +230,68 @@ class Ui_Dialog(object):
         App.ActiveDocument.recompute()      
 
     def create(self):
-        #print(key)
-        key00=self.comboBox_type.currentText()
-        key=self.comboBox_ser.currentIndex()
-        if key00=='SingleRow':
-            #print(key)
-            if key==0:
-                fname='TaperedRollerBrg_SingleRow02.FCStd'
-            elif key==1:
-                fname='TaperedRollerBrg_SingleRow03.FCStd'
-        elif key00=='DoubleRow':
-            #print(key)
-            if key==0:
-                fname='TaperedRollerBrg_DoubleRow02.FCStd'
-            elif key==1:
-                fname='TaperedRollerBrg_DoubleRow03.FCStd'        
-        else:
-            #return
-            pass
-        base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, fname) 
-        #print(joined_path)
-        try:
-           Gui.ActiveDocument.mergeProject(joined_path)
-        except:
-           doc=App.newDocument()
-           Gui.ActiveDocument.mergeProject(joined_path)
+         doc=App.ActiveDocument
+         key00=self.comboBox_type.currentText()
+         key=self.comboBox_ser.currentIndex()
+         if key00=='SingleRow':
+             #print(key)
+             if key==0:
+                 fname='TaperedRollerBrg_SingleRow02.FCStd'
+             elif key==1:
+                 fname='TaperedRollerBrg_SingleRow03.FCStd'
+         elif key00=='DoubleRow':
+             #print(key)
+             if key==0:
+                 fname='TaperedRollerBrg_DoubleRow02.FCStd'
+             elif key==1:
+                 fname='TaperedRollerBrg_DoubleRow03.FCStd'        
+         else:
+             #return
+             pass
+         base=os.path.dirname(os.path.abspath(__file__))
+         joined_path = os.path.join(base, fname) 
+ 
+         # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+         
+         # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "TaperedRollerBrg_DoubleRow02"  in o.Label or "TaperedRollerBrg_DoubleRow02"  in o.Name:
+                 move_target = o
+         
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
 
-        #obj.addProperty("App::PropertyString", "JPN",'Base')
-        #obj.JPN=JPN
-#
-        #label='mass[kg]'
-        #obj.addProperty("App::PropertyEnumeration", "mass",label)
-        #obj.mass=g
-        #print('aaaaaaaaaaaaaaaaaaaaaaa')
-        return  
 
 class main():
         d = QtGui.QWidget()

@@ -24,7 +24,8 @@ class BallBrg:
             Bdim=RollingBrg_Data.Bdim60
         elif series=='62':
             Bdim=RollingBrg_Data.Bdim62  
-            
+        elif series=='63':
+            Bdim=RollingBrg_Data.Bdim63    
         sa=[]     
         sa=Bdim[dia]
         d=sa[0]
@@ -105,10 +106,10 @@ class BallBrg:
         
         try:
             obj.addProperty("App::PropertyString", "mass",label)
-            obj.mass=g0
+            obj.mass=str(g0)
             obj.ViewObject.Proxy=0
         except:
-            obj.mass=g0
+            obj.mass=str(g0)
             obj.ViewObject.Proxy=0
             pass  
         #print(g0)  

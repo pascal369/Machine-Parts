@@ -3,7 +3,6 @@ import os
 import sys
 import string
 import Import
-import Spreadsheet
 import DraftVecUtils
 import Sketcher
 import PartDesign
@@ -65,7 +64,6 @@ class Ui_Dialog(object):
         self.pushButton3.setGeometry(QtCore.QRect(145, 113, 80, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('Update',Dialog)
-        #self.pushButton2.setGeometry(QtCore.QRect(80, 110, 40, 22))
         self.pushButton2.setGeometry(QtCore.QRect(50,113,80,22))
         #png
         self.label_5 = QtGui.QLabel(Dialog)
@@ -75,16 +73,12 @@ class Ui_Dialog(object):
         pic='Cylindorical Roller Bearings.png'  
         base=os.path.dirname(os.path.abspath(__file__))
         joined_path = os.path.join(base,'png_data',pic)
-        #print(joined_path,'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
         self.label_5.setPixmap(QtGui.QPixmap(joined_path))
 
         self.comboBox_ser.addItems(RollingBrg_Data.CylSer)
         self.comboBox_dia.addItems(RollingBrg_Data.CylDia)
-
-        #self.comboBox_ser.setCurrentIndex(1)
         self.comboBox_ser.currentIndexChanged[int].connect(self.onSer)
         self.comboBox_ser.currentIndexChanged[int].connect(self.onDia)
-        #self.comboBox_ser.setCurrentIndex(0)
         
         self.comboBox_ser.setEditable(True)
 
@@ -114,28 +108,27 @@ class Ui_Dialog(object):
         except:
             obj.JPN=JPN
     def readData(self):
-        global spreadsheet
+        global mySht
         selection = Gui.Selection.getSelection()
         if selection:
             selected_object = selection[0]
             if selected_object.TypeId == "App::Part":
                 parts_group = selected_object
                 for obj in parts_group.Group:
-                    #print(obj.Label)
-                    if obj.TypeId =="Spreadsheet::Sheet":
-                        spreadsheet = obj
-            self.comboBox_ser.setCurrentText(spreadsheet.getContents('A1'))            
-            self.comboBox_dia.setCurrentText(spreadsheet.getContents('A3'))
-            #print(self.comBox_dia.CurrentText())
+                    if obj.Label[:5] =="mySht":
+                        mySht = obj
+            self.comboBox_ser.setCurrentText(mySht.getContents('A1'))            
+            self.comboBox_dia.setCurrentText(mySht.getContents('A3'))
          
     def onSer(self):
         c00 = Gui.Selection.getSelection()
         if c00:
             obj = c00[0]
         key0=self.comboBox_ser.currentText()
-        spreadsheet.set('A1',key0)
-        print(key0,'aaaaaaaaaaaaaaaaaa')
-        
+        try:
+            mySht.set('A1',key0)
+        except:
+            pass
     def onDia(self):
          global d
          global D
@@ -153,53 +146,85 @@ class Ui_Dialog(object):
          elif self.comboBox_ser.currentText()=='30':
              a=29
              b=53  
-         #spreadsheet.set('A1',self.comboBox_ser.currentText())
+         #mySht.set('A1',self.comboBox_ser.currentText())
          for i in range(a,b):
-             if key==spreadsheet.getContents('A'+str(i)):
-                 #print(i,key,spreadsheet.getContents('A'+str(i)))
-                 for i in range(a,b):
-                     if key==spreadsheet.getContents('A'+str(i)):
-                         listL=[]
-                         for j in range(0,8):
-                             listL.append(spreadsheet.getContents(column_list[j]+str(i)))
-                         d=listL[0]
-                         print(d)
-                         D=listL[1]
-                         B=listL[2]
-                         dr=listL[3]
-                         Dr=listL[4]
-                         r=listL[5]
-                         r1=listL[6]
-                         n=listL[7]
-         
+             try:
+                 if key==mySht.getContents('A'+str(i)):
+                     #print(i,key,mySht.getContents('A'+str(i)))
+                     for i in range(a,b):
+                         if key==mySht.getContents('A'+str(i)):
+                             listL=[]
+                             for j in range(0,8):
+                                 listL.append(mySht.getContents(column_list[j]+str(i)))
+                             d=listL[0]
+                             D=listL[1]
+                             B=listL[2]
+                             dr=listL[3]
+                             Dr=listL[4]
+                             r=listL[5]
+                             r1=listL[6]
+                             n=listL[7]
+             except:
+                 pass
     def upDate(self):
-        spreadsheet.set('d',d)
-        spreadsheet.set('D',D)
-        spreadsheet.set('B',B)
-        spreadsheet.set('dr',dr)
-        spreadsheet.set('Dr',Dr)
-        spreadsheet.set('r',r)
-        spreadsheet.set('r1',r1)
-        spreadsheet.set('n',n)
+        mySht.set('d',d)
+        mySht.set('D',D)
+        mySht.set('B',B)
+        mySht.set('dr',dr)
+        mySht.set('Dr',Dr)
+        mySht.set('r',r)
+        mySht.set('r1',r1)
+        mySht.set('n',n)
         App.ActiveDocument.recompute()      
 
     def create(self):
-        key=self.comboBox_ser.currentIndex()
-        #if key==0:
-        fname='CylindoricalRollerBrg_SingleRow20.FCStd'
-        #elif key==1:
-        #    fname='CylindoricalRollerBrg_SingleRow30.FCStd'    
-        #else:
-        #    return
-        base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, fname) 
-        #print(joined_path)
-        try:
-           Gui.ActiveDocument.mergeProject(joined_path)
-        except:
-           doc=App.newDocument()
-           Gui.ActiveDocument.mergeProject(joined_path)
-        return  
+         doc=App.ActiveDocument
+         fname='CylindoricalRollerBrg_SingleRow20.FCStd'
+         
+         base=os.path.dirname(os.path.abspath(__file__))
+         joined_path = os.path.join(base, fname) 
+ 
+         # --- インポート前のオブジェクトリストを取得 ---
+         old_obj_names = [o.Name for o in doc.Objects]
+         
+         # マージ実行
+         Gui.ActiveDocument.mergeProject(joined_path)
+         #doc.recompute() # 一旦再計算して内部IDを確定させる
+         # --- インポート後に増えたオブジェクトを特定 ---
+         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
+         
+         if not new_objs:
+             print("Error: オブジェクトが読み込まれませんでした。")
+             return
+         #latticeBeamというラベルを持つものを優先的に探す
+         move_target = None
+         for o in new_objs:
+             if "CylindricalRollerBrg_SingleRow"  in o.Label[:30] or "CylindricalRollerBrg_SingleRow"  in o.Name[:30]:
+                 move_target = o
+         
+         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
+         if not move_target:
+             move_target = new_objs[0]
+         view = Gui.ActiveDocument.ActiveView
+         callbacks = {}
+         def move_cb(info):
+             pos = info["Position"]
+             # 重要：ビュー平面上の3D座標を取得
+             p = view.getPoint(pos)
+             if move_target:
+                 move_target.Placement.Base = p
+                 #view.softRedraw()
+         def click_cb(info):
+             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
+                 # コールバック解除
+                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
+                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
+                 App.ActiveDocument.recompute()
+                 print("Placed: " + move_target.Label)
+         # イベント登録
+         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
+         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+
 
 class main():
         d = QtGui.QWidget()
