@@ -11,6 +11,8 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
+from pivy import coin
+from PySide2 import QtCore
 from scsft_data import paramscshaft
 DEBUG = True # set to True to show debug messages
 type=['0_shaft','1_blade']
@@ -24,21 +26,25 @@ class Ui_Dialog(object):
         #type
         self.type= QtGui.QLabel(Dialog)
         self.type.setGeometry(QtCore.QRect(10, 15, 50, 12))
+        self.type.setStyleSheet("color: black;")
         self.combo_type = QtGui.QComboBox(Dialog)
         self.combo_type.setGeometry(QtCore.QRect(80, 10, 70, 22))
         #screw pitch
         self.pitch = QtGui.QLabel(Dialog)
         self.pitch.setGeometry(QtCore.QRect(10, 40, 80, 12))
+        self.pitch.setStyleSheet("color: black;")
         self.le_pitch = QtGui.QLineEdit(Dialog)
         self.le_pitch.setGeometry(QtCore.QRect(80, 35, 69, 20))
         #L
         self.L = QtGui.QLabel(Dialog)
         self.L.setGeometry(QtCore.QRect(10, 65, 50, 12))
+        self.L.setStyleSheet("color: black;")
         self.le_L = QtGui.QLineEdit(Dialog)
         self.le_L.setGeometry(QtCore.QRect(80, 60, 69, 20))
         #L1
         self.L1 = QtGui.QLabel(Dialog)
         self.L1.setGeometry(QtCore.QRect(10, 90, 50, 12))
+        self.L1.setStyleSheet("color: black;")
         self.le_L1 = QtGui.QLineEdit(Dialog)
         self.le_L1.setGeometry(QtCore.QRect(80, 85, 69, 20))
         #L2
@@ -49,42 +55,50 @@ class Ui_Dialog(object):
         #D1
         self.D1 = QtGui.QLabel(Dialog)
         self.D1.setGeometry(QtCore.QRect(10, 140, 50, 12))
+        self.D1.setStyleSheet("color: black;")
         self.le_D1 = QtGui.QLineEdit(Dialog)
         self.le_D1.setGeometry(QtCore.QRect(80, 135, 69, 20))
         #D
         self.D = QtGui.QLabel(Dialog)
         self.D.setGeometry(QtCore.QRect(155, 15, 50, 12))
+        self.D.setStyleSheet("color: black;")
         self.le_D = QtGui.QLineEdit(Dialog)
         self.le_D.setGeometry(QtCore.QRect(200, 10, 69, 20))
         #d0
         self.d0 = QtGui.QLabel(Dialog)
         self.d0.setGeometry(QtCore.QRect(155, 40, 50, 12))
+        self.d0.setStyleSheet("color: black;")
         self.le_d0 = QtGui.QLineEdit(Dialog)
         self.le_d0.setGeometry(QtCore.QRect(200, 35, 69, 20))
         #d1
         self.d1 = QtGui.QLabel(Dialog)
         self.d1.setGeometry(QtCore.QRect(155, 65, 50, 12))
+        self.d1.setStyleSheet("color: black;")
         self.le_d1 = QtGui.QLineEdit(Dialog)
         self.le_d1.setGeometry(QtCore.QRect(200, 60, 69, 20))
         #l
         self.l = QtGui.QLabel(Dialog)
         self.l.setGeometry(QtCore.QRect(155, 90, 50, 12))
+        self.l.setStyleSheet("color: black;")
         self.le_l = QtGui.QLineEdit(Dialog)
         self.le_l.setGeometry(QtCore.QRect(200, 85, 69, 20))
         #t
         self.t = QtGui.QLabel(Dialog)
         self.t.setGeometry(QtCore.QRect(155, 115, 50, 12))
+        self.t.setStyleSheet("color: black;")
         self.le_t = QtGui.QLineEdit(Dialog)
         self.le_t.setGeometry(QtCore.QRect(200, 110, 69, 20))
         #h
         self.h = QtGui.QLabel(Dialog)
         self.h.setGeometry(QtCore.QRect(155, 140, 50, 12))
+        self.h.setStyleSheet("color: black;")
         self.le_h = QtGui.QLineEdit(Dialog)
         self.le_h.setGeometry(QtCore.QRect(200, 135, 69, 20))
 
         #checkbox
         self.checkbox = QtGui.QCheckBox(Dialog)
         self.checkbox.setGeometry(QtCore.QRect(80, 155, 150, 22))
+        self.checkbox.setStyleSheet("color: black;")
         self.checkbox.setObjectName("checkbox")
         #create
         self.pushButton = QtGui.QPushButton(Dialog)
@@ -205,12 +219,12 @@ class Ui_Dialog(object):
             obj.addProperty("App::PropertyBool",'RightHandThread',label).RightHandThread = False
         paramscshaft.ScSft(obj) 
         obj.ViewObject.Proxy=0
+
+        
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show() 
-        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd') 
-         # 閉じるボタンを無効にする
-        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)                 
+        
