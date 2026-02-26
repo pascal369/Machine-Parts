@@ -2,137 +2,150 @@
 import os
 import sys
 import Import
-#import ImportGui as Gui
 import Spreadsheet
+import DraftVecUtils
+import Sketcher
+import PartDesign
 import FreeCAD as App
 import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
-#from prt_data.CSnap_data import paramCSnap
+from prt_data.CSnap_data import paramCSnap
 
+parts=['グランドパッキン','ランタンリング','グランド押さえ']
 
+S_Width=['3','4','5','6','6.5','8','9.5','10','11','12.5','14.5',
+      '16','19','20','22','25']
+# D,      min,   max
+S_Dim={
+'3':(    3,      12, ),
+'4':(    4,      20, ),
+'5':(    5,      25, ),
+'6':(    8,      28, ),
+'6.5':(  8,      28, ),
+'8':(   12,      50, ),
+'9.5':( 18,      70, ),
+'10':(  18,      70, ),
+'11':(  18,      70, ),
+'12.5':(32,     125, ),
+'14.5':(32,     125, ),
+'16':(  56,     180, ),
+'19':(  90,     250, ),
+'20':( 125,     250, ),
+'22':( 125,     250, ),
+'25':( 125,     250, ),
+ }
+
+# 画面を並べて表示する
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(400, 150)
+        Dialog.resize(250, 350)
         Dialog.move(1000, 0)
+
+
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(130, 0, 250, 120))
+        self.label_6.setGeometry(QtCore.QRect(35, 140, 200, 200))
         self.label_6.setText("")
         
         base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, "prt_data",'Spring_data',"TensionSpring.png")
+        joined_path = os.path.join(base, "prt_data",'GlandP_data',"glandpackingAssy.png")
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))
+        
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
-        
-        #線径　dia
-        self.label_dia = QtGui.QLabel('Wire_dia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 13, 150, 12))
-        self.label_dia.setStyleSheet("color: black;")
-        self.lineEdit_dia = QtGui.QLineEdit('1.6',Dialog)
-        self.lineEdit_dia.setGeometry(QtCore.QRect(80, 15, 50, 20))
-        self.lineEdit_dia.setAlignment(QtCore.Qt.AlignCenter)
-        self.lineEdit_dia.setObjectName("Wire_dia")
-        
-        #ピッチ Pitch
-        self.label_Pitch = QtGui.QLabel('Pitch',Dialog)
-        self.label_Pitch.setGeometry(QtCore.QRect(10, 38, 150, 12))
-        self.label_Pitch.setStyleSheet("color: black;")
-        self.lineEdit_Pitch = QtGui.QLineEdit('2.0',Dialog)
-        self.lineEdit_Pitch.setGeometry(QtCore.QRect(80, 35, 50, 20))
-        self.lineEdit_Pitch.setAlignment(QtCore.Qt.AlignCenter)
-        self.lineEdit_Pitch.setObjectName("Pitch")
-        #コイル径 Coildia
-        self.label_coilDia = QtGui.QLabel('Coil_dia',Dialog)
-        self.label_coilDia.setGeometry(QtCore.QRect(10, 63, 150, 12))
-        self.label_coilDia.setStyleSheet("color: black;")
-        self.lineEdit_coilDia = QtGui.QLineEdit('10.0',Dialog)
-        self.lineEdit_coilDia.setGeometry(QtCore.QRect(80, 65, 50, 20))
-        self.lineEdit_coilDia.setAlignment(QtCore.Qt.AlignCenter)
-        self.lineEdit_coilDia.setObjectName("coilDia")
-        #巻き数 turns
-        self.label_Turns = QtGui.QLabel('Turns',Dialog)
-        self.label_Turns.setGeometry(QtCore.QRect(10, 88, 150, 12))
-        self.label_Turns.setStyleSheet("color: black;")
-        self.lineEdit_Turns = QtGui.QLineEdit('10.0',Dialog)
-        self.lineEdit_Turns.setGeometry(QtCore.QRect(80, 85, 50, 20))
-        self.lineEdit_Turns.setAlignment(QtCore.Qt.AlignCenter)
-        self.lineEdit_Turns.setObjectName("CoilHight")
 
+        #パッキン幅　packing width
+        self.label_S = QtGui.QLabel('gland Packing width',Dialog)
+        self.label_S.setGeometry(QtCore.QRect(40, 13, 130, 22))
+        self.label_S.setStyleSheet("color: black;")
+        self.comboBox_S = QtGui.QComboBox(Dialog)
+        self.comboBox_S.setGeometry(QtCore.QRect(150, 13, 60, 22))
+        self.comboBox_S.listIndex=11
+        self.comboBox_S.setEditable(True)
+        self.comboBox_S.lineEdit().setAlignment(QtCore.Qt.AlignCenter)
+        
+        #適用軸径shaft diameter
+        self.label_shaftdia = QtGui.QLabel('Applicable shaft dia',Dialog)
+        self.label_shaftdia.setGeometry(QtCore.QRect(40, 38, 200, 22))
+        self.label_shaftdia.setText("適用軸径 3～12")
+        self.label_shaftdia.setStyleSheet("color: black;")
+        #軸径
+        self.label_dia = QtGui.QLabel('shaft dia',Dialog)
+        self.label_dia.setGeometry(QtCore.QRect(40, 63, 100, 22))
+        self.label_dia.setStyleSheet("color: black;")
+        self.le_dia = QtGui.QLineEdit(Dialog)
+        self.le_dia.setGeometry(QtCore.QRect(150, 63, 60, 20))
+        self.le_dia.setAlignment(QtCore.Qt.AlignCenter)
+
+        
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(80, 120, 90, 22))
+        self.pushButton.setGeometry(QtCore.QRect(35, 95, 50, 22))
         #インポート
         self.pushButton4 = QtGui.QPushButton('Import',Dialog)
-        self.pushButton4.setGeometry(QtCore.QRect(170, 120, 90, 22))
+        self.pushButton4.setGeometry(QtCore.QRect(35, 120, 185, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(260, 120, 90, 22))
-       
+        self.pushButton2.setGeometry(QtCore.QRect(130, 95, 50, 22))
+        self.comboBox_S.addItems(S_Width)
 
-
-        
+        self.comboBox_S.setCurrentIndex(1)
+        self.comboBox_S.currentIndexChanged[int].connect(self.onWidth) 
+        self.comboBox_S.setCurrentIndex(0)
+        self.le_dia.setText('100')
+        QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.onImport)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
-        
-        QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.onImport)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
-
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "tensile coil spring", None))
+        Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Gland packing Assy", None))
         
-
-    
-
     def onImport(self):
         global spreadsheet
         selection = Gui.Selection.getSelection()
-        # Partsグループが選択されているかチェック
         if selection:
              selected_object = selection[0]
              if selected_object.TypeId == "App::Part":
-                 # Partsグループが選択されている場合の処理
                  parts_group = selected_object
-                 # Partsグループ内のオブジェクトを走査してスプレッドシートを探す
                  for obj in parts_group.Group:
                      if obj.TypeId == "Spreadsheet::Sheet":
-                         # スプレッドシートが見つかった場合の処理
                          spreadsheet = obj
 
-                         self.lineEdit_dia.setText(spreadsheet.getContents('Wire_dia'))  
-                         self.lineEdit_Pitch.setText(spreadsheet.getContents('Pitch'))  
-                         self.lineEdit_coilDia.setText(spreadsheet.getContents('Coil_dia'))  
-                         self.lineEdit_Turns.setText(spreadsheet.getContents('Turns')) 
-                         #print('bbbbbbbbbbbbbbbb')
+                         self.comboBox_S.setCurrentText(spreadsheet.getContents('s0'))  
+                         self.le_dia.setText(spreadsheet.getContents('d0'))  
 
-
+    def onWidth(self):
+        global dmin
+        global dmax
+        global S0
+        S0=self.comboBox_S.currentText()
+        sa=S_Dim[S0]
+        dmin=sa[0]
+        dmax=sa[1]
+        appDia='Applicable shaft dia'+str(dmin)+'～'+str(dmax)
+        self.label_shaftdia.setText(appDia)
+        #print(appDia)
+        self.le_dia.setText(str(dmin))
+        return    
+    
     def update(self):
 
-         dia=self.lineEdit_dia.text()
-         Pitch=self.lineEdit_Pitch.text()
-         Coil_dia=self.lineEdit_coilDia.text()
-         Turns=self.lineEdit_Turns.text()
-         
-         try:
-              
-            spreadsheet.set('B2',dia)
-            spreadsheet.set('B3',Pitch)
-            spreadsheet.set('B4',Coil_dia)
-            spreadsheet.set('B5',Turns)
-            App.ActiveDocument.recompute()
-         except:
-            pass    
+         dia=self.le_dia.text()
+         S0=self.comboBox_S.currentText()
+         spreadsheet.set('s0',str(S0))
+         spreadsheet.set('d0',dia)
+         App.ActiveDocument.recompute()
 
     def create(self): 
          doc=App.ActiveDocument
-         fname='TensionCoilSpring.FCStd'
+         fname='glandPackingAssy.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
-         joined_path = os.path.join(base, 'prt_data','Spring_data',fname) 
-         
+         joined_path = os.path.join(base, 'prt_data','GlandP_data',fname) 
+
          # --- インポート前のオブジェクトリストを取得 ---
          old_obj_names = [o.Name for o in doc.Objects]
           # マージ実行
@@ -147,7 +160,7 @@ class Ui_Dialog(object):
          #
          move_target = None
          for o in new_objs:
-             if "Spring"  in o.Label or "Spring"  in o.Name:
+             if "grandPackingAssy"  in o.Label or "grandPackingAssy"  in o.Name:
                  move_target = o
                  break
 
@@ -173,11 +186,13 @@ class Ui_Dialog(object):
          # イベント登録
          callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
          callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
+
+         
          
 class main():
         d = QtGui.QWidget()
         d.ui = Ui_Dialog()
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
-        d.show()   
+        d.show()  
         

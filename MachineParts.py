@@ -12,7 +12,7 @@ import FreeCAD, Part, math
 from math import pi
 
 buhin=['Wire rope','Rolling bearing','Plain bearing','GearAssy','driveChainAssy','Chain','Sprocket','Screws','Pins','Shaft','Snap Ring',
-       'Oil seal','Gland Packing','Spring','End Plate','Key Plate','Joint','Planar shape','One-touch window'
+       'Oil seal','Grand Packing','Spring','End Plate','Key Plate','Joint','Planar shape','One-touch window'
        ,'Handle','Chute','DumpCar']
 buhin_jpn=['ワイヤロープ','転がり軸受','すべり軸受','ギヤアセンブリ','駆動チェンアセンブリ','チェン','スプロケット','ねじ類','ピン類','軸','止め輪',
        'オイルシール','グランドパッキン','ばね','エンドプレート','キープレート','軸継手','平面形状','ワンタッチ窓'
@@ -32,7 +32,7 @@ joint=['Tube Split Joint','ChainCoupling']
 joint_jpn=['筒割形軸継手','チェンカップリング']
 Gear=['Helical gears','Worm Gear','Bevel gear','Planetary gears','Hypocycloidal gear']
 Gear_jpn=['ヘリカルギヤ','ウオームギヤ','ベベルギヤ','プラネタリーギヤ','ハイポサイクロイドギヤ']
-GlandP=['Gland Packing Assy',]
+GlandP=['Grand Packing Assy',]
 GlandP_jpn=['グランドパッキンアセンブリ',]
 pin=['Cotter Pin']
 pin_jpn=['コッターピン']
@@ -376,7 +376,7 @@ class Ui_Dialog(object):
         elif buhin=='Oil seal':
             self.comboBox_buhin2.hide()
             #return
-        elif buhin=='Gland Packing':
+        elif buhin=='Grand Packing':
             self.comboBox_buhin2.show()
             self.comboBox_buhin2.addItems(GlandP)
             #return
@@ -577,16 +577,14 @@ class Ui_Dialog(object):
              else:
                   importlib.reload(sys.modules['OilSeal'])
              return      
-         elif buhin=='Gland Packing':
-             if buhin2=='Gland Packing Assy':
-                 #import GlandpackingAssy 
-
+         elif buhin=='Grand Packing':
+             if buhin2=='Grand Packing Assy':
                  import importlib
                  import sys
-                 if 'GlandpackingAssy' not in sys.modules:
-                      import GlandpackingAssy 
+                 if 'GrandpackingAssy' not in sys.modules:
+                      import GrandpackingAssy 
                  else:
-                      importlib.reload(sys.modules['GlandpackingAssy'])
+                      importlib.reload(sys.modules['GrandpackingAssy'])
              return        
          elif buhin=='One-touch window':
              import importlib
