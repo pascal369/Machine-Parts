@@ -42,7 +42,7 @@ class Ui_Dialog(object):
         self.label_Pitch.setGeometry(QtCore.QRect(10, 38, 150, 12))
         self.label_Pitch.setStyleSheet("color: black;")
         self.lineEdit_Pitch = QtGui.QLineEdit('2.0',Dialog)
-        self.lineEdit_Pitch.setGeometry(QtCore.QRect(80, 35, 50, 20))
+        self.lineEdit_Pitch.setGeometry(QtCore.QRect(80, 37, 50, 20))
         self.lineEdit_Pitch.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_Pitch.setObjectName("Pitch")
         #コイル径 Coildia
@@ -50,7 +50,7 @@ class Ui_Dialog(object):
         self.label_coilDia.setGeometry(QtCore.QRect(10, 63, 150, 12))
         self.label_coilDia.setStyleSheet("color: black;")
         self.lineEdit_coilDia = QtGui.QLineEdit('10.0',Dialog)
-        self.lineEdit_coilDia.setGeometry(QtCore.QRect(80, 65, 50, 20))
+        self.lineEdit_coilDia.setGeometry(QtCore.QRect(80, 63, 50, 20))
         self.lineEdit_coilDia.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_coilDia.setObjectName("coilDia")
         #巻き数 turns
