@@ -29,7 +29,7 @@ brg_size=[
 
 nut_st=['Type1','Type2','Type3',]
 bolt_st1=['Hexagon',]
-bolt_st2=['Section1','Section2',]
+bolt_st2=['Section1',]
 bolt_st3=['All screw',]
 bolt_st4=['Type_L','Type_J',]
 bolt_st5=['Pan_head','Flat_head','Round_flat_head','Truss_screw','Binding_head','Round_screw',
