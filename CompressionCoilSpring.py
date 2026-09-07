@@ -10,7 +10,9 @@ from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
 from prt_data.CSnap_data import paramCSnap
-
+from pivy import coin
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QSlider
+from PySide6.QtCore import Qt
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -64,11 +66,12 @@ class Ui_Dialog(object):
         self.label_spin.setGeometry(QtCore.QRect(10, 105, 100, 22))
         self.label_spin.setStyleSheet("color: black;")
         self.spinBox=QtGui.QSpinBox(Dialog)
-        self.spinBox.setGeometry(75, 105, 100, 50)
+        self.spinBox.setGeometry(75, 105, 100, 22)
         self.spinBox.setMinimum(0.0)  # 最小値を0.0に設定
         self.spinBox.setMaximum(360.0)  # 最大値を100.0に設定
         self.spinBox.setValue(0.0)
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
+        
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
         self.pushButton.setGeometry(QtCore.QRect(10, 165, 60, 22))
@@ -81,6 +84,7 @@ class Ui_Dialog(object):
         self.pushButton3.setObjectName("pushButton3")
 
         self.spinBox.valueChanged[int].connect(self.spinMove) 
+        
        
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
@@ -96,7 +100,8 @@ class Ui_Dialog(object):
         if r1==spreadsheet.getContents('Pitch'):
             return
         spreadsheet.set('Pitch',str(r1))
-        App.ActiveDocument.recompute() 
+        App.ActiveDocument.recompute()
+        
     def onImport(self):
         global spreadsheet
         selection = Gui.Selection.getSelection()
@@ -118,14 +123,11 @@ class Ui_Dialog(object):
                          Pitch=spreadsheet.getContents('Pitch')
                          self.spinBox.setValue(float(Pitch))
     def update(self):
-         
          dia=self.lineEdit_dia.text()
-         #Pitch=self.lineEdit_Pitch.text()
          Coil_dia=self.lineEdit_coilDia.text()
          Turns=self.lineEdit_Turns.text()
          try:
             spreadsheet.set('B2',dia)
-            #spreadsheet.set('B3',Pitch)
             spreadsheet.set('B4',Coil_dia)
             spreadsheet.set('B5',Turns)
             App.ActiveDocument.recompute()
@@ -152,7 +154,7 @@ class Ui_Dialog(object):
          #
          move_target = None
          for o in new_objs:
-             if "spring"  in o.Label or "spring"  in o.Name:
+             if "Spring_compression"  in o.Label or "Spring_compression"  in o.Name:
                  move_target = o
                  break
 

@@ -37,7 +37,7 @@ class Ui_Dialog(object):
         Dialog.move(1000, 0)
         #和文
         self.pushButton_la = QtGui.QPushButton('JPN Text',Dialog)
-        self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 30, 22))
+        self.pushButton_la.setGeometry(QtCore.QRect(10, 10, 100, 22))
         self.le_la = QtGui.QLineEdit('すべり軸受',Dialog)
         self.le_la.setGeometry(QtCore.QRect(105, 10, 155, 22))
         self.le_la.setAlignment(QtCore.Qt.AlignCenter) 
@@ -52,14 +52,14 @@ class Ui_Dialog(object):
 
         #シリーズ　Series
         self.label_ser = QtGui.QLabel('Series(d*D)',Dialog)
-        self.label_ser.setGeometry(QtCore.QRect(10, 63, 120, 12))
+        self.label_ser.setGeometry(QtCore.QRect(10, 63, 120, 22))
         self.label_ser.setStyleSheet("color: gray;")
         self.comboBox_ser = QtGui.QComboBox(Dialog)
         self.comboBox_ser.setGeometry(QtCore.QRect(80, 63, 80, 22))
 
         #長さ
         self.label_length = QtGui.QLabel('Length(L)',Dialog)
-        self.label_length.setGeometry(QtCore.QRect(10, 90, 150, 12))
+        self.label_length.setGeometry(QtCore.QRect(10, 90, 150, 22))
         self.label_length.setStyleSheet("color: gray;")
         self.comboBox_length = QtGui.QComboBox(Dialog)
         self.comboBox_length.setGeometry(QtCore.QRect(80, 90, 80, 22))

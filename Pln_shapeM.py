@@ -10,7 +10,7 @@ import Draft
 import FreeCAD as App
 import FreeCADGui as Gui
 from pivy import coin
-from PySide2 import QtCore
+#from PySide2 import QtCore
 from pln_data import plndata
 from pln_data import ParamCircle
 from pln_data import ParamSemiCircle
@@ -51,14 +51,14 @@ class Ui_Dialog(object):
         Dialog.move(1000, 0)
         #shape
         self.shape = QtGui.QLabel('shapes',Dialog)
-        self.shape.setGeometry(QtCore.QRect(10, 15, 50, 12))
+        self.shape.setGeometry(QtCore.QRect(50, 15, 50, 12))
         self.shape.setStyleSheet("color: black;")
         self.combo_shape = QtGui.QComboBox(Dialog)
         self.combo_shape.setGeometry(QtCore.QRect(105, 10, 159, 22))
         
         #D
         self.lbl_D = QtGui.QLabel('D[mm]',Dialog)
-        self.lbl_D.setGeometry(QtCore.QRect(10, 65, 50, 12))
+        self.lbl_D.setGeometry(QtCore.QRect(50, 65, 50, 12))
         self.lbl_D.setStyleSheet("color: black;")
         self.le_D = QtGui.QLineEdit(Dialog)
         self.le_D.setGeometry(QtCore.QRect(105, 65, 50, 20))
@@ -74,7 +74,7 @@ class Ui_Dialog(object):
 
         #B
         self.lbl_B = QtGui.QLabel('B[mm]',Dialog)
-        self.lbl_B.setGeometry(QtCore.QRect(10, 95, 50, 12))
+        self.lbl_B.setGeometry(QtCore.QRect(50, 95, 50, 12))
         self.lbl_B.setStyleSheet("color: black;")
         self.le_B = QtGui.QLineEdit(Dialog)
         self.le_B.setGeometry(QtCore.QRect(105, 95, 50, 20))
@@ -90,7 +90,7 @@ class Ui_Dialog(object):
 
         #b1
         self.lbl_b1 = QtGui.QLabel('b1[mm]',Dialog)
-        self.lbl_b1.setGeometry(QtCore.QRect(10, 125, 50, 12))
+        self.lbl_b1.setGeometry(QtCore.QRect(50, 125, 50, 12))
         self.lbl_b1.setStyleSheet("color: black;")
         self.le_b1 = QtGui.QLineEdit(Dialog)
         self.le_b1.setGeometry(QtCore.QRect(105, 125, 50, 20))
@@ -106,7 +106,7 @@ class Ui_Dialog(object):
 
         #b2
         self.lbl_b2 = QtGui.QLabel('b2[mm]',Dialog)
-        self.lbl_b2.setGeometry(QtCore.QRect(10, 155, 50, 12))
+        self.lbl_b2.setGeometry(QtCore.QRect(50, 155, 50, 12))
         self.lbl_b2.setStyleSheet("color: black;")
         self.le_b2 = QtGui.QLineEdit(Dialog)
         self.le_b2.setGeometry(QtCore.QRect(105, 155, 50, 20))
@@ -122,7 +122,7 @@ class Ui_Dialog(object):
 
         #b3
         self.lbl_b3 = QtGui.QLabel('b3[mm]',Dialog)
-        self.lbl_b3.setGeometry(QtCore.QRect(10, 185, 50, 12))
+        self.lbl_b3.setGeometry(QtCore.QRect(50, 185, 50, 12))
         self.lbl_b3.setStyleSheet("color: black;")
         self.le_b3 = QtGui.QLineEdit(Dialog)
         self.le_b3.setGeometry(QtCore.QRect(105, 185, 50, 20))
@@ -138,7 +138,7 @@ class Ui_Dialog(object):
 
         #st
         self.lbl_st = QtGui.QLabel('θ[deg]',Dialog)
-        self.lbl_st.setGeometry(QtCore.QRect(10, 215, 70, 12))
+        self.lbl_st.setGeometry(QtCore.QRect(50, 215, 70, 12))
         self.lbl_st.setStyleSheet("color: black;")
         self.le_st = QtGui.QLineEdit(Dialog)
         self.le_st.setGeometry(QtCore.QRect(105, 215, 50, 20))
@@ -179,7 +179,6 @@ class Ui_Dialog(object):
 
         #img
         self.img = QtGui.QLabel(Dialog)
-
         self.img = QtGui.QLabel(Dialog)
         self.img.setGeometry(QtCore.QRect(30, 305, 250, 140))
         self.img.setText("")
@@ -224,6 +223,7 @@ class Ui_Dialog(object):
         #print(key)            
         if key==0:
             pic='0_circle.png'
+            print(pic) 
         elif key==1:
             pic='1_semi_circle.png'  
         elif key==2:
@@ -722,8 +722,17 @@ class Ui_Dialog(object):
         elif key==24:
             ParamChainCover.ChainCover(obj)
             obj.ViewObject.Proxy=0
-            FreeCAD.ActiveDocument.recompute()  
-          
+            
+
+        doc = App.ActiveDocument
+        new_obj = doc.ActiveObject 
+
+        #'Assembly' オブジェクトを探して追加する
+        target_folder = doc.getObject('Assembly')
+        if target_folder:
+            target_folder.addObject(new_obj)
+            doc.recompute()
+
         view = Gui.ActiveDocument.ActiveView
         obj.ViewObject.Visibility = True
         sep = coin.SoSeparator()
@@ -779,8 +788,7 @@ class Ui_Dialog(object):
         # -----------------------------
         callbacks["move"]  = view.addEventCallback("SoLocation2Event", move_cb)
         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)
-        callbacks["key"]   = view.addEventCallback("SoKeyboardEvent", key_cb)
-                
+        callbacks["key"]   = view.addEventCallback("SoKeyboardEvent", key_cb)         
         
 class Main():
         d = QtGui.QWidget()
@@ -788,4 +796,4 @@ class Main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()
-        
+       

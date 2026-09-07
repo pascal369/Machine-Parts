@@ -12,7 +12,7 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
-from PySide2 import QtCore
+#from PySide2 import QtCore
 #type=['plainBrg','rollingBrg',]
 type=['plainBrg',]
 plainBrg=['Ser500SP']

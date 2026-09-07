@@ -98,8 +98,6 @@ class Ui_Dialog(object):
         self.pushButton2 = QtGui.QPushButton(Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(140, 160, 60, 22))
 
-
-
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)

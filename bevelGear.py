@@ -153,11 +153,12 @@ class Ui_Dialog(object):
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
 
         
-        self.spinBox_Ichi=QtGui.QSpinBox(Dialog)
-        self.spinBox_Ichi.setGeometry(160, 560, 50, 50)
-        self.spinBox_Ichi.setMinimum(0.0)  # 最小値を0.0に設定
-        self.spinBox_Ichi.setMaximum(360.0)  # 最大値を100.0に設定
+        self.spinBox_Ichi = QtGui.QDoubleSpinBox(Dialog)
+        self.spinBox_Ichi.setGeometry(160, 560, 70, 50)
+        self.spinBox_Ichi.setMinimum(-360.0)  # 最小値
+        self.spinBox_Ichi.setMaximum(360.0)  # 最大値
         self.spinBox_Ichi.setValue(0.0)
+        self.spinBox_Ichi.setSingleStep(0.5)
         self.spinBox_Ichi.setAlignment(QtCore.Qt.AlignCenter)
 
         self.comboBox_type.addItems(sperType)
@@ -170,7 +171,7 @@ class Ui_Dialog(object):
         self.comboBox_type.setCurrentIndex(0)
 
         self.spinBox.valueChanged[int].connect(self.spinMove)
-        self.spinBox_Ichi.valueChanged[int].connect(self.setIchi) 
+        self.spinBox_Ichi.valueChanged[float].connect(self.setIchi) 
         
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
@@ -196,57 +197,56 @@ class Ui_Dialog(object):
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))    
     
     def setParts(self):
-     global Pinion
-     global Gear  
-     global mySht  
-     #global key
-     selection = Gui.Selection.getSelection()
-     if selection:
-         selected_object = selection[0]
-         if selected_object.TypeId == "App::Part":
-             parts_group = selected_object
-             for obj in parts_group.Group:
-                 #print(obj.Label)
-                 if obj.Label[:6]=='Pinion':
-                     Pinion=obj
-                 elif obj.Label[:4]=='Gear':
-                     Gear=obj    
+         global Pinion
+         global Gear  
+         global mySht  
+         #global key
+         selection = Gui.Selection.getSelection()
+         if selection:
+             selected_object = selection[0]
+             if selected_object.TypeId == "App::Part":
+                 parts_group = selected_object
+                 for obj in parts_group.Group:
+                     print(obj.Label)
+                     if obj.Label[:6]=='Pinion':
+                         Pinion=obj
+                     elif obj.Label[:4]=='Gear':
+                         Gear=obj    
 
-                 elif obj.Label[:5] =="mySht":
-                     mySht = obj
+                     elif obj.Label[:5] =="mySht":
+                         mySht = obj
 
-             self.comboBox_type.setCurrentText(key)
-             fname=key+'.png'
-             base=os.path.dirname(os.path.abspath(__file__))
-             joined_path = os.path.join(base, "prt_data",'Gear_data',fname)
-             self.label_6.setPixmap(QtGui.QPixmap(joined_path))              
-             self.comboBox_type.setCurrentText(key)
-             self.comboBox_mod.setCurrentText(mySht.getContents('m0'))
-             self.le_alpha.setText(mySht.getContents('alphan'))
-             self.le_beta.setText(mySht.getContents('beta'))
+                 self.comboBox_type.setCurrentText(key)
+                 fname=key+'.png'
+                 base=os.path.dirname(os.path.abspath(__file__))
+                 joined_path = os.path.join(base, "prt_data",'Gear_data',fname)
+                 self.label_6.setPixmap(QtGui.QPixmap(joined_path))              
+                 self.comboBox_type.setCurrentText(key)
+                 self.comboBox_mod.setCurrentText(mySht.getContents('m0'))
+                 self.le_alpha.setText(mySht.getContents('alphan'))
+                 self.le_beta.setText(mySht.getContents('beta'))
 
-             self.le_z1.setText(mySht.getContents('z1'))
-             self.le_z2.setText(mySht.getContents('z2'))
-             self.le_B.setText(mySht.getContents('b'))   
-             self.le_dia1.setText(mySht.getContents('dia1'))  
-             self.le_dia2.setText(mySht.getContents('dia2'))  
-             self.le_Bdia1.setText(mySht.getContents('Bdia1'))  
-             self.le_Bdia2.setText(mySht.getContents('Bdia2'))
-             self.le_BB1.setText(mySht.getContents('bb1')) 
-             self.le_BB2.setText(mySht.getContents('bb2'))   
-             self.le_beta.setText(mySht.getContents('beta'))   
-             fname=key+'.png'
-             base=os.path.dirname(os.path.abspath(__file__))
-             joined_path = os.path.join(base, "prt_data",'Gear_data',fname)
-             self.label_6.setPixmap(QtGui.QPixmap(joined_path))   
+                 self.le_z1.setText(mySht.getContents('z1'))
+                 self.le_z2.setText(mySht.getContents('z2'))
+                 self.le_B.setText(mySht.getContents('b'))   
+                 self.le_dia1.setText(mySht.getContents('dia1'))  
+                 self.le_dia2.setText(mySht.getContents('dia2'))  
+                 self.le_Bdia1.setText(mySht.getContents('Bdia1'))  
+                 self.le_Bdia2.setText(mySht.getContents('Bdia2'))
+                 self.le_BB1.setText(mySht.getContents('bb1')) 
+                 self.le_BB2.setText(mySht.getContents('bb2'))   
+                 self.le_beta.setText(mySht.getContents('beta'))   
+                 fname=key+'.png'
+                 base=os.path.dirname(os.path.abspath(__file__))
+                 joined_path = os.path.join(base, "prt_data",'Gear_data',fname)
+                 self.label_6.setPixmap(QtGui.QPixmap(joined_path))   
 
 
-     else:
-         return
+         else:
+             return
     def setIchi(self):
         A=float(self.spinBox_Ichi.value())
         Pinion.Placement.Rotation=App.Rotation(App.Vector(1,0,0),A)
-        self.spinBox.setValue(A)
 
         App.ActiveDocument.recompute()
     
@@ -260,9 +260,7 @@ class Ui_Dialog(object):
          A=-float(self.spinBox_Ichi.value())
          Pinion.Placement.Rotation=App.Rotation(App.Vector(1,0,0),3*(r1+A))
          Gear.Placement.Rotation=App.Rotation(App.Vector(0,0,1),-3*r2)
-                 
 
-    
     def update(self):
         sigma=90 #軸角
         m0=float(self.comboBox_mod.currentText())#モジュール   

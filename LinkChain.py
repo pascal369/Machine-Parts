@@ -63,7 +63,7 @@ class Ui_Dialog(object):
         self.le_sdia.setGeometry(QtCore.QRect(80, 61, 100, 22))
 
         #chainLength
-        self.label_cL = QtGui.QLabel('chainLength',Dialog)
+        self.label_cL = QtGui.QLabel('chain C to C',Dialog)
         self.label_cL.setGeometry(QtCore.QRect(10, 88, 150, 12))
         self.label_cL.setStyleSheet("color: black;")
         self.le_cL = QtGui.QLineEdit('2000',Dialog)

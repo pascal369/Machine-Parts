@@ -116,7 +116,7 @@ class Ui_Dialog(object):
         self.pushButton2 = QtGui.QPushButton(Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(140, 335, 60, 22))
         #インポートデータ
-        self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
+        self.pushButton3 = QtGui.QPushButton('Read Data',Dialog)
         self.pushButton3.setGeometry(QtCore.QRect(45, 360, 185, 22))
 
         #図形
@@ -141,21 +141,23 @@ class Ui_Dialog(object):
         self.label_spin2=QtGui.QLabel('Sun Set',Dialog)
         self.label_spin2.setGeometry(QtCore.QRect(95, 605, 150, 22))
         self.label_spin2.setStyleSheet("color: black;")
-        self.spinBox2=QtGui.QSpinBox(Dialog)
+        self.spinBox2=QtGui.QDoubleSpinBox(Dialog)
         self.spinBox2.setGeometry(95, 630, 75, 50)
         self.spinBox2.setMinimum(0.0)  # 最小値を0.0に設定
         self.spinBox2.setMaximum(360.0)  # 最大値を100.0に設定
         self.spinBox2.setValue(0.0)
+        self.spinBox2.setSingleStep(0.5)
         self.spinBox2.setAlignment(QtCore.Qt.AlignCenter)
         #Internal
         self.label_spin3=QtGui.QLabel('Internal Set',Dialog)
         self.label_spin3.setGeometry(QtCore.QRect(180, 605, 150, 22))
         self.label_spin3.setStyleSheet("color: black;")
-        self.spinBox3=QtGui.QSpinBox(Dialog)
+        self.spinBox3=QtGui.QDoubleSpinBox(Dialog)
         self.spinBox3.setGeometry(180, 630, 75, 50)
         self.spinBox3.setMinimum(0.0)  # 最小値を0.0に設定
         self.spinBox3.setMaximum(360.0)  # 最大値を100.0に設定
         self.spinBox3.setValue(0.0)
+        self.spinBox3.setSingleStep(0.5)
         self.spinBox3.setAlignment(QtCore.Qt.AlignCenter)
 
         self.comboBox_type.addItems(sperType)
@@ -170,8 +172,8 @@ class Ui_Dialog(object):
         self.comboBox_type.setCurrentIndex(0)
 
         self.spinBox.valueChanged[int].connect(self.spinMove)
-        self.spinBox2.valueChanged[int].connect(self.setIchi)
-        self.spinBox3.valueChanged[int].connect(self.setIchi2)
+        self.spinBox2.valueChanged[float].connect(self.setIchi)
+        self.spinBox3.valueChanged[float].connect(self.setIchi2)
                 
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.onCondition)
@@ -179,7 +181,7 @@ class Ui_Dialog(object):
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setIchi)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setIchi)
         QtCore.QObject.connect(self.pushButton_cd, QtCore.SIGNAL("pressed()"), self.onCondition)
         
         self.comboBox_mod.setCurrentText('2')
@@ -197,26 +199,23 @@ class Ui_Dialog(object):
         self.label_6.setPixmap(QtGui.QPixmap(joined_path))    
 
     def read_data(self):
+         global planetaryAssy
          global spreadsheet
          global planetary
-         global planetary001
-         global planetary002
-         global planetary003
+         global planetary2
+         global planetary3
          global sun
          global carrier
          global internal
          doc = App.ActiveDocument
          objects = doc.Objects
          for obj in objects:
-             #print(obj.Label)
              if obj.Label=='planetary':
                  planetary=obj
-             elif obj.Label=='planetary001':
-                 planetary001=obj 
-             elif obj.Label=='planetary002':
-                 planetary002=obj    
-             elif obj.Label=='planetary003':
-                 planetary003=obj 
+             elif obj.Label=='planetary2':
+                 planetary2=obj 
+             elif obj.Label=='planetary3':
+                 planetary3=obj    
              elif obj.Label=='sun':
                  sun=obj  
              elif obj.Label=='carrier':
@@ -225,6 +224,8 @@ class Ui_Dialog(object):
                  internal=obj          
              elif obj.Label[:6] =="shtPln":
                  spreadsheet = obj
+             elif obj.Label=='planetaryAssy':
+                 planetaryAssy=obj    
 
                  key2=self.comboBox_type.currentText()
                  self.comboBox_mod.setCurrentText(spreadsheet.getContents('m0'))
@@ -253,16 +254,6 @@ class Ui_Dialog(object):
 
      
     def setParts(self):
-     global sun
-     global sun01
-     global planetary
-     global planetary001
-     global planetary002
-     global planetary003
-     global internal
-     global carrier
-     global spreadsheet
-     
      doc = FreeCAD.activeDocument()
      if doc:
          group_names = []
@@ -287,12 +278,10 @@ class Ui_Dialog(object):
                     carrier=obj  
                 elif obj.Label=='planetary':
                     planetary=obj 
-                elif obj.Label=='planetary001':
-                    planetary001=obj   
-                elif obj.Label=='planetary002':
-                    planetary002=obj    
-                elif obj.Label=='planetary003':
-                    planetary003=obj        
+                elif obj.Label=='planetary2':
+                    planetary2=obj   
+                elif obj.Label=='planetary3':
+                    planetary3=obj    
                 elif obj.TypeId =="Spreadsheet::Sheet":
                     spreadsheet = obj  
 
@@ -320,39 +309,40 @@ class Ui_Dialog(object):
                     self.le_BB.setText(spreadsheet.getContents('bb_b')) 
                 elif key2=='internal':
                     self.le_z.setText(spreadsheet.getContents('zc'))
-                    self.le_t.setText(spreadsheet.getContents('tc'))            
+                    self.le_t.setText(spreadsheet.getContents('tc'))  
+         doc.recompute()                      
      else:
          return
      
     def setIchi(self):
-        global A
+#        global A
         A=self.spinBox2.value()
         sun.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
-        App.ActiveDocument.recompute()
+#        App.ActiveDocument.recompute()
 
     def setIchi2(self):
         global B
         B=self.spinBox3.value()
         internal.Placement.Rotation=App.Rotation(App.Vector(0,1,0),B)
-        App.ActiveDocument.recompute()
-
+        planetaryAssy.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-B) 
     
     def spinMove(self):
+         A=self.spinBox2.value()
          za=float(spreadsheet.getContents('za'))
          zc=float(spreadsheet.getContents('zc'))
          zb=(zc-za)/2
-         r1 = self.spinBox.value()*5
+         r1 = self.spinBox.value()*3
          sun.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1*(1+za/zc)+A)
          carrier.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1*za/zc)
          planetary.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r1*(za/zb))
-         App.ActiveDocument.recompute()
-    
+         planetary2.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r1*(za/zb))
+         planetary3.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r1*(za/zb))
+
     def update(self):
         mod=self.comboBox_mod.currentText()
         beta=self.le_beta.text()
         key2=self.comboBox_type.currentText()
         n=self.comboBox_N.currentText()
-        
 
         spreadsheet.set('m0',mod)
         spreadsheet.set('beta',beta)
@@ -412,6 +402,7 @@ class Ui_Dialog(object):
          # マージ実行
          Gui.ActiveDocument.mergeProject(joined_path)
          doc.recompute() # 一旦再計算して内部IDを確定させる
+
          # --- インポート後に増えたオブジェクトを特定 ---
          new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
          

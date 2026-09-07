@@ -114,7 +114,7 @@ class Ui_Dialog(object):
         self.pushButton2 = QtGui.QPushButton(Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(140, 285, 80, 22))
         #インポートデータ
-        self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
+        self.pushButton3 = QtGui.QPushButton('Read Data',Dialog)
         self.pushButton3.setGeometry(QtCore.QRect(45, 310, 185, 22))
 
         #図形
@@ -187,12 +187,12 @@ class Ui_Dialog(object):
         self.spinBox.setValue(0.0)
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
 
-        self.spinBox_Ichi=QtGui.QSpinBox(Dialog)
-        self.spinBox_Ichi.setGeometry(160, 640, 50, 50)
-        self.spinBox_Ichi.setMinimum(0.0)  # 最小値を0.0に設定
-        self.spinBox_Ichi.setMaximum(360.0)  # 最大値を100.0に設定
-        self.spinBox_Ichi.setValue(0.0)
-        self.spinBox_Ichi.setAlignment(QtCore.Qt.AlignCenter)
+#        self.spinBox_Ichi=QtGui.QSpinBox(Dialog)
+#        self.spinBox_Ichi.setGeometry(160, 640, 50, 50)
+#        self.spinBox_Ichi.setMinimum(0.0)  # 最小値を0.0に設定
+#        self.spinBox_Ichi.setMaximum(360.0)  # 最大値を100.0に設定
+#        self.spinBox_Ichi.setValue(0.0)
+#        self.spinBox_Ichi.setAlignment(QtCore.Qt.AlignCenter)
 
         self.comboBox_type.addItems(sperType)
         self.comboBox_type.setEditable(True)
@@ -204,14 +204,14 @@ class Ui_Dialog(object):
         self.comboBox_type.setCurrentIndex(0)
 
         self.spinBox.valueChanged[int].connect(self.spinMove)
-        self.spinBox_Ichi.valueChanged[int].connect(self.setIchi)
+        #self.spinBox_Ichi.valueChanged[int].connect(self.setIchi)
         
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setIchi)
+        #QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.setIchi)
         
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "helicalGear", None))
@@ -240,13 +240,12 @@ class Ui_Dialog(object):
                      if obj.Label[:6]=='Pinion':
                          Pinion=obj
                      elif obj.Label[:4]=='Gear':
-                         Gear=obj    
+                         Gear=obj 
                      elif obj.TypeId == "Spreadsheet::Sheet":
                          mySht = obj
-
-                         
                          self.comboBox_type.setCurrentText(mySht.getContents('A1'))
                          self.comboBox_mod.setCurrentText(mySht.getContents('m0'))
+                         self.le_beta.setText(mySht.getContents('beta')) 
                          self.le_N.setText(mySht.getContents('z1'))
                          self.le_N2.setText(mySht.getContents('z2'))
                          self.le_B.setText(mySht.getContents('b1')) 
@@ -257,36 +256,37 @@ class Ui_Dialog(object):
                          self.le_Bdia2.setText(mySht.getContents('Bdia2'))  
                          self.le_BB.setText(mySht.getContents('bb1')) 
                          self.le_BB2.setText(mySht.getContents('bb2')) 
-                         
-
                          self.label_M.setText(mySht.getContents('m0'))
                          self.label_N1.setText(mySht.getContents('z1'))
                          self.label_N2.setText(mySht.getContents('z2'))
          else:
-             print('Select the object!')
-             return                
-            
-    def setIchi(self):
-        global A
-        N1=self.label_N1.text()
-        A=self.spinBox_Ichi.value()/2
-        Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
-        App.ActiveDocument.recompute()
+#             print('Select the object!')
+             return 
+
+#    def setIchi(self):
+#        global A
+#        N1=self.label_N1.text()
+#        A=self.spinBox_Ichi.value()/2
+#        Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A)
+#        App.ActiveDocument.recompute()
     
     def spinMove(self):
-         try:
-             N1=self.label_N1.text()
-             if N1=='***':
-                 return
-             N2=self.label_N2.text()
-             r1 = self.spinBox.value()*3
-             r2 =r1*float(N1)/float(N2)
-             Pinion.Placement.Rotation=App.Rotation(App.Vector(0,1,0),r1-A)
-             Gear.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-r2)
-         except:
-             return
-         App.ActiveDocument.recompute()
+        angle = self.spinBox.value()*5
+        z1 = float(self.le_N.text())
+        z2 = float(self.le_N2.text())
+        Pinion.Placement.Rotation = App.Rotation(
+            App.Vector(0,1,0),
+            angle
+        )
+
+        Gear.Placement.Rotation = App.Rotation(
+             App.Vector(0,1,0),
+             self.base_phase - angle * float(z1) / float(z2)
+        )
+        App.ActiveDocument.recompute()        
+
     def update(self):
+         global pitch_angle
          m0=self.comboBox_mod.currentText()
          z1=self.le_N.text()
          z2=self.le_N2.text()
@@ -320,6 +320,19 @@ class Ui_Dialog(object):
          self.label_pcd1.setText(str(pcd1))
          self.label_pcd2.setText(str(pcd2))
          self.label_L1.setText(str(L1))
+
+         pitch_angle = 360.0 / float(z2)
+         if z1==z2:
+             self.base_phase = pitch_angle 
+         else:
+             self.base_phase = pitch_angle / 2
+                 
+
+         Gear.Placement.Rotation = App.Rotation(
+             App.Vector(0,1,0),
+             self.base_phase
+         )
+
          App.ActiveDocument.recompute()
    
     def create(self): 

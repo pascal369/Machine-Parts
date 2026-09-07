@@ -12,7 +12,7 @@ from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
 from pivy import coin
-from PySide2 import QtCore
+#from PySide2 import QtCore
 from shft_data import paramShaftBasic
 from shft_data import paramShaftKeyway
 from shft_data import paramShaftKey_2

@@ -48,11 +48,11 @@ class Ui_Dialog(object):
         self.spinBox.setMaximum(360.0)  # 最大値を100.0に設定
         self.spinBox.setValue(0.0)
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.comboBox_ichi = QtGui.QComboBox(Dialog)
-        self.comboBox_ichi.setGeometry(QtCore.QRect(180, 270, 50, 30))
+#        self.comboBox_ichi = QtGui.QComboBox(Dialog)
+#        self.comboBox_ichi.setGeometry(QtCore.QRect(180, 270, 50, 30))
         
         self.spinBox.valueChanged[int].connect(self.spinMove)
-        self.comboBox_ichi.currentIndexChanged[int].connect(self.setIchi) 
+#        self.comboBox_ichi.currentIndexChanged[int].connect(self.setIchi) 
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
@@ -101,10 +101,10 @@ class Ui_Dialog(object):
     def setParts(self):
      return
      
-    def setIchi(self):
-        A=float(self.comboBox_ichi.currentText())
-        self.spinBox.setValue(A)
-        App.ActiveDocument.recompute()
+#    def setIchi(self):
+#        A=float(self.comboBox_ichi.currentText())
+#        self.spinBox.setValue(A)
+#        App.ActiveDocument.recompute()
     def spinMove(self):
          try:
              z1=float(spreadsheet.getContents('z1'))

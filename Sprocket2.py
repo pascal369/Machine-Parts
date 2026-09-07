@@ -16,12 +16,11 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
-doc=App.ActiveDocument
 
 sprType=['ANSI25','ANSI35','ANSI40','ANSI50','ANSI60','ANSI80','ANSI100','ANSI120',
            'ANSI140','ANSI160','ANSI180','ANSI200','ANSI240',]
 sprType2=['ANSI50','ANSI60','ANSI80','ANSI100','ANSI120']
-sprShape=['Assy_1B_1B','Assy_1B_1C','Assy_1C_1C',]
+sprShape=['Assy_1B_1B','Assy_1B_1C','Assy_1C_1C']
 
 sprTeeth=[i for i in range(9,75)]
 string_list = [str(element) for element in sprTeeth]
@@ -48,165 +47,132 @@ class Ui_Dialog(object):
         #タイプ
         self.label_type = QtGui.QLabel('Type',Dialog)
         self.label_type.setGeometry(QtCore.QRect(10, 13, 100, 12))
-        self.label_type.setStyleSheet("color: black;")
         self.comboBox_type = QtGui.QComboBox(Dialog)
         self.comboBox_type.setGeometry(QtCore.QRect(110, 10, 100, 22))
         #形状
         self.label_shape = QtGui.QLabel('Shape',Dialog)
         self.label_shape.setGeometry(QtCore.QRect(10, 42, 100, 12))
-        self.label_shape.setStyleSheet("color: black;")
         self.comboBox_shape = QtGui.QComboBox(Dialog)
-        self.comboBox_shape.setGeometry(QtCore.QRect(110, 40, 100, 22))
+        self.comboBox_shape.setGeometry(QtCore.QRect(110, 35, 100, 22))
         #no1   no2
         self.label_L1 = QtGui.QLabel('no1',Dialog)
         self.label_L1.setGeometry(QtCore.QRect(120, 60, 100, 22))
-        self.label_L1.setStyleSheet("color: black;")
         self.label_L2 = QtGui.QLabel('no2',Dialog)
         self.label_L2.setGeometry(QtCore.QRect(170, 60, 100, 22))
-        self.label_L2.setStyleSheet("color: black;")
         #歯数
         self.label_N = QtGui.QLabel('No of Teeth',Dialog)
         self.label_N.setGeometry(QtCore.QRect(10, 85, 100, 12))
-        self.label_N.setStyleSheet("color: black;")
         self.comboBox_N = QtGui.QComboBox(Dialog)
-        self.comboBox_N.setGeometry(QtCore.QRect(110, 82, 50, 22))
+        self.comboBox_N.setGeometry(QtCore.QRect(110, 85, 50, 22))
         self.comboBox_N2 = QtGui.QComboBox(Dialog)
-        self.comboBox_N2.setGeometry(QtCore.QRect(162, 82, 50, 22))
+        self.comboBox_N2.setGeometry(QtCore.QRect(160, 85, 50, 22))
         #穴径
         self.label_dia = QtGui.QLabel('Hole Dia',Dialog)
-        self.label_dia.setGeometry(QtCore.QRect(10, 112, 100, 22))
-        self.label_dia.setStyleSheet("color: black;")
+        self.label_dia.setGeometry(QtCore.QRect(10, 110, 100, 22))
         self.le_dia = QtGui.QLineEdit('15',Dialog)
-        self.le_dia.setGeometry(QtCore.QRect(110, 112, 50, 22))
+        self.le_dia.setGeometry(QtCore.QRect(110, 110, 50, 20))
         self.le_dia.setAlignment(QtCore.Qt.AlignCenter)
         self.le_dia2 = QtGui.QLineEdit('35',Dialog)
-        self.le_dia2.setGeometry(QtCore.QRect(162, 112, 50, 22))
+        self.le_dia2.setGeometry(QtCore.QRect(160, 110, 50, 20))
         self.le_dia2.setAlignment(QtCore.Qt.AlignCenter)
 
         #作成
         self.pushButton = QtGui.QPushButton('Create',Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(40, 135, 60, 22))
+        self.pushButton.setGeometry(QtCore.QRect(50, 135, 60, 22))
         #更新
         self.pushButton2 = QtGui.QPushButton('upDate',Dialog)
-        self.pushButton2.setGeometry(QtCore.QRect(135, 135, 55, 22))
+        self.pushButton2.setGeometry(QtCore.QRect(140, 135, 60, 22))
         #データ読み込み
         self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
-        self.pushButton3.setGeometry(QtCore.QRect(40, 160, 185, 22))
+        self.pushButton3.setGeometry(QtCore.QRect(50, 160, 180, 22))
         #クリヤ
         self.pushButton4 = QtGui.QPushButton('Clear Data',Dialog)
-        self.pushButton4.setGeometry(QtCore.QRect(40, 185, 185, 22))
+        self.pushButton4.setGeometry(QtCore.QRect(50, 185, 180, 22))
         #図形
         self.label_6 = QtGui.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(25, 210, 200, 190))
+        self.label_6.setGeometry(QtCore.QRect(25, 195, 200, 200))
         self.label_6.setText("")
         self.label_6.setAlignment(QtCore.Qt.AlignCenter)
         self.label_6.setObjectName("label_6")
-        fname='Sprocket_Assy_1B_1B.png'
-        base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
         #中心距離
         self.label_L1 = QtGui.QLabel('Plan',Dialog)
         self.label_L1.setGeometry(QtCore.QRect(110, 400, 100, 22))
-        self.label_L1.setStyleSheet("color: black;")
         self.label_L2 = QtGui.QLabel('Judge',Dialog)
         self.label_L2.setGeometry(QtCore.QRect(160, 400, 100, 22))
-        self.label_L2.setStyleSheet("color: black;")
         self.label_L = QtGui.QLabel('centerDistance',Dialog)
         self.label_L.setGeometry(QtCore.QRect(10, 425, 100, 22))
-        self.label_L.setStyleSheet("color: black;")
         self.le_Lp = QtGui.QLineEdit('315',Dialog)
         self.le_Lp.setGeometry(QtCore.QRect(110, 425, 40, 20))
         self.le_Lp.setAlignment(QtCore.Qt.AlignCenter)
         self.label_Lj = QtGui.QLabel('***',Dialog)
         self.label_Lj.setGeometry(QtCore.QRect(160, 425, 40, 20))
         self.label_Lj.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_Lj.setStyleSheet("color: black;")
         #リンク数
         self.label_Link = QtGui.QLabel('No of Links',Dialog)
         self.label_Link.setGeometry(QtCore.QRect(10, 450, 100, 22))
-        self.label_Link.setStyleSheet("color: black;")
         self.label_Linkp = QtGui.QLabel('***',Dialog)
         self.label_Linkp.setGeometry(QtCore.QRect(110, 450, 40, 20))
         self.label_Linkp.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_Linkp.setStyleSheet("color: black;")
         self.label_Linkj = QtGui.QLabel('***',Dialog)
         self.label_Linkj.setGeometry(QtCore.QRect(160, 450, 40, 20))
         self.label_Linkj.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_Linkj.setStyleSheet("color: black;")
         #歯数
         self.label_Teeth1 = QtGui.QLabel('No1',Dialog)
         self.label_Teeth1.setGeometry(QtCore.QRect(110, 475, 100, 22))
-        self.label_Teeth1.setStyleSheet("color: black;")
         self.label_Teeth2 = QtGui.QLabel('No2',Dialog)
         self.label_Teeth2.setGeometry(QtCore.QRect(160, 475, 100, 22))
-        self.label_Teeth2.setStyleSheet("color: black;")
         self.label_Teeth = QtGui.QLabel('No of Teeth',Dialog)
         self.label_Teeth.setGeometry(QtCore.QRect(10, 500, 100, 22))
-        self.label_Teeth.setStyleSheet("color: black;")
         self.label_N1 = QtGui.QLabel('***',Dialog)
         self.label_N1.setGeometry(QtCore.QRect(110, 500, 40, 20))
         self.label_N1.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_N1.setStyleSheet("color: black;")
         self.label_N2 = QtGui.QLabel('***',Dialog)
         self.label_N2.setGeometry(QtCore.QRect(160, 500, 40, 20))
         self.label_N2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_N2.setStyleSheet("color: black;")
         #pitch
         self.label_pitch = QtGui.QLabel('chain pitch',Dialog)
         self.label_pitch.setGeometry(QtCore.QRect(10, 525, 100, 22))
-        self.label_pitch.setStyleSheet("color: black;")
         self.label_pitch1 = QtGui.QLabel('***',Dialog)
         self.label_pitch1.setGeometry(QtCore.QRect(110, 525, 90, 20))
         self.label_pitch1.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_pitch1.setStyleSheet("color: black;")
         #pcd
         self.label_pcd = QtGui.QLabel('pcd of Sprocket',Dialog)
         self.label_pcd.setGeometry(QtCore.QRect(10, 550, 100, 22))
-        self.label_pcd.setStyleSheet("color: black;")
         self.label_pcd1 = QtGui.QLabel('***',Dialog)
         self.label_pcd1.setGeometry(QtCore.QRect(110, 550, 40, 20))
         self.label_pcd1.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_pcd1.setStyleSheet("color: black;")
         self.label_pcd2 = QtGui.QLabel('***',Dialog)
         self.label_pcd2.setGeometry(QtCore.QRect(160, 550, 40, 20))
         self.label_pcd2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_pcd2.setStyleSheet("color: black;")
         #Angle of Sprocket
         self.label_k = QtGui.QLabel('Angle of Sprocket',Dialog)
         self.label_k.setGeometry(QtCore.QRect(10, 575, 100, 22))
-        self.label_k.setStyleSheet("color: black;")
         self.label_k1 = QtGui.QLabel('***',Dialog)
         self.label_k1.setGeometry(QtCore.QRect(110, 575, 90, 20))
         self.label_k1.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_k1.setStyleSheet("color: black;")
         #spinBox
         self.label_spin=QtGui.QLabel('Animation',Dialog)
         self.label_spin.setGeometry(QtCore.QRect(10, 605, 150, 22))
-        self.label_spin.setStyleSheet("color: black;")
         #spinBox
         self.spinBox=QtGui.QSpinBox(Dialog)
-        self.spinBox.setGeometry(80, 605, 70, 50)
-        self.spinBox.setMinimum(-9999)  # 最小値
-        self.spinBox.setMaximum(9999.0)  # 最大値
+        self.spinBox.setGeometry(100, 605, 50, 50)
+        self.spinBox.setMinimum(0.0)  # 最小値を0.0に設定
+        self.spinBox.setMaximum(100.0)  # 最大値を100.0に設定
         self.spinBox.setValue(100.0)
-        
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
         #base
         self.label_kiten = QtGui.QLabel('Base',Dialog)
         self.label_kiten.setGeometry(QtCore.QRect(10, 665, 100, 22))
-        self.label_kiten.setStyleSheet("color: black;")
         self.le_kiten = QtGui.QLineEdit('100',Dialog)
         self.le_kiten.setGeometry(QtCore.QRect(110, 665, 100, 20))
         self.le_kiten.setAlignment(QtCore.Qt.AlignCenter)
 
         #sprocket調節
-        self.spinBox2=QtGui.QDoubleSpinBox(Dialog)
-        self.spinBox2.setGeometry(150, 605, 70, 50)
-        self.spinBox2.setMinimum(-100.0)  # 最小値
-        self.spinBox2.setMaximum(100.0)  # 最大値
+        self.spinBox2=QtGui.QSpinBox(Dialog)
+        self.spinBox2.setGeometry(170, 605, 50, 50)
+        self.spinBox2.setMinimum(-100.0)  # 最小値を0.0に設定
+        self.spinBox2.setMaximum(100.0)  # 最大値を100.0に設定
         self.spinBox2.setValue(0.0)
-        self.spinBox2.setSingleStep(0.5)
         self.spinBox2.setAlignment(QtCore.Qt.AlignCenter)
 
         self.comboBox_type.addItems(sprType)
@@ -217,39 +183,46 @@ class Ui_Dialog(object):
         self.comboBox_N2.setEditable(True)
 
         QtCore.QObject.connect(self.pushButton, QtCore.SIGNAL("pressed()"), self.create)
-        QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
+        #QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         QtCore.QObject.connect(self.pushButton4, QtCore.SIGNAL("pressed()"), self.setClear)
 
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.onType)
         QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.read_data)
-        QtCore.QObject.connect(self.pushButton3, QtCore.SIGNAL("pressed()"), self.update)
+        QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
 
         self.comboBox_type.currentIndexChanged[int].connect(self.onType)
+        
         self.comboBox_shape.setCurrentIndex(1)
-        self.comboBox_shape.currentIndexChanged[int].connect(self.onShape)
+        self.comboBox_shape.currentIndexChanged[int].connect(self.onType)
         self.comboBox_shape.setCurrentIndex(0)
+
         self.comboBox_N.setCurrentText('30')
         self.comboBox_N2.setCurrentText('40')
+
         self.spinBox.valueChanged[int].connect(self.spinMove)
-        self.spinBox2.valueChanged[float].connect(self.setIchi) 
+
+        self.spinBox2.valueChanged[int].connect(self.setIchi) 
+
         self.le_kiten.textChanged.connect(self.update_kiten)
+
+        
         self.retranslateUi(Dialog)
         
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QtGui.QApplication.translate("Dialog", "Sprocket", None))
-    def onShape(self):
-        pic=self.comboBox_shape.currentText()
-        fname='Sprocket_' + pic + '.png'
-        base=os.path.dirname(os.path.abspath(__file__))
-        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
-        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+ 
     def onType(self):
         global N_Lst
         global sx
         key=self.comboBox_shape.currentText()
         N0=self.comboBox_N.currentText()
         key2= self.comboBox_shape.currentText()
+        fname='Sprocket_'+key2+'.png'
+        base=os.path.dirname(os.path.abspath(__file__))
+        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
+        
         for k in range(2):
             try:
                 if k==0:
@@ -267,6 +240,8 @@ class Ui_Dialog(object):
                 if type0==type3[1:]:
                     break
             col_type=j 
+            #print(col_type)
+            #D0 形状を選択 
             
             if key2=='Assy_1B_1B':
                 for p in range(2):
@@ -333,22 +308,21 @@ class Ui_Dialog(object):
                 return
         
     def spinMove(self):
-         Pitch=float(self.label_pitch1.text())
-         A=b0-self.spinBox.value()
-         beta1=360/float(N1)
-         beta2=360/float(N2)
-         x=5
-         sproP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
-         sproG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
-         if A==0:
+         try:
+             Pitch=float(self.label_pitch1.text())
+             A=self.spinBox.value()
+             beta1=360/float(N1)
+             beta2=360/float(N2)
+             x=5
+             #print(N1,N2,beta1)
+             sproP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta1/x)
+             sproG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A*beta2/x)
+             #print(A,Pitch,x)
+             if A==0:
+                 return
+             self.le_kiten.setText(str(round(A*Pitch/x,3)))
+         except:
              return
-         self.le_kiten.setText(str((A*Pitch/x)))
-         kiten=self.le_kiten.text()
-         CLj=shtAssy.getContents('CLj')
-         doc.recompute()
-         if float(kiten)>float(CLj):
-             return
-         
 
     def update_kiten(self):
         kiten=self.le_kiten.text()
@@ -368,21 +342,23 @@ class Ui_Dialog(object):
                              sP = obj
                          elif obj.Label[:7]=='sG':
                              sG = obj    
+
                      try:
                          
                          if selected_object.Label=='sproP' :
-                             A0=float(self.spinBox2.value())
+                             A0=float(self.spinBox2.value())*0.5
                              sP.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A0)
                              shtAssy.set('spr1',str(A0))
                              App.ActiveDocument.recompute() 
                          elif selected_object.Label=='sproG' :
                              
-                             A1=float(self.spinBox2.value())
+                             A1=float(self.spinBox2.value())*0.5
                              sG.Placement.Rotation=App.Rotation(App.Vector(0,1,0),A1)  
                              shtAssy.set('spr2',str(A1))  
                              App.ActiveDocument.recompute() 
                      except:
                         return        
+                         
 
     def setClear(self):
         Gui.Selection.clearSelection()
@@ -433,8 +409,13 @@ class Ui_Dialog(object):
                 sht_X=shtAssy
                 self.comboBox_type.setCurrentText(sht_X.getContents('A2')[1:])  
                 self.comboBox_shape.setCurrentText(sht_X.getContents('A1')[1:])
+                #self.comboBox_N.setCurrentText(shtSproP.getContents('N0'))
+                #self.comboBox_N2.setCurrentText(shtSproG.getContents('N0'))
                 self.le_dia.setText(shtSproP.getContents('dia'))
                 self.le_dia2.setText(shtSproG.getContents('dia'))
+
+                #self.comboBox_shape.addItems(sprShape[:5])
+
                 self.comboBox_type.setCurrentText(shtAssy.getContents('B6')[1:])
                 Lc=shtAssy.getContents('CLp')
                 self.le_Lp.setText(Lc)
@@ -442,6 +423,7 @@ class Ui_Dialog(object):
                 N2=shtAssy.getContents('Teeth2')
                 self.comboBox_N.setCurrentText(N1)
                 self.comboBox_N2.setCurrentText(N2)
+                #print(N1,N2)
                 pitch=shtAssy.getContents('Pitch')
                 pcd1=shtAssy.getContents('pcd1')
                 pcd2=shtAssy.getContents('pcd2')
@@ -541,27 +523,27 @@ class Ui_Dialog(object):
         self.label_k1.setText(str(k1))
         shtAssy.set('CLp',Lc)
         self.comboBox_shape.setCurrentText('sproAssy')
-        
+        key2= self.comboBox_shape.currentText()
+        fname='Sprocket_'+key2+'.png'
+        base=os.path.dirname(os.path.abspath(__file__))
+        joined_path = os.path.join(base, "prt_data",'Spro_data',fname)
+        self.label_6.setPixmap(QtGui.QPixmap(joined_path)) 
         App.ActiveDocument.recompute() 
     def update(self):
-         global b0
+         
          global N0
          global row_N
          global col_type
          global col_shp
          global sx
-         b0=self.le_Lp.text()
-         b0=float(b0)/2
-         shtAssy.set('kiten',str(b0))
-         self.le_kiten.setText(str(b0))
-#         self.spinBox.setMaximum(b0)  # 最大値を100.0に設定
-#         self.spinBox2.setMinimum(1)  # 最小値を0.0に設定
-         self.spinBox.setValue(b0)
+         
          key=self.comboBox_shape.currentText()
-        
+         #print(key)
+         #if key!='sproAssy':
          for k in range(2):
              if k==0:
                  sht_X=shtSproP
+                 #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaa',sht_x.Label)
                  N0=self.comboBox_N.currentText()
                  dia=self.le_dia.text()  
              elif k==1:
@@ -569,36 +551,34 @@ class Ui_Dialog(object):
                  N0=self.comboBox_N2.currentText()
                  dia=self.le_dia2.text()  
              
+             #p0 r0 t0 E0を検索
              for i in range(3,15):
                  type=self.comboBox_type.currentText()
                  type3=sht_X.getContents('A'+str(i))
                  #print(type,type3)
                  if type==type3[1:]:
+                     print(type,type3[1:])
                      break
                  
              row_type=i 
              p0=sht_X.getContents('B'+str(row_type))
              r0=sht_X.getContents('C'+str(row_type))
              t0=sht_X.getContents('D'+str(row_type))
+             #E0=sht_X.getContents('J'+str(row_type))
              shtAssy.set('Pitch',p0)
              if sht_X.Label=='shtSproP':
                  N1=N0
                  pcd1=int(float(p0)/(math.sin(3.142/float(N0))))
                  shtAssy.set('Teeth1',N1)
-                 shtAssy.set('pcd1',str(pcd1))
-                 self.label_pcd1.setText(str(pcd1))
-                 self.label_N1.setText(N1)
              elif sht_X.Label=='shtSproG':
                  N2=N0
                  pcd2=int(float(p0)/(math.sin(3.142/float(N0))))   
-                 shtAssy.set('Teeth2',N2)
-                 shtAssy.set('pcd2',str(pcd2))
-                 self.label_pcd2.setText(str(pcd2))
-                 self.label_N2.setText(N2)
+                 shtAssy.set('Teeth2',N2) 
              #タイプを選択
              for j in range(0,116):
                  type=self.comboBox_type.currentText()
                  type3=sht_X.getContents(column_list[j]+str('18'))
+                 #print(type,type3)
                  if type==type3[1:]:
                      break
              col_type=j  
@@ -611,43 +591,42 @@ class Ui_Dialog(object):
                       pass    
              row_N=m  
              #D0 形状を選択 
+             #print(key,key2[1:])
              key2= self.comboBox_shape.currentText()
-             if key2=='Assy_1B_1B':
-                 if k==0:
-                     key='1B'
-                 elif k==1:
-                     key='1B'  
-             elif key2=='Assy_1B_1C':
-                 if k==0:
-                     key='1B'
-                 elif k==1:
-                     key='1C'    
-             elif key2=='Assy_1C_1C':
-                 if k==0:
-                     key='1C'
-                 elif k==1:
-                     key='1C'           
 
-                 for s in range(col_type,col_type+4):   
-                     print(col_type) 
-                     if key=='1B':
-                         sx=s-2
-                     elif key=='2B':
-                         sx=s-2
-                     elif key=='1C':
-                         sx=s
-                     elif key=='2C':
-                         sx=s+1
-                     key2=sht_X.getContents(column_list[s]+str('20'))
-                     if key==key2[1:]: 
-                        break
-                     col_shp=sx 
+             for p in range(2):
+                 if key2=='Assy_1B_1B':
+                     if p==0:
+                         key='1B'
+                     elif p==1:
+                         key='1B'    
+                 
+                     for s in range(col_type+1,col_type+4):
+                         #print(key,'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
+                         if key=='1B':
+                             sx=s-2
+                         elif key=='2B':
+                             sx=s-2
+                         elif key=='1C':
+                             sx=s
+                         elif key=='2C':
+                             sx=s+1
+                         #    sx=s-2
+                         key2=sht_X.getContents(column_list[s]+str('20'))
+                         #print(key,key2[1:])
+                         if key==key2[1:]: 
+                            print(sx,key,key2[1:])
+                            break
+                         col_shp=sx 
              
              D0=sht_X.getContents(column_list[sx]+str(m)) 
+             #print(key,key2[1:],sx,m,D0)
              if D0=='':
                  return
              else: 
                 L0=sht_X.getContents(column_list[sx+4]+str(m)) 
+             #print(D0,L0)
+            
              sht_X.set('A2',type)
              sht_X.set('B2',p0)
              sht_X.set('C2',r0)
@@ -656,20 +635,29 @@ class Ui_Dialog(object):
              sht_X.set('F2',D0)
              sht_X.set('G2',L0)  
              sht_X.set('H2',dia)  
+             #App.ActiveDocument.recompute()   
+             #elif key=='sproAssy':
+             #print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
              Lc=self.le_Lp.text()
              shtAssy.set('CLj',Lc)
              self.AssyCulc()
+             
              #リンク型番変更
              type=self.comboBox_type.currentText()[4:]
+             #print(type)
              for i in range(2,14):
                  key2=shtLink.getContents(column_list[i]+str('2'))
+                 #print(type,key2)
                  if type==key2:
+                    #print(key,key2)
                     break
              shtAssy.set('Type',type)    
              shtAssy.set('Linkp',str(Lp))
              shtAssy.set('Linkj',str(Lj))     
+
              type=self.comboBox_type.currentText()                                
              picth=shtLink.getContents(column_list[i]+str(3))
+             
              h0=shtLink.getContents(column_list[i]+str(4))
              t0=shtLink.getContents(column_list[i]+str(5))
              W0=shtLink.getContents(column_list[i]+str(6))
@@ -685,6 +673,8 @@ class Ui_Dialog(object):
              shtLink.set(column_list[1]+str(8),d2)
              shtLink.set(column_list[1]+str(9),h1)
              shtAssy.set('Type',type)
+             #shtAssy.set('Pitch',str(pitch))
+             
              self.label_pitch1.setText(pitch)
              try:
                  if sht_X.Label=='shtSproP':
@@ -694,58 +684,21 @@ class Ui_Dialog(object):
              except:
                  pass
              self.comboBox_shape.setCurrentText(shtAssy.getContents('A1'))    
-            # App.ActiveDocument.recompute() 
+             #self.AssyCulc()
+             App.ActiveDocument.recompute() 
 
     def create(self): 
-         doc=App.ActiveDocument
+         #print('ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
          shp=self.comboBox_shape.currentText()
          fname='Sprocket_'+shp+'.FCStd'
          base=os.path.dirname(os.path.abspath(__file__))
          joined_path = os.path.join(base, 'prt_data','Spro_data',fname) 
-         # --- インポート前のオブジェクトリストを取得 ---
-         old_obj_names = [o.Name for o in doc.Objects]
-         # マージ実行
-         Gui.ActiveDocument.mergeProject(joined_path)
-         doc.recompute() # 一旦再計算して内部IDを確定させる
-         # --- インポート後に増えたオブジェクトを特定 ---
-         new_objs = [o for o in doc.Objects if o.Name not in old_obj_names]
-         if not new_objs:
-             print("Error: オブジェクトが読み込まれませんでした。")
-             return
-         #latticeBeamというラベルを持つものを優先的に探す
-         move_target = None
-         for o in new_objs:
-             if "sprocketAssy_1B_1B"  in o.Label or "sprocketAssy_1B_1B"  in o.Name:
-                 move_target = o
-                 break
-             elif "sprocketAssy_1B_1C"  in o.Label or "sprocketAssy_1B_1C"  in o.Name:
-                 move_target = o
-                 break
-             elif "sprocketAssy_1C_1C"  in o.Label or "sprocketAssy_1C_1C"  in o.Name:
-                 move_target = o
-                 break
-         # 見つからなければ、新しく入ってきた最初のオブジェクトをターゲットにする
-         if not move_target:
-             move_target = new_objs[0]
-         view = Gui.ActiveDocument.ActiveView
-         callbacks = {}
-         def move_cb(info):
-             pos = info["Position"]
-             # 重要：ビュー平面上の3D座標を取得
-             p = view.getPoint(pos)
-             if move_target:
-                 move_target.Placement.Base = p
-                 #view.softRedraw()
-         def click_cb(info):
-             if info["State"] == "DOWN" and info["Button"] == "BUTTON1":
-                 # コールバック解除
-                 view.removeEventCallback("SoLocation2Event", callbacks["move"])
-                 view.removeEventCallback("SoMouseButtonEvent", callbacks["click"])
-                 App.ActiveDocument.recompute()
-                 print("Placed: " + move_target.Label)
-         # イベント登録
-         callbacks["move"] = view.addEventCallback("SoLocation2Event", move_cb)
-         callbacks["click"] = view.addEventCallback("SoMouseButtonEvent", click_cb)    
+         try:
+            Gui.ActiveDocument.mergeProject(joined_path)
+         except:
+            doc=App.newDocument()
+            Gui.ActiveDocument.mergeProject(joined_path)
+         Gui.SendMsgToActiveView("ViewFit")    
 
 class main():
         d = QtGui.QWidget()
@@ -753,3 +706,6 @@ class main():
         d.ui.setupUi(d)
         d.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         d.show()  
+        # 閉じるボタンを無効にする
+#        script_window = Gui.getMainWindow().findChild(QtGui.QDialog, 'd')
+#        script_window.setWindowFlags(script_window.windowFlags() & ~QtCore.Qt.WindowCloseButtonHint)

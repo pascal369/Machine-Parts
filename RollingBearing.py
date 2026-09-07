@@ -12,7 +12,7 @@ from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
 from pivy import coin
-from PySide2 import QtCore
+#from PySide2 import QtCore
 from prt_data.RollBrg_data import ParamBallBrg
 from prt_data.RollBrg_data import ParamAngulaBallBrg
 from prt_data.RollBrg_data import RollingBrg_Data

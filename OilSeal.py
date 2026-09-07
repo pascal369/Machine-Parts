@@ -11,7 +11,7 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
-#from prt_data.CSnap_data import paramCSnap
+from pivy import coin
 
 CDia=['6 16 7','6 22 7','7 22 7','8 22 7','8 24 7','9 22 7','10 22 7','10 25 7','12 24 7','12 25 7',
       '12 30 7','15 26 7','15 30 7','15 35 7','16 30 7','18 30 7','18 35 7','20 35 7','20 40 7',

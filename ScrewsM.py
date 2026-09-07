@@ -16,7 +16,7 @@ from math import pi
 import Draft
 import FreeCAD as App
 from pivy import coin
-from PySide2 import QtCore
+#from PySide2 import QtCore
 from ScrLib import ScrData
 
 from ScrLib import ParamHxgNut

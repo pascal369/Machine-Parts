@@ -150,7 +150,7 @@ class Ui_Dialog(object):
         self.pushButton2 = QtGui.QPushButton(Dialog)
         self.pushButton2.setGeometry(QtCore.QRect(135, 340, 80, 22))
         #インポートデータ
-        self.pushButton3 = QtGui.QPushButton('Import Data',Dialog)
+        self.pushButton3 = QtGui.QPushButton('Read Data',Dialog)
         self.pushButton3.setGeometry(QtCore.QRect(40, 365, 185, 22))
 
         #図形
@@ -217,16 +217,18 @@ class Ui_Dialog(object):
         self.label_spin.setStyleSheet("color: black;")
 
         self.spinBox=QtGui.QSpinBox(Dialog)
-        self.spinBox.setGeometry(75, 710, 100, 50)
+        self.spinBox.setGeometry(75, 710, 70, 50)
         self.spinBox.setMinimum(0.0)  # 最小値を0.0に設定
         self.spinBox.setMaximum(360.0)  # 最大値を100.0に設定
         self.spinBox.setValue(0.0)
         self.spinBox.setAlignment(QtCore.Qt.AlignCenter)
-        self.spinBox_ichi=QtGui.QSpinBox(Dialog)
-        self.spinBox_ichi.setGeometry(180, 710, 50, 50)
-        self.spinBox_ichi.setMinimum(0.0)  # 最小値を0.0に設定
+
+        self.spinBox_ichi = QtGui.QDoubleSpinBox(Dialog)
+        self.spinBox_ichi.setGeometry(180, 710, 70, 50)
+        self.spinBox_ichi.setMinimum(-360)  # 最小値を0.0に設定
         self.spinBox_ichi.setMaximum(360.0)  # 最大値を100.0に設定
         self.spinBox_ichi.setValue(0.0)
+        self.spinBox_ichi.setSingleStep(0.5)
         self.spinBox_ichi.setAlignment(QtCore.Qt.AlignCenter)
 
         self.comboBox_type.addItems(sperType)
@@ -240,7 +242,7 @@ class Ui_Dialog(object):
         self.comboBox_type.setCurrentIndex(0)
 
         self.spinBox.valueChanged[int].connect(self.spinMove)
-        self.spinBox_ichi.valueChanged[int].connect(self.setIchi)
+        self.spinBox_ichi.valueChanged[float].connect(self.setIchi) 
         
         QtCore.QObject.connect(self.pushButton2, QtCore.SIGNAL("pressed()"), self.update)
         self.retranslateUi(Dialog)
@@ -340,13 +342,12 @@ class Ui_Dialog(object):
                          self.label_L1.setText(str(a))
     
     def setIchi(self):
+        N2=self.label_N2.text()
         r1 = self.spinBox_ichi.value()
         worm.Placement.Rotation=App.Rotation(App.Vector(1,0,0),10*r1)
         App.ActiveDocument.recompute()
     
     def spinMove(self):
-         N1=self.label_N1.text()
-         N2=self.label_N2.text()
          r1 = self.spinBox.value()
          r2 =r1*float(N1)/float(N2)
          A=self.spinBox_ichi.value()
@@ -356,49 +357,54 @@ class Ui_Dialog(object):
               wheel.Placement.Rotation=App.Rotation(App.Vector(0,1,0),x*r2)
          else:
               wheel.Placement.Rotation=App.Rotation(App.Vector(0,1,0),-x*r2)
+
+         
+
     def update(self):
-              mod=float(self.comboBox_mod.currentText()) #モジュール
-              spreadsheet.set('m0',str(mod))
-              N1=float(self.le_N.text())
-              N2=float(self.le_N2.text())
-              ganmaK=self.comboBox_betaK.currentText()
-              a=float(self.le_a.text())
-              d2=mod*N2
-              d1=(a - d2 / 2) * 2
-              Qv=d1 / mod
-              ganma=round(math.atan(mod * N1 / d1)*57.3,3)
-              spreadsheet.set('z1',str(N1))
-              spreadsheet.set('z2',str(N2))
-              spreadsheet.set('ganma',str(ganma))
-              self.comboBox_betaK.setCurrentText(spreadsheet.getContents('ganmaK'))#ねじれ角   
-              spreadsheet.set('ganmaK',ganmaK)
-              spreadsheet.set('a',str(a))
-              spreadsheet.set('dia1',str(a))
-              Bdia=float(self.le_Bdia.text())
-              dia1=float(self.le_dia.text())
-              da1=d1 + 2 * mod
-              h0=2.25*mod
-              df1=da1 - 2 * h0
-              if dia1>df1:
-                  dia1=df1-1
-              spreadsheet.set('dia1',str(dia1) ) 
-              dia2=float(self.le_dia2.text())
-              spreadsheet.set('dia2',str(dia2) ) 
-              spreadsheet.set('Bdia',str(Bdia)) 
-              BB=float(self.le_BB.text())   
-              spreadsheet.set('BB',str(BB))  
-              WB=float(self.le_WB.text())  
-              spreadsheet.set('WB',str(WB))  
-              self.le_Q.setText(str(Qv))
-              w0=float(self.le_Bw.text())
-              spreadsheet.set('w0',str(w0))  
-              self.label_M.setText(str(mod))
-              self.label_N1.setText(str(N1))
-              self.label_N2.setText(str(N2))
-              self.label_pcd1.setText(str(d1))
-              self.label_pcd2.setText(str(d2))
-              self.le_a.setText(str(a))
-              App.ActiveDocument.recompute()
+         global N1
+         global N2
+         mod=float(self.comboBox_mod.currentText()) #モジュール
+         spreadsheet.set('m0',str(mod))
+         N1=float(self.le_N.text())
+         N2=float(self.le_N2.text())
+         ganmaK=self.comboBox_betaK.currentText()
+         a=float(self.le_a.text())
+         d2=mod*N2
+         d1=(a - d2 / 2) * 2
+         Qv=d1 / mod
+         ganma=round(math.atan(mod * N1 / d1)*57.3,3)
+         spreadsheet.set('z1',str(N1))
+         spreadsheet.set('z2',str(N2))
+         spreadsheet.set('ganma',str(ganma))
+         self.comboBox_betaK.setCurrentText(spreadsheet.getContents('ganmaK'))#ねじれ角   
+         spreadsheet.set('ganmaK',ganmaK)
+         spreadsheet.set('a',str(a))
+         spreadsheet.set('dia1',str(a))
+         Bdia=float(self.le_Bdia.text())
+         dia1=float(self.le_dia.text())
+         da1=d1 + 2 * mod
+         h0=2.25*mod
+         df1=da1 - 2 * h0
+         if dia1>df1:
+             dia1=df1-1
+         spreadsheet.set('dia1',str(dia1) ) 
+         dia2=float(self.le_dia2.text())
+         spreadsheet.set('dia2',str(dia2) ) 
+         spreadsheet.set('Bdia',str(Bdia)) 
+         BB=float(self.le_BB.text())   
+         spreadsheet.set('BB',str(BB))  
+         WB=float(self.le_WB.text())  
+         spreadsheet.set('WB',str(WB))  
+         self.le_Q.setText(str(Qv))
+         w0=float(self.le_Bw.text())
+         spreadsheet.set('w0',str(w0))  
+         self.label_M.setText(str(mod))
+         self.label_N1.setText(str(N1))
+         self.label_N2.setText(str(N2))
+         self.label_pcd1.setText(str(d1))
+         self.label_pcd2.setText(str(d2))
+         self.le_a.setText(str(a))
+         App.ActiveDocument.recompute()
    
     def create(self): 
          doc=App.ActiveDocument

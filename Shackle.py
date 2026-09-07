@@ -11,6 +11,7 @@ import FreeCADGui as Gui
 from PySide import QtGui
 from PySide import QtUiTools
 from PySide import QtCore
+from pivy import coin
 #from prt_data.CSnap_data import paramCSnap
 
 ODia=['6','8','10','12','16','20',]
